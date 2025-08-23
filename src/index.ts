@@ -1,13 +1,17 @@
 import express from 'express';
+import { RequestsManager } from '#utils/requests.js';
+import { config } from '#config/index.js';
 
 const app = express();
-const port = process.env.PORT ?? 5173;
+// const requests = new RequestsManager();
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   res.send('Hello World!');
   console.log('Received a request at /');
+  // await requests.get({ url: 'http://localhost:8080/timeout/11' });
+  // console.log('Network request finished: success');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+app.listen(config.port, () => {
+  console.log(`Server is running at http://localhost:${config.port}`);
 });

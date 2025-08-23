@@ -24,18 +24,21 @@ export function initRequestClient() {
       ) {
         // Retry logic for network errors or timeouts
         const config = error.config;
+
         if (!config || !config.__retryCount) {
           config.__retryCount = 0;
           config._backOff = 1;
         }
 
-        if (config.__retryCount < 3) {
+        if (config.__retryCount < 4) {
           config.__retryCount += 1;
-          config._backOff *= 2; // Exponential backoff
+          config._backOff =
+            config.__retryCount > 1 ? config._backOff * 2 : config._backOff;
+
           const delay = config.__retryCount > 1 ? config._backOff * 1000 : 1000;
 
           console.log(
-            `attempt ${config.__retryCount} failed, retrying in ${delay} seconds...`
+            `attempt ${config.__retryCount} failed, retrying in ${delay / 1000} seconds...`
           );
           return new Promise((resolve) => {
             setTimeout(() => {
