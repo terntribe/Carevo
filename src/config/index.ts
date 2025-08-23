@@ -16,4 +16,9 @@ export const config = {
     phone_number_id: process.env.WA_PHONE_NUMBER_ID || '',
     api_version: process.env.WA_VERSION || 'v22.0',
   },
+
+  // third-party APIs
+  api_keys: {
+    gemini: process.env.GEMINI_API_KEY || '',
+  },
 };

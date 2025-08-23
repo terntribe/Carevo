@@ -1,4 +1,5 @@
 import storage from '#config/storage.js';
+import tts from '#config/tts.js';
 import { config } from '#config/index.js';
 import path from 'path';
 
@@ -7,7 +8,7 @@ function getAudioFileName(messageId: string, ext: string): string {
   return `carevo-${messageId}-${timestamp}.${ext}`;
 }
 
-export default async function saveAudio(
+export async function saveAudio(
   data: Buffer,
   messageId: string
 ): Promise<string> {
@@ -29,4 +30,18 @@ export default async function saveAudio(
   }
 
   return opusFilePath;
+}
+
+export async function generateAudio(
+  text: string,
+  language: string,
+  messageId: string
+): Promise<string> {
+  const audioData = await tts.generateAudio(text, language);
+  if (!audioData) {
+    throw new Error('Failed to generate audio');
+  }
+
+  const audioFilePath = await saveAudio(audioData, messageId);
+  return audioFilePath;
 }
