@@ -12,23 +12,23 @@ const MessageSession = z.object({
 export type MessageSessionType = z.infer<typeof MessageSession>;
 
 export class SessionManager {
-  constructor(private sessions: MessageSessionType[] = []) {} // using in mem store for now
-
-  create(phoneNumber: string) {
+  static create(phoneNumber: string, sessions: MessageSessionType[]) {
     // creates and adds a new session
     const timestamp = new Date();
     const seshId = crypto.randomUUID();
-    this.sessions.push({
+    const session: MessageSessionType = {
       id: seshId,
       phoneNumber: phoneNumber,
       language: 'default:english',
       createdAt: timestamp.toISOString(),
       updatedAt: timestamp.toISOString(),
-    });
-    return seshId;
+    };
+    sessions.push(session);
+
+    return { sessions, session };
   }
 
-  update(sesh: MessageSessionType) {
+  static update(sesh: MessageSessionType, sessions: MessageSessionType[]) {
     // updates a session
     sesh.updatedAt = new Date().toISOString();
     const updated = MessageSession.safeParse(sesh); // might move to validators...??
@@ -36,27 +36,29 @@ export class SessionManager {
       console.log(updated.error.issues[0].message);
       return null;
     } else {
-      this.sessions = this.sessions.map((session) => {
+      sessions = sessions.map((session) => {
         if (session.id === updated.data.id) {
           return updated.data;
         }
         return session;
       });
     }
+    return sessions;
   }
 
-  retrieve(identifier: string): MessageSessionType | undefined {
-    return this.sessions.find(
+  static retrieve(
+    identifier: string,
+    sessions: MessageSessionType[]
+  ): MessageSessionType | undefined {
+    return sessions.find(
       (session) =>
         session.id === identifier || session.phoneNumber === identifier
     );
   }
-  delete(identifier: string) {
-    this.sessions = this.sessions.filter(
+  delete(identifier: string, sessions: MessageSessionType[]) {
+    return sessions.filter(
       (session) =>
         session.id !== identifier || session.phoneNumber !== identifier
     );
   }
 }
-
-export const sessionManager = new SessionManager();

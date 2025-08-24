@@ -1,5 +1,5 @@
 import {
-  sessionManager,
+  SessionManager,
   MessageSessionType,
 } from '#models/sessions/sessions.model.js';
 import { generateAudio } from '#utils/audio.js';
@@ -11,9 +11,8 @@ const messageConfig = new MessageConfig();
 
 export const matchIntent = (
   keyword: string,
-  phoneNumber: string
-): 'obs' | string => {
-  const session = sessionManager.retrieve(phoneNumber);
+  session: MessageSessionType
+): 'onboard' | string => {
   const lastQueryKeyword = session?.lastQueryKeyword;
 
   if (messageConfig.supportedLanguage(keyword)) {
@@ -81,7 +80,7 @@ export const processMessage = async (
       );
       if (!audioFilePath) {
         console.error('Failed to generate audio for message:', message.query);
-        return;
+        return session;
       }
 
       const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
@@ -101,9 +100,9 @@ export const processMessage = async (
         keyword !== session.lastQueryKeyword
           ? keyword
           : session.lastQueryKeyword;
-      sessionManager.update(session);
     }
   }
+  return session;
 };
 
 // helpers
