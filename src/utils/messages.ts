@@ -22,7 +22,7 @@ const requests = new RequestsManager();
 export default class WhatsAppService {
   static async sendMessage(data: MessageResponse) {
     const url = `https://graph.facebook.com/${config.whatsapp.api_version}/${config.whatsapp.phone_number_id}/messages`;
-    await requests.post({
+    const reponse = await requests.post({
       url: url,
       body: JSON.stringify(data),
       headers: {
@@ -30,6 +30,7 @@ export default class WhatsAppService {
         'Content-Type': 'application/json',
       },
     });
+    return reponse;
   }
 
   static async uploadAudioFile(filePath: string): Promise<FileUploadResponse> {

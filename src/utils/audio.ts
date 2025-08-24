@@ -38,8 +38,10 @@ export async function generateAudio(
   messageId: string
 ): Promise<string> {
   const audioData = await tts.generateAudio(text, language);
+
   if (!audioData) {
-    throw new Error('Failed to generate audio');
+    console.error('Failed to generate audio');
+    return ''; // Return empty string if audio generation fails
   }
 
   const audioFilePath = await saveAudio(audioData, messageId);

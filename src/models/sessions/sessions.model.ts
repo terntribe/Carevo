@@ -27,6 +27,7 @@ export class SessionManager {
     });
     return seshId;
   }
+
   update(sesh: MessageSessionType) {
     // updates a session
     sesh.updatedAt = new Date().toISOString();
@@ -43,6 +44,7 @@ export class SessionManager {
       });
     }
   }
+
   retrieve(identifier: string): MessageSessionType | undefined {
     return this.sessions.find(
       (session) =>
@@ -57,4 +59,4 @@ export class SessionManager {
   }
 }
 
-export default new SessionManager();
+export const sessionManager = new SessionManager();

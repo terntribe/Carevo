@@ -28,12 +28,13 @@ const Message = z.object({
   }),
 });
 
-type MessageType = z.infer<typeof Message>;
+export type MessageType = z.infer<typeof Message>;
 
-// MessageConfig class to handle operations involving messages/system prompts from the JSON config file.
-class MessageConfig {
-  public messages: MessageType[];
-  public languages: string[];
+/* MessageConfig class to handle operations involving 
+messages/system prompts from the JSON config file. */
+export class MessageConfig {
+  private messages: MessageType[];
+  private languages: string[];
 
   constructor() {
     this.messages = [];
@@ -58,10 +59,14 @@ class MessageConfig {
     return true;
   }
 
-  getMessage(keyword: string) {
+  getMessageByKeyword(keyword: string) {
     return this.messages.find(
       (msg) => msg.keyword === keyword || msg.query === keyword
     );
+  }
+
+  getMessageById(id: string) {
+    return this.messages.find((msg) => msg.id === id);
   }
 
   async saveMessage(message: MessageType) {
@@ -77,6 +82,8 @@ class MessageConfig {
       );
     }
   }
-}
 
-export default new MessageConfig();
+  supportedLanguage(text: string) {
+    return this.languages.includes(text);
+  }
+}
