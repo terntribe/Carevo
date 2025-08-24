@@ -8,6 +8,7 @@ import { MessageConfig, MessageType } from '#utils/responses.ts';
 import { MessageResponse } from '#utils/types.js';
 
 const messageConfig = new MessageConfig();
+const configLoaded = await messageConfig.loadMessages();
 
 export const matchIntent = (
   keyword: string,

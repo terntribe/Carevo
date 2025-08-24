@@ -1,9 +1,13 @@
 import express from 'express';
 import { RequestsManager } from '#utils/requests.js';
 import { config } from '#config/index.js';
+import webhookRouter from '#routes/webhook.routes.js';
 
 const app = express();
 // const requests = new RequestsManager();
+
+app.use(express.json());
+app.use('/api/v1/webhook', webhookRouter);
 
 app.get('/', async (req, res) => {
   res.send('Hello World!');

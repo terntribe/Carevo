@@ -1,6 +1,7 @@
 import { chatController } from '#controllers/chat.controllers.js';
 import { validateWebhookRequest } from '#middlewares/webhooks/validate.middleware.js';
 import { Router } from 'express';
+import { config } from '#config/index.js';
 
 const webhookRouter = Router();
 
@@ -10,7 +11,10 @@ webhookRouter.get('', (req, res) => {
   const verifyToken = req.query['hub.verify_token'];
 
   if (mode && verifyToken) {
-    if (mode === 'subscribe' && verifyToken === process.env.VERIFY_TOKEN) {
+    if (
+      mode === 'subscribe' &&
+      verifyToken === config.whatsapp.wa_verify_token
+    ) {
       console.log('Webhook verified');
       // echo back the challenge token
       return res.status(200).send(req.query['hub.challenge']);
@@ -26,3 +30,5 @@ webhookRouter.get('', (req, res) => {
 });
 
 webhookRouter.post('/', validateWebhookRequest, chatController); // controller will be next
+
+export default webhookRouter;

@@ -15,6 +15,7 @@ export const config = {
     reciepient_id: process.env.WA_RECIPIENT_WAID || '',
     phone_number_id: process.env.WA_PHONE_NUMBER_ID || '',
     api_version: process.env.WA_VERSION || 'v22.0',
+    wa_verify_token: process.env.WA_VERIFY_TOKEN || '',
   },
 
   // third-party APIs
