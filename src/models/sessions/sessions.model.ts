@@ -5,7 +5,7 @@ const MessageSession = z.object({
   id: z.uuid(),
   phoneNumber: z.coerce.string().length(10),
   language: z.union([z.literal('default:english'), z.string()]),
-  lastQueryKeyword: z.string().optional(),
+  lastMessage: z.object({ query: z.string() }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });
@@ -51,7 +51,8 @@ export class SessionManager {
     const session: MessageSessionType = {
       id: seshId,
       phoneNumber: phoneNumber,
-      language: 'default:english',
+      language: 'english',
+      lastMessage: { query: '' },
       createdAt: timestamp.toISOString(),
       updatedAt: timestamp.toISOString(),
     };

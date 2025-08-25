@@ -35,7 +35,7 @@ export async function saveAudio(
 export async function generateAudio(
   text: string,
   language: string,
-  messageId: string
+  messageId: number
 ): Promise<string> {
   const audioData = await tts.generateAudio(text, language);
 
@@ -44,6 +44,6 @@ export async function generateAudio(
     return ''; // Return empty string if audio generation fails
   }
 
-  const audioFilePath = await saveAudio(audioData, messageId);
+  const audioFilePath = await saveAudio(audioData, messageId.toString());
   return audioFilePath;
 }

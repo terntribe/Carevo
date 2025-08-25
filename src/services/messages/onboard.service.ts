@@ -6,6 +6,6 @@ export class OnboardingService {
     return await processMessage('onboard:greet', session);
   }
   static async setLanguagePreferrence(session: MessageSessionType) {
-    return await processMessage('onboard:select-lang', session);
+    return await processMessage('onboard:select_language', session);
   }
 }

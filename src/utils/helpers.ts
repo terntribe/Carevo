@@ -2,12 +2,20 @@ import axios from 'axios';
 
 type messageData = {
   id: any;
-  from: any;
+  from: string;
   timestamp: any;
-  text: any;
+  text: string;
   type: any;
   attachments: any;
 };
+
+export type deliveredMessage = {
+  phone: string;
+  text: string;
+  expires: Date;
+};
+
+let messages: deliveredMessage[] = [];
 
 export const isValidIncomingWhatsAppMessageData = (data: any): boolean => {
   // Validates that webhook event data has a valid "message" structure
@@ -64,7 +72,7 @@ export const parseIncomingWhatAppMessageData = (
 };
 
 export function initRequestClient() {
-  const client = axios.create({ timeout: 10000 });
+  const client = axios.create({ timeout: 6 * 10000 });
 
   //attach debug log for requests
   client.interceptors.request.use(
@@ -115,4 +123,27 @@ export function initRequestClient() {
   );
 
   return client;
+}
+
+export function inProcessLine(msg: { phone: string; text: string }): boolean {
+  const now = new Date();
+  const expiry = new Date(now.getTime() + 5 * 60 * 1000);
+  const newEntry = { ...msg, expires: expiry };
+  const message = messages.find(
+    (m) => m.phone == msg.phone && m.text == msg.text
+  );
+
+  if (message) {
+    if (now > message.expires) {
+      messages = messages.map((m) => {
+        if (m.phone == msg.phone && m.text == msg.text) return newEntry;
+        return m;
+      });
+      return false;
+    } else {
+      return true;
+    }
+  }
+  messages.push(newEntry);
+  return false;
 }

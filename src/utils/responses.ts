@@ -2,15 +2,17 @@ import { config } from '#config/index.js';
 import { JSONFileHandler } from './files.js';
 import * as z from 'zod';
 
+/*
+'onboard:select_language',
+'onboard:greet',
+'topic',
+'support:unknown_input',
+'support:contact'
+*/
+
 const Message = z.object({
-  id: z.uuid(),
-  type: z.literal([
-    'onboard:select_language',
-    'onboard:greet',
-    'topic',
-    'support:unknown_input',
-    'support:contact',
-  ]),
+  id: z.number(),
+  type: z.literal(['topic', 'onboard', 'support']),
   keyword: z.string(),
   query: z.coerce.string(),
   response: z.string().max(5000),
@@ -23,8 +25,8 @@ const Message = z.object({
   ),
   options: z.object({
     prompt: z.string(),
-    moreInfo: z.uuid(),
-    relatedQuestions: z.array(z.uuid()),
+    relatedQuestions: z.array(z.number()).optional(),
+    next: z.number().optional(),
   }),
 });
 
@@ -59,23 +61,28 @@ export class MessageConfig {
     return true;
   }
 
-  getMessageByKeyword(keyword: string) {
-    return this.messages.find(
-      (msg) => msg.keyword === keyword || msg.query === keyword
-    );
+  getMessageByQuery(query: string) {
+    return this.messages.find((msg) => msg.query === query);
   }
 
-  getMessageById(id: string) {
+  getMessageById(id: number) {
     return this.messages.find((msg) => msg.id === id);
   }
 
   async saveMessage(message: MessageType) {
+    // update the messages in memory and disk
     const safeMsg = Message.safeParse(message);
+
     if (!safeMsg.success) {
       console.log(safeMsg.error.issues[0].message);
       return null;
     } else {
-      this.messages = this.messages.filter((msg) => msg.id === safeMsg.data.id);
+      this.messages = this.messages.map((msg) => {
+        if (msg.id === safeMsg.data.id) {
+          return safeMsg.data;
+        }
+        return msg;
+      });
       await JSONFileHandler.saveJSONFile(
         config.storage.messages_location,
         this.messages

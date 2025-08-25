@@ -137,3 +137,10 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# audio generated files (remove when we go live)
+audio_files/
+
+# local sessions
+sessions.json
+

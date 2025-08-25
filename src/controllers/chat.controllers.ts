@@ -1,4 +1,21 @@
-import { parseIncomingWhatAppMessageData } from '#utils/helpers.js';
+/*
+
+NOTE: Response from this controller should be strictly 200 OK (for now), except for 
+validation issues i.e. if messageData is empty due to errors from parsing and 
+those handled by the validator middleware.
+Any error that occurs when we process the message should be logged.
+
+WhatsApp Business API retries messages that return any status code other than 200,
+We do not want to pollute our logs and standard output with errors.
+We have an helper function that tries to preserve idempotency for a limited time range 
+but the API is unstable  i.e. failed messages from yesterday are also retried.
+
+*/
+
+import {
+  inProcessLine,
+  parseIncomingWhatAppMessageData,
+} from '#utils/helpers.js';
 import { Request, Response } from 'express';
 import {
   MessageSessionType,
@@ -6,67 +23,81 @@ import {
 } from '#models/sessions/sessions.model.js';
 import { matchIntent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
+import { TopicService } from '#services/messages/topic.service.js';
 
 const sessionManager = new SessionManager();
-const sessionsLoaded = await sessionManager.loadSessions();
+const _ = await sessionManager.loadSessions();
 
 export const chatController = async (req: Request, res: Response) => {
-  // get the body from request pass it to parse helper and get the text
   const messageData = parseIncomingWhatAppMessageData(req.body);
-  // phone number
+
   const sendersPhoneNumber = messageData?.from;
 
   let intent: 'onboard' | string = '';
 
-  if (!sendersPhoneNumber || messageData.text) {
-    console.log('Missing fields');
-    res.status(400).send('Bad request: Missing fields');
+  if (!sendersPhoneNumber || !messageData || !messageData.text) {
+    console.log('Missing fields'); // log here
+    return res.status(400).send('Bad request: Missing fields'); // send 400 bad request because validation failed
+  } else if (
+    inProcessLine({ phone: sendersPhoneNumber, text: messageData.text })
+  ) {
+    console.log(`still warm: ${sendersPhoneNumber} -> ${messageData.text}`);
+    return res.send(200);
   }
-  // try and get the session first (if num does not exist), if not create a new sesh and call obs with 'greet' keyword...
+
+  // try and get the session first (if num does not exist),
+  //if not create a new sesh and call obs with 'greet' keyword...
   let userSession = sessionManager.retrieve(
     sendersPhoneNumber
   ) as MessageSessionType;
 
   if (!userSession) {
-    // create a new session
     var newSession = await sessionManager.create(sendersPhoneNumber);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
-      console.error('Failed to create a new session');
-      res.status(500).send('Internal server error: Failed to create session');
-      return;
+      console.error('Failed to create a new session'); // log here
+      return res.send(200);
     }
-    // call obs with 'greet'
 
     const currentSession = await OnboardingService.greetUser(userSession);
     if (!currentSession) {
-      console.error('Failed to greet user');
-      res.status(500).send('Internal server error: Failed to greet user');
-      return;
+      console.error('onboarding service failed: '); // log here
+      return res.send(200);
     }
+
     newSession = await sessionManager.update(currentSession);
-    res.status(200).send('Session created and user greeted successfully');
+    res.status(200).send('Session created');
   } else {
     // pass the text to the intent matcher and call either ->
     intent = matchIntent(messageData?.text, userSession);
   }
+
   // obs or topic service
   if (intent === 'onboard') {
     // call obs
 
     const currentSession =
       await OnboardingService.setLanguagePreferrence(userSession);
+
     if (!currentSession) {
-      console.error('Failed to set language preference');
-      res
-        .status(500)
-        .send('Internal server error: Failed to set language preference');
-      return;
+      console.error('Failed to set language preference'); // log here
+      return res.status(200).send();
     }
-    const newSession = await sessionManager.update(currentSession);
+    const _ = await sessionManager.update(currentSession);
     res.status(200).send('Session created and user greeted successfully');
   } else {
     // call tps
+    const currentSession = await TopicService.response(
+      messageData.text,
+      userSession
+    );
+    if (!currentSession) {
+      console.error('Failed to proccess response for: ', messageData.text); // log here
+      return res.send(200);
+    }
+    const _ = await sessionManager.update(currentSession);
+    res.status(200).send('Response sent');
   }
+  return res.send(200);
 };

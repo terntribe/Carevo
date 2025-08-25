@@ -1,7 +1,4 @@
-import {
-  SessionManager,
-  MessageSessionType,
-} from '#models/sessions/sessions.model.js';
+import { MessageSessionType } from '#models/sessions/sessions.model.js';
 import { generateAudio } from '#utils/audio.js';
 import WhatsAppService from '#utils/messages.js';
 import { MessageConfig, MessageType } from '#utils/responses.ts';
@@ -11,35 +8,30 @@ const messageConfig = new MessageConfig();
 const configLoaded = await messageConfig.loadMessages();
 
 export const matchIntent = (
-  keyword: string,
+  query: string,
   session: MessageSessionType
 ): 'onboard' | string => {
-  const lastQueryKeyword = session?.lastQueryKeyword;
+  const lastMessageQuery = session.lastMessage.query;
 
-  if (messageConfig.supportedLanguage(keyword)) {
+  if (messageConfig.supportedLanguage(query)) {
     return 'obs';
-  } else if (lastQueryKeyword && keyword === 'more information') {
-    return `${lastQueryKeyword}:more_info`;
+  } else if (lastMessageQuery && query === 'more information') {
+    return `${lastMessageQuery}:more_info`;
   }
-  return keyword;
+  return query;
 };
 
 export const processMessage = async (
   keyword: string,
   session: MessageSessionType
 ) => {
-  // processes the message based on the keyword
+  // processes the message based on the keyword query
 
-  keyword = keyword.includes('more_info') ? keyword.split(':')[0] : keyword;
-  let message = messageConfig.getMessageByKeyword(keyword);
-
-  if (keyword.includes('more_info')) {
-    message = messageConfig.getMessageById(message?.options.moreInfo as string);
-  }
+  let message = messageConfig.getMessageByQuery(keyword);
 
   if (!message) {
     console.error(`No message found for keyword: ${keyword}`);
-    message = messageConfig.getMessageByKeyword('support:invalid_input');
+    message = messageConfig.getMessageByQuery('support:invalid_input');
   }
 
   if (message) {
@@ -73,7 +65,10 @@ export const processMessage = async (
       }
     } else {
       // concat the response + ', ' + options.prompt and send to tts to convert
-      const text = message.response + ', ' + message.options.prompt;
+      const text = message.options.prompt
+        ? message.response + ', ' + message.options.prompt
+        : message.response;
+
       const audioFilePath = await generateAudio(
         text,
         languagePreference,
@@ -97,10 +92,10 @@ export const processMessage = async (
       await messageConfig.saveMessage(message);
 
       // update the session keyword entry
-      session.lastQueryKeyword =
-        keyword !== session.lastQueryKeyword
+      session.lastMessage.query =
+        keyword !== session.lastMessage.query
           ? keyword
-          : session.lastQueryKeyword;
+          : session.lastMessage.query;
     }
   }
   return session;

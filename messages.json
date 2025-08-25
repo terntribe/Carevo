@@ -1,0 +1,130 @@
+{
+  "languages": ["english"],
+  "messages": [
+    {
+      "id": 0,
+      "type": "onboard",
+      "keyword": "greet",
+      "query": "onboard:greet",
+      "response": "Hello! Welcome to Carevo.\nI’m here to share health tips with you through voice messages.\n\nPlease choose an option to continue:\nSelect your preferred language:\n1.English\nChoose a health topic you want to learn about:\n1.malaria?\n\nJust reply with your choice",
+      "audio": {
+        "english": {
+          "location": "",
+          "whastapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "",
+        "next": ""
+      }
+    },
+    {
+      "id": 1,
+      "type": "topic",
+      "keyword": "malaria",
+      "query": "malaria",
+      "response": "Malaria is a disease caused by a parasite. It is spread when a mosquito carrying the parasite bites a person.\n\nIt can make people very sick with fever, chills, and tiredness. Malaria is common in many tropical and warm places.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [2, 3, 4, 5, 6],
+        "next": "2"
+      }
+    },
+    {
+      "id": 2,
+      "type": "topic",
+      "keyword": "symptoms",
+      "query": "What are the symptoms of malaria?",
+      "response": "The main signs of malaria are fever, chills, headache, and sweating. Some people may also feel weak, have body pain, or vomit.\n\nIf malaria is not treated, the symptoms can become worse and more dangerous.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [3, 4, 5, 6],
+        "next": "3"
+      }
+    },
+    {
+      "id": 3,
+      "type": "topic",
+      "keyword": "treatment",
+      "query": "What to do when I have malaria.",
+      "response": "If you think you have malaria, go to a health center or hospital quickly. A test can confirm if it is malaria.\n\nDo not try to treat yourself at home. Doctors can give you the right medicine to cure malaria and stop it from getting worse.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [2, 4, 5, 6],
+        "next": "4"
+      }
+    },
+    {
+      "id": 4,
+      "type": "topic",
+      "keyword": "prevention",
+      "query": "How to prevent against malaria.",
+      "response": "You can prevent malaria by sleeping under treated mosquito nets, using mosquito repellent, and wearing clothes that cover your body.\n\nKeeping your surroundings clean and removing standing water also helps reduce mosquito breeding.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [2, 3, 5, 6],
+        "next": "5"
+      }
+    },
+    {
+      "id": 5,
+      "type": "topic",
+      "keyword": "fatal",
+      "query": "Can malaria be fatal?",
+      "response": "Yes, malaria can be very dangerous if not treated quickly. It can damage important organs in the body like the brain, liver, or kidneys.\n\nChildren under five years old and pregnant women are at higher risk of dying from malaria.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [2, 3, 4, 6],
+        "next": "6"
+      }
+    },
+    {
+      "id": 6,
+      "type": "topic",
+      "keyword": "death",
+      "query": "Can you die from malaria?",
+      "response": "Yes, malaria can cause death if it is not treated on time. Severe malaria can lead to coma, severe anemia, or organ failure.\n\nBut with early testing and proper treatment, malaria can be cured and death can be prevented.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "options": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal? or if you want more information on the subject, respond with \"more information\"",
+        "related_questions": [2, 3, 4, 5],
+        "next": "2"
+      }
+    }
+  ]
+}
