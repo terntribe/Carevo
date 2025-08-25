@@ -14,7 +14,7 @@ export async function saveAudio(
 ): Promise<string> {
   // Save audio in WAV format and convert to Opus
   const wavFileName = getAudioFileName(messageId, 'wav');
-  const opusFileName = getAudioFileName(messageId, 'opus');
+  const opusFileName = getAudioFileName(messageId, 'ogg');
   const wavFilePath = path.resolve(
     process.cwd() + `${config.storage.audio_files}/${wavFileName}`
   );

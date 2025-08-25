@@ -80,7 +80,14 @@ export function initRequestClient() {
       console.log(`${request.method} - pinging ${request.url}`);
       return request;
     },
-    (error) => error // we will come back here to log errors
+    (error) => {
+      if (error.response) {
+        if (error.response.status !== 200) {
+          console.log(error.response.data);
+        }
+      }
+      throw error;
+    } // we will come back here to log errors
   );
 
   // attach retry logic for timeouts and network errors
@@ -101,7 +108,7 @@ export function initRequestClient() {
           config._backOff = 1;
         }
 
-        if (config.__retryCount < 4) {
+        if (config.__retryCount < 2) {
           config.__retryCount += 1;
           config._backOff =
             config.__retryCount > 1 ? config._backOff * 2 : config._backOff;

@@ -83,10 +83,10 @@ export class MessageConfig {
         }
         return msg;
       });
-      await JSONFileHandler.saveJSONFile(
-        config.storage.messages_location,
-        this.messages
-      );
+      await JSONFileHandler.saveJSONFile(config.storage.messages_location, {
+        langages: this.languages,
+        messages: this.messages,
+      });
     }
   }
 

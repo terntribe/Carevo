@@ -5,6 +5,8 @@ const requests = new RequestsManager();
 
 export default class GeminiTTSConfig {
   static async generateAudio(text: string, langauge: string) {
+    console.log('narrating->', text); // remove this later
+    console.log('with language', langauge);
     const data = {
       url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent',
       headers: {
@@ -16,7 +18,7 @@ export default class GeminiTTSConfig {
           {
             parts: [
               {
-                text: `Say this in ${langauge} ${text}`,
+                text: `Say this in ${langauge} '${text}'`,
               },
             ],
           },
