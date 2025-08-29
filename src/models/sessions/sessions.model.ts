@@ -3,9 +3,12 @@ import * as z from 'zod';
 
 const MessageSession = z.object({
   id: z.uuid(),
-  phoneNumber: z.coerce.string().length(10),
+  phoneNumber: z.coerce.string().min(10),
   language: z.union([z.literal('default:english'), z.string()]),
-  lastMessage: z.object({ query: z.string() }),
+  lastMessage: z.object({
+    query: z.string(),
+    options: z.array(z.string()),
+  }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
 });
@@ -52,7 +55,7 @@ export class SessionManager {
       id: seshId,
       phoneNumber: phoneNumber,
       language: 'english',
-      lastMessage: { query: '' },
+      lastMessage: { query: '', options: [] },
       createdAt: timestamp.toISOString(),
       updatedAt: timestamp.toISOString(),
     };

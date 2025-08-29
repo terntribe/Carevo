@@ -1,14 +1,14 @@
 /*
 
 NOTE: Response from this controller should be strictly 200 OK (for now), except for 
-validation issues i.e. if messageData is empty due to errors from parsing and 
+validation issues i.e. if `messageData` is empty due to errors from parsing and 
 those handled by the validator middleware.
 Any error that occurs when we process the message should be logged.
 
 WhatsApp Business API retries messages that return any status code other than 200,
-We do not want to pollute our logs and standard output with errors.
-We have an helper function that tries to preserve idempotency for a limited time range 
-but the API is unstable  i.e. failed messages from yesterday are also retried.
+We do not want unexpected behaivors or to pollute our logs and standard output with errors.
+The `inProcessLine` function tries to prevent multiple identical queries from the same sender to pass
+for a limited time range but the API is unstable  i.e. failed messages from yesterday are also retried.
 
 */
 
@@ -23,7 +23,7 @@ import {
 } from '#models/sessions/sessions.model.js';
 import { matchIntent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
-import { TopicService } from '#services/messages/topic.service.js';
+import { MessageService } from '#services/messages/message.service.js';
 
 const sessionManager = new SessionManager();
 const _ = await sessionManager.loadSessions();
@@ -73,22 +73,26 @@ export const chatController = async (req: Request, res: Response) => {
     intent = matchIntent(messageData?.text, userSession);
   }
 
-  // obs or topic service
-  if (intent === 'onboard') {
+  // obs or message service
+  if (userSession.lastMessage.query.startsWith('onboard')) {
     // call obs
 
-    const currentSession =
-      await OnboardingService.setLanguagePreferrence(userSession);
+    const currentSession = await OnboardingService.setLanguagePreferrence(
+      messageData.text,
+      userSession
+    );
 
     if (!currentSession) {
       console.error('Failed to set language preference'); // log here
-      return res.status(200).send();
+      return res.send(200);
     }
+
     const _ = await sessionManager.update(currentSession);
-    res.status(200).send('Session created and user greeted successfully');
+
+    return res.send('Onboard response sent');
   } else {
     // call tps
-    const currentSession = await TopicService.response(
+    const currentSession = await MessageService.response(
       messageData.text,
       userSession
     );
@@ -97,7 +101,7 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
     const _ = await sessionManager.update(currentSession);
-    res.status(200).send('Response sent');
+    return res.send('Response sent');
   }
-  return res.send(200);
+  // return res.send(200);
 };

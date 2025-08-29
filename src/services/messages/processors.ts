@@ -7,31 +7,56 @@ import { MessageResponse } from '#utils/types.js';
 const messageConfig = new MessageConfig();
 const configLoaded = await messageConfig.loadMessages();
 
+export const checkSupportedLanguages = (index: string) => {
+  const i = Number(index);
+  if (!configLoaded || !i) {
+    return null;
+  }
+  return messageConfig.getLangauge(i);
+};
+
 export const matchIntent = (
   query: string,
   session: MessageSessionType
-): 'onboard' | string => {
-  const lastMessageQuery = session.lastMessage.query;
-
-  if (messageConfig.supportedLanguage(query)) {
-    return 'obs';
-  } else if (lastMessageQuery && query === 'more information') {
-    return `${lastMessageQuery}:more_info`;
+): string => {
+  if (/^\d+$/.test(query)) {
+    const sysPrompt = MessageConfig.checkSysPrompt(query);
+    const index = Number(query);
+    if (
+      sysPrompt &&
+      sysPrompt === 'more_information' &&
+      session.lastMessage.query
+    ) {
+      return `${session.lastMessage.query}:more_info`;
+    } else if (sysPrompt) return sysPrompt;
+    else if (
+      session.lastMessage.options.length > 0 &&
+      index >= 0 &&
+      index <= session.lastMessage.options.length
+    ) {
+      return session.lastMessage.options[index];
+    }
   }
-  return query;
+  return 'support:invalid_input';
 };
 
 export const processMessage = async (
-  keyword: string,
+  query: string,
   session: MessageSessionType
 ) => {
   // processes the message based on the keyword query
 
-  let message = messageConfig.getMessageByQuery(keyword);
+  // ensures the messageConfig has been loaded
+  if (!configLoaded) {
+    console.error('messages have not been loaded');
+    return;
+  }
+
+  let message = messageConfig.getMessageByQueryOrId(query);
 
   if (!message) {
-    console.error(`No message found for keyword: ${keyword}`);
-    message = messageConfig.getMessageByQuery('support:invalid_input');
+    console.error(`No message found for keyword: ${query}`);
+    message = messageConfig.getMessageByQueryOrId('support:invalid_input');
   }
 
   if (message) {
@@ -53,8 +78,7 @@ export const processMessage = async (
       console.log('No mediaId found, uploading audio file for', message.query);
 
       const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
-        message,
-        languagePreference
+        message.audio[languagePreference].location
       );
 
       if (uploadedMediaId) {
@@ -65,8 +89,8 @@ export const processMessage = async (
       }
     } else {
       // concat the response + ', ' + options.prompt and send to tts to convert
-      const text = message.options.prompt
-        ? message.response + ', ' + message.options.prompt
+      const text = message.actions.prompt
+        ? message.response + ', ' + message.actions.prompt
         : message.response;
 
       const audioFilePath = await generateAudio(
@@ -74,15 +98,15 @@ export const processMessage = async (
         languagePreference,
         message.id
       );
+      // const audioFilePath =
+      // 'C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250826103710.ogg';
       if (!audioFilePath) {
         console.error('Failed to generate audio for message:', message.query);
         return session;
       }
 
-      const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
-        message,
-        languagePreference
-      );
+      const uploadedMediaId =
+        await processAndSendWhatsAppAudioMessage(audioFilePath);
 
       // update message audio location and media id field
       message.audio[languagePreference] = {
@@ -93,9 +117,14 @@ export const processMessage = async (
 
       // update the session keyword entry
       session.lastMessage.query =
-        keyword !== session.lastMessage.query
-          ? keyword
+        message.query !== session.lastMessage.query
+          ? message.query
           : session.lastMessage.query;
+
+      // update options
+      session.lastMessage.options = message.actions.options
+        ? message.actions.options
+        : session.lastMessage.options;
     }
   }
   return session;
@@ -111,19 +140,14 @@ async function sendWhatsAppVoiceMsg(mediaId: string) {
   await WhatsAppService.sendMessage(response);
 }
 
-async function processAndSendWhatsAppAudioMessage(
-  message: MessageType,
-  language: string
-) {
+async function processAndSendWhatsAppAudioMessage(audioFileLocation: string) {
   let fileId = null;
   try {
-    fileId = await WhatsAppService.uploadAudioFile(
-      message.audio[language].location
-    );
+    fileId = await WhatsAppService.uploadAudioFile(audioFileLocation);
 
     await sendWhatsAppVoiceMsg(fileId.id);
   } catch (error) {
-    console.log('Error occured:', error);
+    console.log('Error occured');
   }
 
   return fileId;

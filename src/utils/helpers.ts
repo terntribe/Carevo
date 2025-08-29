@@ -94,6 +94,11 @@ export function initRequestClient() {
   client.interceptors.response.use(
     (response) => response,
     (error) => {
+      if (error.response) {
+        if (error.response.status !== 200) {
+          console.log(error.response.data);
+        }
+      }
       if (
         (axios.isAxiosError(error) && !error.response) ||
         error.code === 'ECONNABORTED' ||

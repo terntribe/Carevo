@@ -1,5 +1,7 @@
 {
-  "languages": ["english"],
+  "langages": [
+    "english"
+  ],
   "messages": [
     {
       "id": 0,
@@ -9,13 +11,13 @@
       "response": "Hello! Welcome to Carevo.\nI’m here to share health tips with you through voice messages.\n\nPlease choose an option to continue:\nSelect your preferred language:\n1.English\nChoose a health topic you want to learn about:\n1.malaria?\n\nJust reply with your choice",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250826120552.ogg",
+          "whatsapp_media_id": "1429912404961689"
         }
       },
       "options": {
         "prompt": "",
-        "next": ""
+        "next": 1
       }
     },
     {
@@ -26,14 +28,13 @@
       "response": "Malaria is a disease caused by a parasite. It is spread when a mosquito carrying the parasite bites a person.\n\nIt can make people very sick with fever, chills, and tiredness. Malaria is common in many tropical and warm places.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-1-20250826120712.ogg",
+          "whatsapp_media_id": "936292692044981"
         }
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [2, 3, 4, 5, 6],
-        "next": "2"
+        "next": 2
       }
     },
     {
@@ -50,8 +51,13 @@
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [3, 4, 5, 6],
-        "next": "3"
+        "related_questions": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "next": 3
       }
     },
     {
@@ -68,8 +74,13 @@
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [2, 4, 5, 6],
-        "next": "4"
+        "related_questions": [
+          2,
+          4,
+          5,
+          6
+        ],
+        "next": 4
       }
     },
     {
@@ -86,8 +97,13 @@
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [2, 3, 5, 6],
-        "next": "5"
+        "related_questions": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "next": 5
       }
     },
     {
@@ -104,8 +120,13 @@
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [2, 3, 4, 6],
-        "next": "6"
+        "related_questions": [
+          2,
+          3,
+          4,
+          6
+        ],
+        "next": 6
       }
     },
     {
@@ -122,8 +143,13 @@
       },
       "options": {
         "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [2, 3, 4, 5],
-        "next": "2"
+        "related_questions": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "next": 2
       }
     }
   ]

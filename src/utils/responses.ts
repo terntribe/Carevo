@@ -11,7 +11,7 @@ import * as z from 'zod';
 */
 
 const Message = z.object({
-  id: z.number(),
+  id: z.coerce.string(),
   type: z.literal(['topic', 'onboard', 'support']),
   keyword: z.string(),
   query: z.coerce.string(),
@@ -23,12 +23,16 @@ const Message = z.object({
       whatsapp_media_id: z.string(),
     })
   ),
-  options: z.object({
+  actions: z.object({
     prompt: z.string(),
-    relatedQuestions: z.array(z.number()).optional(),
-    next: z.number().optional(),
+    options: z.array(z.string()),
   }),
 });
+const systemMessages = {
+  '11': 'more_information',
+  '10': 'onboard:change_language',
+  '22': 'support:feedback',
+} as const;
 
 export type MessageType = z.infer<typeof Message>;
 
@@ -49,8 +53,9 @@ export class MessageConfig {
       const results = await JSONFileHandler.readJSONFile(
         config.storage.messages_location
       );
+
       this.messages = results.messages;
-      this.languages = results.langauges;
+      this.languages = results.languages;
     } catch (error) {
       console.error(
         `Failed to load messages from ${config.storage.messages_location}:`,
@@ -61,12 +66,8 @@ export class MessageConfig {
     return true;
   }
 
-  getMessageByQuery(query: string) {
-    return this.messages.find((msg) => msg.query === query);
-  }
-
-  getMessageById(id: number) {
-    return this.messages.find((msg) => msg.id === id);
+  getMessageByQueryOrId(query: string) {
+    return this.messages.find((msg) => msg.query === query || msg.id === query);
   }
 
   async saveMessage(message: MessageType) {
@@ -74,7 +75,8 @@ export class MessageConfig {
     const safeMsg = Message.safeParse(message);
 
     if (!safeMsg.success) {
-      console.log(safeMsg.error.issues[0].message);
+      console.log(typeof message.id);
+      console.log(safeMsg.error.issues);
       return null;
     } else {
       this.messages = this.messages.map((msg) => {
@@ -92,5 +94,21 @@ export class MessageConfig {
 
   supportedLanguage(text: string) {
     return this.languages.includes(text);
+  }
+
+  getLangauge(index: number) {
+    if (index >= 0 && index <= this.languages.length) {
+      return this.languages[index];
+    }
+    return null;
+  }
+
+  static checkSysPrompt(
+    query: string
+  ): (typeof systemMessages)[keyof typeof systemMessages] | false {
+    if (query in systemMessages) {
+      return systemMessages[query as keyof typeof systemMessages];
+    }
+    return false;
   }
 }

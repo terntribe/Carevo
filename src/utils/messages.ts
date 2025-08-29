@@ -4,6 +4,7 @@ import FormData from 'form-data';
 import fs from 'fs';
 
 import { MessageResponse, FileUploadResponse } from './types.js';
+import path from 'path';
 
 const requests = new RequestsManager();
 // const audioStore = new AudioStorageHandler(); this will be used to upload and store audio files
@@ -26,7 +27,7 @@ export default class WhatsAppService {
       url: url,
       body: JSON.stringify(data),
       headers: {
-        Authorization: `Bearer ${config.whatsapp.acess_token}`,
+        Authorization: `Bearer ${config.whatsapp.access_token}`,
         'Content-Type': 'application/json',
       },
     });
@@ -39,7 +40,7 @@ export default class WhatsAppService {
 
     form.append('file', fs.createReadStream(filePath), {
       contentType: 'audio/ogg',
-      filename: filePath,
+      filename: path.basename(filePath),
     });
     form.append('messaging_product', 'whatsapp');
 
@@ -47,7 +48,7 @@ export default class WhatsAppService {
       url: url,
       body: form,
       headers: {
-        Authorization: `Bearer ${config.whatsapp.acess_token}`,
+        Authorization: `Bearer ${config.whatsapp.access_token}`,
         ...form.getHeaders(), // Include FormData headers
       },
     });

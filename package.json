@@ -39,6 +39,7 @@
     "@tsconfig/node22": "^22.0.2",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
+    "@types/wav": "^1.0.4",
     "eslint": "^9.34.0",
     "eslint-plugin-perfectionist": "^4.15.0",
     "prettier": "^3.6.2",
