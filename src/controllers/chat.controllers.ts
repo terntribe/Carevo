@@ -21,7 +21,7 @@ import {
   MessageSessionType,
   SessionManager,
 } from '#models/sessions/sessions.model.js';
-import { matchIntent } from '#services/messages/processors.js';
+import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
 
@@ -32,8 +32,7 @@ export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
 
   const sendersPhoneNumber = messageData?.from;
-
-  let intent: 'onboard' | string = '';
+  let intent: Intent | null = null;
 
   if (!sendersPhoneNumber || !messageData || !messageData.text) {
     console.log('Missing fields'); // log here
@@ -68,18 +67,18 @@ export const chatController = async (req: Request, res: Response) => {
     }
 
     newSession = await sessionManager.update(currentSession);
-    res.status(200).send('Session created');
+    return res.status(200).send('Session created');
   } else {
     // pass the text to the intent matcher and call either ->
     intent = matchIntent(messageData?.text, userSession);
   }
 
   // obs or message service
-  if (userSession.lastMessage.query.startsWith('onboard')) {
+  if (intent && intent.service === 'onboard') {
     // call obs
 
     const currentSession = await OnboardingService.setLanguagePreferrence(
-      messageData.text,
+      intent.intent,
       userSession
     );
 
@@ -91,10 +90,11 @@ export const chatController = async (req: Request, res: Response) => {
     const _ = await sessionManager.update(currentSession);
 
     return res.send('Onboard response sent');
-  } else {
+  } else if (intent && intent.service === 'message') {
     // call tps
+
     const currentSession = await MessageService.response(
-      messageData.text,
+      intent.intent,
       userSession
     );
     if (!currentSession) {
@@ -105,5 +105,6 @@ export const chatController = async (req: Request, res: Response) => {
     const _ = await sessionManager.update(currentSession);
     return res.send('Response sent');
   }
-  // return res.send(200);
+
+  return res.send(200);
 };

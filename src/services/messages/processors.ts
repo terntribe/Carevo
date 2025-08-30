@@ -4,6 +4,11 @@ import WhatsAppService from '#utils/messages.js';
 import { MessageConfig, MessageType } from '#utils/responses.ts';
 import { MessageResponse } from '#utils/types.js';
 
+export interface Intent {
+  intent: string;
+  service: 'onboard' | 'message';
+}
+
 const messageConfig = new MessageConfig();
 const configLoaded = await messageConfig.loadMessages();
 
@@ -18,28 +23,46 @@ export const checkSupportedLanguages = (index: string) => {
 export const matchIntent = (
   query: string,
   session: MessageSessionType
-): string => {
+): Intent => {
   if (/^\d+$/.test(query)) {
-    const sysPrompt = MessageConfig.checkSysPrompt(query);
     const index = Number(query);
+    const sysPrompt = MessageConfig.checkSysPrompt(query);
+
     console.log('Matched intent:', { sysPrompt, index });
+
     if (
       sysPrompt &&
       sysPrompt === 'more_information' &&
       session.lastMessage.query
     ) {
-      return `${session.lastMessage.query}:more_info`;
+      return {
+        intent: `${session.lastMessage.query}:more_info`,
+        service: 'message',
+      };
     } else if (sysPrompt) {
-      return sysPrompt;
+      return {
+        intent: sysPrompt,
+        service: sysPrompt.startsWith('onboard') ? 'onboard' : 'message',
+      };
     } else if (
       session.lastMessage.options.length > 0 &&
       index >= 0 &&
       index <= session.lastMessage.options.length
     ) {
-      return session.lastMessage.options[index - 1];
+      // checks if a reserved system prompt is used as an option
+      const option = session.lastMessage.options[index - 1];
+      const isSysPrompt = MessageConfig.checkSysPrompt(option);
+
+      return {
+        intent: option,
+        service:
+          isSysPrompt && isSysPrompt.startsWith('onboard')
+            ? 'onboard'
+            : 'message',
+      };
     }
   }
-  return 'support:invalid_input';
+  return { intent: 'support:invalid_input', service: 'message' };
 };
 
 export const processMessage = async (
