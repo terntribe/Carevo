@@ -25,13 +25,13 @@ const Message = z.object({
   ),
   actions: z.object({
     prompt: z.string(),
-    options: z.array(z.string()),
+    options: z.array(z.coerce.string()),
   }),
 });
 const systemMessages = {
   '11': 'more_information',
   '10': 'onboard:change_language',
-  '22': 'support:feedback',
+  '22': 'topic:topics',
 } as const;
 
 export type MessageType = z.infer<typeof Message>;

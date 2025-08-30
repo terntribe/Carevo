@@ -5,6 +5,7 @@ export class OnboardingService {
   static async greetUser(session: MessageSessionType) {
     return await processMessage('onboard:greet', session);
   }
+
   static async setLanguagePreferrence(
     choice: string,
     session: MessageSessionType

@@ -22,19 +22,21 @@ export const matchIntent = (
   if (/^\d+$/.test(query)) {
     const sysPrompt = MessageConfig.checkSysPrompt(query);
     const index = Number(query);
+    console.log('Matched intent:', { sysPrompt, index });
     if (
       sysPrompt &&
       sysPrompt === 'more_information' &&
       session.lastMessage.query
     ) {
       return `${session.lastMessage.query}:more_info`;
-    } else if (sysPrompt) return sysPrompt;
-    else if (
+    } else if (sysPrompt) {
+      return sysPrompt;
+    } else if (
       session.lastMessage.options.length > 0 &&
       index >= 0 &&
       index <= session.lastMessage.options.length
     ) {
-      return session.lastMessage.options[index];
+      return session.lastMessage.options[index - 1];
     }
   }
   return 'support:invalid_input';
@@ -55,7 +57,7 @@ export const processMessage = async (
   let message = messageConfig.getMessageByQueryOrId(query);
 
   if (!message) {
-    console.error(`No message found for keyword: ${query}`);
+    console.warn(`No message found for keyword: ${query}`);
     message = messageConfig.getMessageByQueryOrId('support:invalid_input');
   }
 
@@ -114,19 +116,19 @@ export const processMessage = async (
         whatsapp_media_id: uploadedMediaId?.id || '',
       };
       await messageConfig.saveMessage(message);
-
-      // update the session keyword entry
-      session.lastMessage.query =
-        message.query !== session.lastMessage.query
-          ? message.query
-          : session.lastMessage.query;
-
-      // update options
-      session.lastMessage.options = message.actions.options
-        ? message.actions.options
-        : session.lastMessage.options;
     }
+    // update the session keyword entry
+    session.lastMessage.query =
+      message.query !== session.lastMessage.query
+        ? message.query
+        : session.lastMessage.query;
+
+    // update options
+    session.lastMessage.options = message.actions.options
+      ? message.actions.options
+      : session.lastMessage.options;
   }
+
   return session;
 };
 

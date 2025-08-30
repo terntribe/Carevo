@@ -52,6 +52,7 @@ export const chatController = async (req: Request, res: Response) => {
   ) as MessageSessionType;
 
   if (!userSession) {
+    // !userSession
     var newSession = await sessionManager.create(sendersPhoneNumber);
     userSession = newSession ? newSession : userSession;
 
@@ -100,6 +101,7 @@ export const chatController = async (req: Request, res: Response) => {
       console.error('Failed to proccess response for: ', messageData.text); // log here
       return res.send(200);
     }
+    console.log('Session after TPS: ', currentSession);
     const _ = await sessionManager.update(currentSession);
     return res.send('Response sent');
   }

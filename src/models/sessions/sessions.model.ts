@@ -4,10 +4,10 @@ import * as z from 'zod';
 const MessageSession = z.object({
   id: z.uuid(),
   phoneNumber: z.coerce.string().min(10),
-  language: z.union([z.literal('default:english'), z.string()]),
+  language: z.union([z.literal('english'), z.string()]),
   lastMessage: z.object({
     query: z.string(),
-    options: z.array(z.string()),
+    options: z.array(z.coerce.string()),
   }),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),

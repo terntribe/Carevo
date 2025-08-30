@@ -1,23 +1,38 @@
 {
-  "langages": [
-    "english"
-  ],
+  "languages": ["english"],
   "messages": [
     {
       "id": 0,
-      "type": "onboard",
-      "keyword": "greet",
+      "type": "topic",
+      "keyword": "onboard",
       "query": "onboard:greet",
-      "response": "Hello! Welcome to Carevo.\nI’m here to share health tips with you through voice messages.\n\nPlease choose an option to continue:\nSelect your preferred language:\n1.English\nChoose a health topic you want to learn about:\n1.malaria?\n\nJust reply with your choice",
+      "response": "Hello, welcome to Carevo. I am your health guide on WhatsApp. You can listen to short audio messages about health in simple language.\n\nPlease select your preferred language:\n1. English\n\nTo proceed to the available health topics without changing language, reply with:\n2. Select a health topic\n\nReply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250826120552.ogg",
-          "whatsapp_media_id": "1429912404961689"
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250830095119.ogg",
+          "whatsapp_media_id": "1311458950369952"
         }
       },
-      "options": {
+      "actions": {
         "prompt": "",
-        "next": 1
+        "options": [15, 22]
+      }
+    },
+    {
+      "id": 22,
+      "type": "topic",
+      "keyword": "topic",
+      "query": "topic:topics",
+      "response": "Here are the available health topics you can learn about:\n\n1. Malaria\n\nReply with the number of your choice.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whastapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "",
+        "options": [1]
       }
     },
     {
@@ -25,131 +40,101 @@
       "type": "topic",
       "keyword": "malaria",
       "query": "malaria",
-      "response": "Malaria is a disease caused by a parasite. It is spread when a mosquito carrying the parasite bites a person.\n\nIt can make people very sick with fever, chills, and tiredness. Malaria is common in many tropical and warm places.",
+      "response": "Malaria is a sickness caused by parasites that enter the body through mosquito bites. These mosquitoes are usually active at night.\n\nIt can make people very weak and, if not treated quickly, can even cause death.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-1-20250826120712.ogg",
-          "whatsapp_media_id": "936292692044981"
+          "location": "",
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "next": 2
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How can I prevent malaria?\n4. How is malaria treated?\n5. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [2, 3, 4, 5, 6]
       }
     },
     {
       "id": 2,
       "type": "topic",
-      "keyword": "symptoms",
+      "keyword": "malaria",
       "query": "What are the symptoms of malaria?",
-      "response": "The main signs of malaria are fever, chills, headache, and sweating. Some people may also feel weak, have body pain, or vomit.\n\nIf malaria is not treated, the symptoms can become worse and more dangerous.",
+      "response": "The main symptoms are fever, chills, sweating, headache, and feeling very tired. Some people also have body pain and feel sick in the stomach.\n\nIf you see these signs, it is important to get tested and treated quickly.",
       "audio": {
         "english": {
           "location": "",
-          "whatsapp_media_id": ""
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What to do when I have malaria, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [
-          3,
-          4,
-          5,
-          6
-        ],
-        "next": 3
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. How does malaria spread?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [3, 4, 5]
       }
     },
     {
       "id": 3,
       "type": "topic",
-      "keyword": "treatment",
-      "query": "What to do when I have malaria.",
-      "response": "If you think you have malaria, go to a health center or hospital quickly. A test can confirm if it is malaria.\n\nDo not try to treat yourself at home. Doctors can give you the right medicine to cure malaria and stop it from getting worse.",
+      "keyword": "malaria",
+      "query": "How does malaria spread?",
+      "response": "Malaria spreads when a female mosquito carrying the parasite bites a person. The parasite enters the blood and makes the person sick.\n\nIt cannot spread directly from one person to another like flu or cold.",
       "audio": {
         "english": {
           "location": "",
-          "whatsapp_media_id": ""
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, How to prevent against malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [
-          2,
-          4,
-          5,
-          6
-        ],
-        "next": 4
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [2, 4, 5]
       }
     },
     {
       "id": 4,
       "type": "topic",
-      "keyword": "prevention",
-      "query": "How to prevent against malaria.",
-      "response": "You can prevent malaria by sleeping under treated mosquito nets, using mosquito repellent, and wearing clothes that cover your body.\n\nKeeping your surroundings clean and removing standing water also helps reduce mosquito breeding.",
+      "keyword": "malaria",
+      "query": "How can I prevent malaria?",
+      "response": "You can prevent malaria by sleeping under a treated mosquito net, using insect sprays, and covering your body with clothes at night.\n\nAlso, clearing standing water near your home helps reduce mosquito breeding.",
       "audio": {
         "english": {
           "location": "",
-          "whatsapp_media_id": ""
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, Can malaria be fatal?, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [
-          2,
-          3,
-          5,
-          6
-        ],
-        "next": 5
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [2, 3, 5]
       }
     },
     {
       "id": 5,
       "type": "topic",
-      "keyword": "fatal",
-      "query": "Can malaria be fatal?",
-      "response": "Yes, malaria can be very dangerous if not treated quickly. It can damage important organs in the body like the brain, liver, or kidneys.\n\nChildren under five years old and pregnant women are at higher risk of dying from malaria.",
+      "keyword": "malaria",
+      "query": "How is malaria treated?",
+      "response": "Malaria is treated with special medicines called antimalarial drugs. These medicines kill the parasite in the blood.\n\nIt is very important to visit a health worker or clinic as soon as symptoms start. Do not try to treat it alone.",
       "audio": {
         "english": {
           "location": "",
-          "whatsapp_media_id": ""
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can you die from malaria? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [
-          2,
-          3,
-          4,
-          6
-        ],
-        "next": 6
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [2, 3, 6]
       }
     },
     {
       "id": 6,
       "type": "topic",
-      "keyword": "death",
-      "query": "Can you die from malaria?",
-      "response": "Yes, malaria can cause death if it is not treated on time. Severe malaria can lead to coma, severe anemia, or organ failure.\n\nBut with early testing and proper treatment, malaria can be cured and death can be prevented.",
+      "keyword": "malaria",
+      "query": "Can malaria cause death?",
+      "response": "Yes, malaria can cause death if it is not treated quickly. Severe malaria can damage the brain, liver, or kidneys.\n\nQuick testing and treatment can save lives, so it is important to seek care immediately.",
       "audio": {
         "english": {
           "location": "",
-          "whatsapp_media_id": ""
+          "whastapp_media_id": ""
         }
       },
-      "options": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask: What are the symptoms of malaria?, What to do when I have malaria, How to prevent against malaria, Can malaria be fatal? or if you want more information on the subject, respond with \"more information\"",
-        "related_questions": [
-          2,
-          3,
-          4,
-          5
-        ],
-        "next": 2
+      "actions": {
+        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "options": [2, 4]
       }
     }
   ]
