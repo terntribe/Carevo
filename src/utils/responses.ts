@@ -67,7 +67,7 @@ export class MessageConfig {
   }
 
   getMessageByQueryOrId(query: string) {
-    return this.messages.find((msg) => msg.query === query || msg.id === query);
+    return this.messages.find((msg) => msg.query == query || msg.id == query);
   }
 
   async saveMessage(message: MessageType) {

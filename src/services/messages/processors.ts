@@ -26,8 +26,8 @@ export const matchIntent = (
 ): Intent => {
   if (/^\d+$/.test(query)) {
     const index = Number(query);
-    const sysPrompt = MessageConfig.checkSysPrompt(query);
 
+    const sysPrompt = MessageConfig.checkSysPrompt(query);
     console.log('Matched intent:', { sysPrompt, index });
 
     if (
@@ -54,7 +54,7 @@ export const matchIntent = (
       const isSysPrompt = MessageConfig.checkSysPrompt(option);
 
       return {
-        intent: option,
+        intent: isSysPrompt ? isSysPrompt : option,
         service:
           isSysPrompt && isSysPrompt.startsWith('onboard')
             ? 'onboard'
@@ -80,7 +80,7 @@ export const processMessage = async (
   let message = messageConfig.getMessageByQueryOrId(query);
 
   if (!message) {
-    console.warn(`No message found for keyword: ${query}`);
+    console.warn(`No message found for query or id: ${query}`);
     message = messageConfig.getMessageByQueryOrId('support:invalid_input');
   }
 

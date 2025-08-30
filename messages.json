@@ -1,5 +1,4 @@
 {
-  "languages": ["english"],
   "messages": [
     {
       "id": 0,
@@ -15,7 +14,10 @@
       },
       "actions": {
         "prompt": "",
-        "options": [15, 22]
+        "options": [
+          15,
+          22
+        ]
       }
     },
     {
@@ -26,13 +28,15 @@
       "response": "Here are the available health topics you can learn about:\n\n1. Malaria\n\nReply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-22-20250830183846.ogg",
+          "whatsapp_media_id": "775552828756666"
         }
       },
       "actions": {
         "prompt": "",
-        "options": [1]
+        "options": [
+          1
+        ]
       }
     },
     {
@@ -43,13 +47,19 @@
       "response": "Malaria is a sickness caused by parasites that enter the body through mosquito bites. These mosquitoes are usually active at night.\n\nIt can make people very weak and, if not treated quickly, can even cause death.",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-1-20250830185153.ogg",
+          "whatsapp_media_id": "3024856607675537"
         }
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How can I prevent malaria?\n4. How is malaria treated?\n5. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [2, 3, 4, 5, 6]
+        "options": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
       }
     },
     {
@@ -66,7 +76,11 @@
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. How does malaria spread?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [3, 4, 5]
+        "options": [
+          3,
+          4,
+          5
+        ]
       }
     },
     {
@@ -83,7 +97,11 @@
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [2, 4, 5]
+        "options": [
+          2,
+          4,
+          5
+        ]
       }
     },
     {
@@ -100,7 +118,11 @@
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [2, 3, 5]
+        "options": [
+          2,
+          3,
+          5
+        ]
       }
     },
     {
@@ -117,7 +139,11 @@
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [2, 3, 6]
+        "options": [
+          2,
+          3,
+          6
+        ]
       }
     },
     {
@@ -134,7 +160,10 @@
       },
       "actions": {
         "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [2, 4]
+        "options": [
+          2,
+          4
+        ]
       }
     }
   ]
