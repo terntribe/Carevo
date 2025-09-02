@@ -73,7 +73,7 @@ export const processMessage = async (
 
   // ensures the messageConfig has been loaded
   if (!configLoaded) {
-    console.error('messages have not been loaded');
+    console.error('messages have not been loaded'); // fatal but do not crash
     return;
   }
 
@@ -97,7 +97,7 @@ export const processMessage = async (
       // pass the id th the whatsapp messaging service to send
       console.log('Audio file found for ', message.query);
 
-      await sendWhatsAppVoiceMsg(mediaId);
+      await sendWhatsAppVoiceMsg(mediaId); // get the response here and log its failure or success!
     } else if (message.audio[languagePreference].location) {
       // pass location to the whatsapp MS to upload and get the media Id
       console.log('No mediaId found, uploading audio file for', message.query);
@@ -110,6 +110,7 @@ export const processMessage = async (
         // save the mediaId to the message config for future use
         message.audio[languagePreference].whatsapp_media_id =
           uploadedMediaId.id;
+
         await messageConfig.saveMessage(message);
       }
     } else {
@@ -162,7 +163,7 @@ async function sendWhatsAppVoiceMsg(mediaId: string) {
     audio: { id: mediaId || '' },
   };
   const response = WhatsAppService.getOutgoingMessageData(audioData);
-  await WhatsAppService.sendMessage(response);
+  return await WhatsAppService.sendMessage(response);
 }
 
 async function processAndSendWhatsAppAudioMessage(audioFileLocation: string) {

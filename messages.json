@@ -2,7 +2,7 @@
   "messages": [
     {
       "id": 0,
-      "type": "topic",
+      "type": "onboard",
       "keyword": "onboard",
       "query": "onboard:greet",
       "response": "Hello, welcome to Carevo. I am your health guide on WhatsApp. You can listen to short audio messages about health in simple language.\n\nPlease select your preferred language:\n1. English\n\nTo proceed to the available health topics without changing language, reply with:\n2. Select a health topic\n\nReply with the number of your choice.",
@@ -16,6 +16,25 @@
         "prompt": "",
         "options": [
           15,
+          22
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "type": "onboard",
+      "keyword": "onboard:language",
+      "query": "onboard:english",
+      "response": "You have selected English as your preferred language.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whastapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To continue, reply with 22 to see the list of available health topics.",
+        "options": [
           22
         ]
       }
@@ -112,8 +131,8 @@
       "response": "You can prevent malaria by sleeping under a treated mosquito net, using insect sprays, and covering your body with clothes at night.\n\nAlso, clearing standing water near your home helps reduce mosquito breeding.",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-4-20250830221234.ogg",
+          "whatsapp_media_id": "1270619690911970"
         }
       },
       "actions": {
@@ -133,8 +152,8 @@
       "response": "Malaria is treated with special medicines called antimalarial drugs. These medicines kill the parasite in the blood.\n\nIt is very important to visit a health worker or clinic as soon as symptoms start. Do not try to treat it alone.",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-5-20250902121206.ogg",
+          "whatsapp_media_id": "1077314291263917"
         }
       },
       "actions": {

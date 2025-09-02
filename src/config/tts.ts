@@ -45,7 +45,7 @@ export default class GeminiTTSConfig {
         ?.data;
     } else {
       console.error(
-        `Failed to generate audio: ${response.status} - ${response.statusText}`
+        `Failed to generate audio: ${response.status} - ${response.statusText}` // throw this error
       );
     }
     return null;

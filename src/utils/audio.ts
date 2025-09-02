@@ -1,7 +1,7 @@
 import storage from '#config/storage.js';
 import tts from '#config/tts.js';
 import { config } from '#config/index.js';
-import path from 'path';
+// import path from 'path';
 
 function getAudioFileName(messageId: string, ext: string): string {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/[-T:]/g, '');
@@ -15,15 +15,16 @@ export async function saveAudio(
   // Save audio in WAV format and convert to Opus
   const wavFileName = getAudioFileName(messageId, 'wav');
   const opusFileName = getAudioFileName(messageId, 'ogg');
-  const wavFilePath = path.resolve(
-    process.cwd() + `${config.storage.audio_files}/${wavFileName}`
+
+  const wavFilePath = storage.resolvePath(
+    `${config.storage.audio_files}/${wavFileName}`
   );
-  const opusFilePath = path.resolve(
-    process.cwd() + `${config.storage.audio_files}/${opusFileName}`
+  const opusFilePath = storage.resolvePath(
+    `${config.storage.audio_files}/${opusFileName}`
   );
 
-  await storage.saveWavFile(wavFilePath, data);
-  const opusFile = await storage.saveOpusFile(wavFilePath, opusFilePath);
+  await storage.saveWavFile(wavFilePath, data); // try catch here too...
+  const opusFile = await storage.saveOpusFile(wavFilePath, opusFilePath); // catch error here and log
 
   if (!opusFile) {
     throw new Error('Failed to convert audio to Opus format');
@@ -37,7 +38,7 @@ export async function generateAudio(
   language: string,
   messageId: string
 ): Promise<string> {
-  const audioData = await tts.generateAudio(text, language);
+  const audioData = await tts.generateAudio(text, language); // try - catch this and log the error
 
   if (!audioData) {
     console.error('Failed to generate audio');

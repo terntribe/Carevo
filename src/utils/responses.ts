@@ -77,7 +77,7 @@ export class MessageConfig {
     if (!safeMsg.success) {
       console.log(typeof message.id);
       console.log(safeMsg.error.issues);
-      return null;
+      return null; // nah throw an error...
     } else {
       this.messages = this.messages.map((msg) => {
         if (msg.id === safeMsg.data.id) {
@@ -86,6 +86,7 @@ export class MessageConfig {
         return msg;
       });
       await JSONFileHandler.saveJSONFile(config.storage.messages_location, {
+        // try catch this
         langages: this.languages,
         messages: this.messages,
       });
