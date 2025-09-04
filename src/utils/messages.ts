@@ -2,12 +2,16 @@ import { config } from '#config/index.js';
 import { RequestsManager } from './requests.js';
 import FormData from 'form-data';
 import fs from 'fs';
-
+import { rootLogger, getLogger } from '#config/logger.js';
 import { MessageResponse, FileUploadResponse } from './types.js';
 import path from 'path';
 
 const requests = new RequestsManager();
-// const audioStore = new AudioStorageHandler(); this will be used to upload and store audio files
+
+const logger = getLogger(rootLogger, {
+  microservice: 'whatsapp-bot-service',
+  scope: 'WhatsAppService',
+});
 
 /*
 {
@@ -53,11 +57,11 @@ export default class WhatsAppService {
       },
     });
 
-    if (response.status !== 200) {
-      console.log(response.data);
+    if (response && response.status !== 200) {
+      logger.debug(`Failed to upload media: ${response.data}`);
       throw new Error(`Failed to upload media: ${response.statusText}`);
     }
-    return response.data as FileUploadResponse;
+    return response?.data as FileUploadResponse;
   }
 
   static getOutgoingMessageData(message: MessageResponse) {

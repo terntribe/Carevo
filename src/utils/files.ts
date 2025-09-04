@@ -1,5 +1,6 @@
 // json file handler
 import fs from 'fs/promises';
+import { rootLogger as logger } from '#config/logger.js';
 
 export class JSONFileHandler {
   static async readJSONFile(filePath: string): Promise<any> {
@@ -7,7 +8,7 @@ export class JSONFileHandler {
       const data = await fs.readFile(filePath, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
-      console.error(`Error reading JSON file at ${filePath}:`, error);
+      logger.error(`Error reading JSON file at ${filePath}: ${error}`);
       throw error;
     }
   }
@@ -16,9 +17,9 @@ export class JSONFileHandler {
     try {
       const jsonData = JSON.stringify(data, null, 2);
       await fs.writeFile(filePath, jsonData, 'utf-8');
-      console.log(`JSON data saved to ${filePath}`);
+      logger.info(`JSON data saved to ${filePath}`);
     } catch (error) {
-      console.error(`Error saving JSON file at ${filePath}:`, error);
+      logger.error(`Error saving JSON file at ${filePath}: ${error}`);
       throw error;
     }
   }

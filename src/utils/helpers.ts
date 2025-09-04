@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { rootLogger as logger } from '#config/logger.js';
 
 type messageData = {
   id: any;
@@ -77,13 +78,18 @@ export function initRequestClient() {
   //attach debug log for requests
   client.interceptors.request.use(
     (request) => {
-      console.log(`${request.method} - pinging ${request.url}`);
+      logger.debug(`${request.method?.toUpperCase()} -> ${request.url}`, {
+        request: request,
+      });
       return request;
     },
     (error) => {
       if (error.response) {
         if (error.response.status !== 200) {
-          console.log(error.response.data);
+          logger.debug('Request failed', {
+            data: error.response.data,
+            config: error.response.config,
+          });
         }
       }
       throw error;
@@ -96,7 +102,9 @@ export function initRequestClient() {
     (error) => {
       if (error.response) {
         if (error.response.status !== 200) {
-          console.log(error.response.data);
+          logger.debug(`Request failed: ${error.response.config.url}`, {
+            error: error.response.data,
+          });
         }
       }
       if (
@@ -120,8 +128,9 @@ export function initRequestClient() {
 
           const delay = config.__retryCount > 1 ? config._backOff * 1000 : 1000;
 
-          console.log(
-            `attempt ${config.__retryCount} failed, retrying in ${delay / 1000} seconds...`
+          logger.warn(
+            `attempt ${config.__retryCount} failed, retrying in ${delay / 1000} seconds...`,
+            { config: config }
           );
           return new Promise((resolve) => {
             setTimeout(() => {

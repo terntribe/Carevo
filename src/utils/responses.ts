@@ -1,6 +1,7 @@
 import { config } from '#config/index.js';
 import { JSONFileHandler } from './files.js';
 import * as z from 'zod';
+import { rootLogger as logger } from '#config/logger.js';
 
 /*
 'onboard:select_language',
@@ -57,9 +58,9 @@ export class MessageConfig {
       this.messages = results.messages;
       this.languages = results.languages;
     } catch (error) {
-      console.error(
-        `Failed to load messages from ${config.storage.messages_location}:`,
-        error
+      logger.error(
+        `Failed to load messages from ${config.storage.messages_location}:
+        ${error}`
       );
       return false;
     }
@@ -70,14 +71,15 @@ export class MessageConfig {
     return this.messages.find((msg) => msg.query == query || msg.id == query);
   }
 
-  async saveMessage(message: MessageType) {
+  async saveMessage(message: MessageType): Promise<void> {
     // update the messages in memory and disk
     const safeMsg = Message.safeParse(message);
 
     if (!safeMsg.success) {
-      console.log(typeof message.id);
-      console.log(safeMsg.error.issues);
-      return null; // nah throw an error...
+      // console.log(typeof message.id);
+      logger.error(`Validation error: ${safeMsg.error.issues}`, {
+        message: message,
+      });
     } else {
       this.messages = this.messages.map((msg) => {
         if (msg.id === safeMsg.data.id) {
@@ -85,11 +87,18 @@ export class MessageConfig {
         }
         return msg;
       });
-      await JSONFileHandler.saveJSONFile(config.storage.messages_location, {
-        // try catch this
-        langages: this.languages,
-        messages: this.messages,
-      });
+      try {
+        await JSONFileHandler.saveJSONFile(config.storage.messages_location, {
+          // try catch this
+          langages: this.languages,
+          messages: this.messages,
+        });
+      } catch (error) {
+        logger.error(
+          `Failed to save messages to ${config.storage.messages_location}: ${error}`,
+          { message: message }
+        );
+      }
     }
   }
 

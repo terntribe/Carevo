@@ -24,9 +24,27 @@ import {
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
+import { rootLogger, getLogger, analyticsLogger } from '#config/logger.js';
 
 const sessionManager = new SessionManager();
 const _ = await sessionManager.loadSessions();
+
+// loggers
+const logger = getLogger(rootLogger, {
+  microservice: 'whastapp-bot-service',
+  scope: 'webhook',
+});
+
+const analytics = getLogger(analyticsLogger, {
+  microservice: 'whastapp-bot-service',
+  scope: 'webhook',
+});
+
+type Context = {
+  phoneNumber: string;
+  message: string;
+  intent?: Intent;
+};
 
 export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
@@ -35,12 +53,14 @@ export const chatController = async (req: Request, res: Response) => {
   let intent: Intent | null = null;
 
   if (!sendersPhoneNumber || !messageData || !messageData.text) {
-    console.log('Missing fields'); // log here
-    return res.status(400).send('Bad request: Missing fields'); // send 400 bad request because validation failed
+    logger.error('Missing fields: phone number or message text is missing');
+    return res.status(400).send(400);
   } else if (
     inProcessLine({ phone: sendersPhoneNumber, text: messageData.text })
   ) {
-    console.log(`still warm: ${sendersPhoneNumber} -> ${messageData.text}`);
+    logger.warn(
+      `Message still being processed: Sender: ${sendersPhoneNumber} -> text: ${messageData.text}`
+    );
     return res.send(200);
   }
 
@@ -50,24 +70,42 @@ export const chatController = async (req: Request, res: Response) => {
     sendersPhoneNumber
   ) as MessageSessionType;
 
+  let context: Context = {
+    phoneNumber: sendersPhoneNumber,
+    message: messageData.text,
+  }; // for logging
+
   if (!userSession) {
     // !userSession
     var newSession = await sessionManager.create(sendersPhoneNumber);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
-      console.error('Failed to create a new session'); // log here
+      logger.error(
+        `Failed to create a new session for whatsapp user -> ${sendersPhoneNumber}`,
+        context
+      ); // log here
       return res.send(200);
     }
 
     const currentSession = await OnboardingService.greetUser(userSession);
     if (!currentSession) {
-      console.error('onboarding service failed: '); // log here
+      logger.error(
+        `Failed to onboard whatsapp user -> ${sendersPhoneNumber}`,
+        context
+      ); // log here
       return res.send(200);
     }
 
     newSession = await sessionManager.update(currentSession);
-    return res.status(200).send('Session created');
+
+    logger.info(
+      `New session created for whatsapp user -> ${sendersPhoneNumber}`,
+      {
+        session: newSession,
+      }
+    );
+    return res.send(200);
   } else {
     // pass the text to the intent matcher and call either ->
     intent = matchIntent(messageData?.text, userSession);
@@ -83,7 +121,10 @@ export const chatController = async (req: Request, res: Response) => {
     );
 
     if (!currentSession) {
-      console.error('Failed to set language preference'); // log here
+      logger.error(
+        `Failed to set language preference of ${intent.intent}`,
+        context
+      ); // log here
       return res.send(200);
     }
 
@@ -97,11 +138,17 @@ export const chatController = async (req: Request, res: Response) => {
       intent.intent,
       userSession
     );
+
+    context.intent = intent;
+
     if (!currentSession) {
-      console.error('Failed to proccess response for: ', messageData.text); // log here
+      logger.error(
+        `Failed to proccess response for: ${messageData.text}`,
+        context
+      ); // log here
       return res.send(200);
     }
-    console.log('Session after TPS: ', currentSession);
+    // console.log('Session after TPS: ', currentSession);
     const _ = await sessionManager.update(currentSession);
     return res.send('Response sent');
   }

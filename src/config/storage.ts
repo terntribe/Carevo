@@ -3,7 +3,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
-// import path from 'path';
+import { rootLogger as logger } from './logger.js';
 
 const execPromise = promisify(exec);
 
@@ -32,20 +32,23 @@ export default class LocalStorage {
       writer.end();
     });
   }
-  static async saveOpusFile(wavFile: string, opusFile: string) {
+  static async saveOpusFile(wavFile: string, opusFile: string): Promise<void> {
     try {
       // Convert to Ogg/Opus using FFmpeg
       await execPromise(
         `ffmpeg -i ${wavFile} -c:a libopus -b:a 64k ${opusFile}`
       );
     } catch (error) {
-      console.log('Error during conversion:', error); // Bubble this error and not log it here ...
-      return '';
+      logger.error(
+        `Failed to convert ${wavFile} to opus/ogg format: ${error}`,
+        { wavFile: wavFile, opusFile: opusFile }
+      );
+
+      throw error;
     } finally {
       // Clean up
       await fs.promises.unlink(wavFile);
     }
-    return opusFile; // no need to return -> void
   }
 
   static resolvePath(filePath: string) {

@@ -23,11 +23,18 @@ export async function saveAudio(
     `${config.storage.audio_files}/${opusFileName}`
   );
 
-  await storage.saveWavFile(wavFilePath, data); // try catch here too...
-  const opusFile = await storage.saveOpusFile(wavFilePath, opusFilePath); // catch error here and log
+  try {
+    await storage.saveWavFile(wavFilePath, data); // try catch here too...
+  } catch (error) {
+    console.error('Failed to convert/store WAV file for audio');
+    return '';
+  }
 
-  if (!opusFile) {
-    throw new Error('Failed to convert audio to Opus format');
+  try {
+    await storage.saveOpusFile(wavFilePath, opusFilePath); // catch error here and log
+  } catch (error) {
+    console.error('Failed to convert audio to Opus format');
+    return '';
   }
 
   return opusFilePath;
@@ -38,16 +45,15 @@ export async function generateAudio(
   language: string,
   messageId: string
 ): Promise<string> {
-  const audioData = await tts.generateAudio(text, language); // try - catch this and log the error
-
-  if (!audioData) {
+  try {
+    const audioData = await tts.generateAudio(text, language); // try - catch this and log the error
+    const audioFilePath = await saveAudio(
+      Buffer.from(audioData, 'base64'),
+      messageId
+    );
+    return audioFilePath;
+  } catch (error) {
     console.error('Failed to generate audio');
     return ''; // Return empty string if audio generation fails
   }
-
-  const audioFilePath = await saveAudio(
-    Buffer.from(audioData, 'base64'),
-    messageId
-  );
-  return audioFilePath;
 }

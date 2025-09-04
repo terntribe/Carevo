@@ -1,5 +1,11 @@
 import { JSONFileHandler } from '#utils/files.js';
 import * as z from 'zod';
+import { rootLogger, getLogger } from '#config/logger.js';
+
+const logger = getLogger(rootLogger, {
+  microservice: 'whatsapp-bot-service',
+  scope: 'session-manager',
+});
 
 const MessageSession = z.object({
   id: z.uuid(),
@@ -27,7 +33,7 @@ export class SessionManager {
       const results = await JSONFileHandler.readJSONFile(this.file);
       this.sessions = results.sessions;
     } catch (error) {
-      console.error(`Failed to load sessions from ${this.file}:`, error);
+      logger.error(`Failed to load sessions from ${this.file}:`, error);
       return false;
     }
     return true;
@@ -40,7 +46,7 @@ export class SessionManager {
         sessions: this.sessions,
       });
     } catch (error) {
-      console.error(`Failed to save sessions to ${this.file}:`, error);
+      logger.error(`Failed to save sessions to ${this.file}:`, error);
       return false;
     }
     return true;
@@ -63,7 +69,7 @@ export class SessionManager {
     // save
     const saved = await this.saveSessions();
     if (!saved) {
-      console.error('Failed to save new session');
+      logger.error('Failed to save new session', { session: session });
       return null;
     }
 
@@ -76,7 +82,9 @@ export class SessionManager {
     const updated = MessageSession.safeParse(sesh); // might move to validators...??
 
     if (!updated.success) {
-      console.log(updated.error.issues[0].message);
+      logger.error(`Validation Error: ${updated.error.issues[0].message}`, {
+        session: sesh,
+      });
       return null;
     } else {
       this.sessions = this.sessions.map((session) => {
@@ -88,7 +96,7 @@ export class SessionManager {
       //save
       const saved = await this.saveSessions();
       if (!saved) {
-        console.error('Failed to save updated session');
+        logger.error('Failed to save updated session', { session: sesh });
         return null;
       }
     }
@@ -110,7 +118,7 @@ export class SessionManager {
     // save
     const deleted = await this.saveSessions();
     if (!deleted) {
-      console.error('Failed to delete session');
+      logger.error('Failed to delete session', { identifier: identifier });
       return null;
     }
     return;

@@ -3,14 +3,24 @@ import { generateAudio } from '#utils/audio.js';
 import WhatsAppService from '#utils/messages.js';
 import { MessageConfig, MessageType } from '#utils/responses.ts';
 import { MessageResponse } from '#utils/types.js';
+import { getLogger, rootLogger } from '#config/logger.js';
+import { config } from '#config/index.js';
+import path from 'path';
 
-export interface Intent {
+export type Intent = {
   intent: string;
   service: 'onboard' | 'message';
-}
+};
+
+type processContext = { query: string; session: MessageSessionType };
 
 const messageConfig = new MessageConfig();
 const configLoaded = await messageConfig.loadMessages();
+
+const logger = getLogger(rootLogger, {
+  microservice: 'whatsapp-bot-service',
+  scope: 'response',
+});
 
 export const checkSupportedLanguages = (index: string) => {
   const i = Number(index);
@@ -24,11 +34,20 @@ export const matchIntent = (
   query: string,
   session: MessageSessionType
 ): Intent => {
+  const context = { session: session };
+
   if (/^\d+$/.test(query)) {
     const index = Number(query);
 
+    logger.info(
+      `Matching intent for query: ${query}, choice: ${index}`,
+      context
+    );
+
     const sysPrompt = MessageConfig.checkSysPrompt(query);
-    console.log('Matched intent:', { sysPrompt, index });
+    if (sysPrompt) {
+      logger.info(`Matched intent: ${sysPrompt}`);
+    }
 
     if (
       sysPrompt &&
@@ -53,6 +72,11 @@ export const matchIntent = (
       const option = session.lastMessage.options[index - 1];
       const isSysPrompt = MessageConfig.checkSysPrompt(option);
 
+      logger.info(
+        `Matched Intent: ${isSysPrompt ? isSysPrompt : option}`,
+        context
+      );
+
       return {
         intent: isSysPrompt ? isSysPrompt : option,
         service:
@@ -71,21 +95,29 @@ export const processMessage = async (
 ) => {
   // processes the message based on the keyword query
 
+  let context: processContext = {
+    query: query,
+    session: session,
+  };
+
   // ensures the messageConfig has been loaded
   if (!configLoaded) {
-    console.error('messages have not been loaded'); // fatal but do not crash
+    logger.error(
+      `Failed to load messages file from location : ${config.storage.messages_location}`,
+      { filename: config.storage.messages_location }
+    ); // change to fatal
     return;
   }
 
   let message = messageConfig.getMessageByQueryOrId(query);
 
   if (!message) {
-    console.warn(`No message found for query or id: ${query}`);
+    logger.warn(`No message found for query or id: ${query}`);
     message = messageConfig.getMessageByQueryOrId('support:invalid_input');
   }
 
   if (message) {
-    console.log('Processing message:', message.query);
+    logger.info(`Processing message: ${message.query}`);
 
     const languagePreference = session.language;
     const mediaId =
@@ -95,19 +127,37 @@ export const processMessage = async (
 
     if (mediaId) {
       // pass the id th the whatsapp messaging service to send
-      console.log('Audio file found for ', message.query);
+      logger.info(`Whatsapp media id exists: ${mediaId}`, {
+        keyword: message.keyword,
+        ...context,
+      });
 
       await sendWhatsAppVoiceMsg(mediaId); // get the response here and log its failure or success!
     } else if (message.audio[languagePreference].location) {
+      // store file name and location
+      const audioLocation = message.audio[languagePreference].location;
+      const audioFileName = path.basename(audioLocation);
+
       // pass location to the whatsapp MS to upload and get the media Id
-      console.log('No mediaId found, uploading audio file for', message.query);
+      logger.info(
+        `No whatsapp media id found, uploading audio file ${audioFileName}`,
+        {
+          audio: audioLocation,
+          ...context,
+        }
+      );
 
       const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
-        message.audio[languagePreference].location
+        audioLocation,
+        context
       );
 
       if (uploadedMediaId) {
         // save the mediaId to the message config for future use
+        logger.info(`Obtained whatsapp media id: ${uploadedMediaId}`, {
+          audio: audioLocation,
+          ...context,
+        });
         message.audio[languagePreference].whatsapp_media_id =
           uploadedMediaId.id;
 
@@ -127,19 +177,38 @@ export const processMessage = async (
       // const audioFilePath =
       // 'C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250826103710.ogg';
       if (!audioFilePath) {
-        console.error('Failed to generate audio for message:', message.query);
+        logger.error('Failed to generate audio for message', {
+          response: text,
+          ...context,
+        });
         return session;
       }
 
-      const uploadedMediaId =
-        await processAndSendWhatsAppAudioMessage(audioFilePath);
+      const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
+        audioFilePath,
+        context
+      );
 
-      // update message audio location and media id field
-      message.audio[languagePreference] = {
-        location: audioFilePath,
-        whatsapp_media_id: uploadedMediaId?.id || '',
-      };
-      await messageConfig.saveMessage(message);
+      if (uploadedMediaId) {
+        // update message audio location and media id field
+
+        logger.info(`Obtained whatsapp media id: ${uploadedMediaId}`, {
+          audio: audioFilePath,
+          ...context,
+        });
+
+        message.audio[languagePreference] = {
+          location: audioFilePath,
+          whatsapp_media_id: uploadedMediaId.id,
+        };
+
+        await messageConfig.saveMessage(message);
+      } else {
+        logger.error(`Failed to obtain whatsapp media id`, {
+          audio: audioFilePath,
+          ...context,
+        });
+      }
     }
     // update the session keyword entry
     session.lastMessage.query =
@@ -166,14 +235,22 @@ async function sendWhatsAppVoiceMsg(mediaId: string) {
   return await WhatsAppService.sendMessage(response);
 }
 
-async function processAndSendWhatsAppAudioMessage(audioFileLocation: string) {
+async function processAndSendWhatsAppAudioMessage(
+  audioFileLocation: string,
+  context: processContext | {} = {}
+) {
   let fileId = null;
   try {
     fileId = await WhatsAppService.uploadAudioFile(audioFileLocation);
 
     await sendWhatsAppVoiceMsg(fileId.id);
   } catch (error) {
-    console.log('Error occured');
+    // log error
+    logger.error(`Failed to send whatsapp audio message: ${error}`, {
+      audio: audioFileLocation,
+      mediaId: fileId,
+      ...context,
+    });
   }
 
   return fileId;

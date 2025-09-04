@@ -2,6 +2,7 @@ export const config = {
   // Application configuration
   env: process.env.ENV || 'local',
   port: process.env.PORT || '3000',
+  log_level: process.env.LOG_LEVEL || 'info',
 
   // Storage configuration
   storage: {
