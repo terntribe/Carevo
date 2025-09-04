@@ -1,6 +1,7 @@
 import { Request } from './types.js';
 import { initRequestClient } from './helpers.js';
 import { getLogger, rootLogger } from '#config/logger.js';
+import { AxiosError } from 'axios';
 
 const logger = getLogger(rootLogger, {
   microservice: 'whatsapp-bot-service',
@@ -24,7 +25,7 @@ export class RequestsManager {
         headers: request.headers,
       });
     } catch (error) {
-      logger.error(`POST request error:',${error}`);
+      logger.error(`POST request error:'${error}`);
     }
   }
 }

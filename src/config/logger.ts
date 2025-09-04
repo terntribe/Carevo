@@ -1,7 +1,7 @@
 import winston from 'winston';
 import { config } from './index.js';
 
-const { combine, timestamp, json, errors, cli } = winston.format;
+const { combine, timestamp, json, errors, printf } = winston.format;
 
 const logLevels = {
   fatal: 0,
@@ -17,12 +17,15 @@ export type logLevel = keyof typeof logLevels;
 export const rootLogger = winston.createLogger({
   levels: logLevels,
   level: config.log_level,
-  format: combine(errors({ stack: true }), json(), timestamp()),
   defaultMeta: { service: 'api-service' },
   transports: [
     new winston.transports.Console({
-      // format: combine(timestamp(), json()),
-      format: cli(),
+      format: combine(
+        timestamp({
+          format: 'YYYY-MM-DD hh:mm:ss.SSS A',
+        }),
+        printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
+      ),
     }),
     new winston.transports.File({
       filename: 'logs/error.log',

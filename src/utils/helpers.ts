@@ -88,7 +88,7 @@ export function initRequestClient() {
         if (error.response.status !== 200) {
           logger.debug('Request failed', {
             data: error.response.data,
-            config: error.response.config,
+            config: error.config,
           });
         }
       }
@@ -102,8 +102,9 @@ export function initRequestClient() {
     (error) => {
       if (error.response) {
         if (error.response.status !== 200) {
-          logger.debug(`Request failed: ${error.response.config.url}`, {
+          logger.debug(`Request failed`, {
             error: error.response.data,
+            config: error.config,
           });
         }
       }
@@ -115,6 +116,15 @@ export function initRequestClient() {
       ) {
         // Retry logic for network errors or timeouts
         const config = error.config;
+        const errorContext = error.response
+          ? {
+              code: error.code,
+              statusCode: error.response.status,
+              message: error.response.statusText,
+              data: error.response.data,
+            }
+          : { code: error.code, message: error.message };
+        logger.error('Request failed', { context: errorContext });
 
         if (!config || !config.__retryCount) {
           config.__retryCount = 0;
