@@ -6,8 +6,8 @@ import { rootLogger, getLogger } from '#config/logger.js';
 
 const webhookRouter = Router();
 const logger = getLogger(rootLogger, {
-  microservice: 'whastapp-bot-service',
-  scope: 'webhook',
+  service: 'whastapp-bot-service',
+  component: 'webhook-router',
 });
 
 webhookRouter.get('', (req, res) => {

@@ -4,7 +4,6 @@ import { config } from '#config/index.js';
 import webhookRouter from '#routes/webhook.routes.js';
 
 const app = express();
-// const requests = new RequestsManager();
 
 app.use(express.json());
 app.use('/api/v1/webhook', webhookRouter);

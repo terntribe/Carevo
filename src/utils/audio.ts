@@ -1,7 +1,12 @@
 import storage from '#config/storage.js';
 import tts from '#config/tts.js';
 import { config } from '#config/index.js';
-// import path from 'path';
+import { rootLogger, getLogger } from '#config/logger.js';
+
+const logger = getLogger(rootLogger, {
+  service: 'whatsapp-bot-service',
+  component: 'generate-audio',
+});
 
 function getAudioFileName(messageId: string, ext: string): string {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/[-T:]/g, '');
@@ -46,7 +51,7 @@ export async function generateAudio(
   messageId: string
 ): Promise<string> {
   try {
-    const audioData = await tts.generateAudio(text, language); // try - catch this and log the error
+    const audioData = await tts.generateAudio(text, language, messageId); // try - catch this and log the error
     const audioFilePath = await saveAudio(
       Buffer.from(audioData, 'base64'),
       messageId

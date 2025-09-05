@@ -3,8 +3,7 @@ import { isValidIncomingWhatsAppMessageData } from '#utils/helpers.js';
 import { rootLogger, getLogger } from '#config/logger.js';
 
 const logger = getLogger(rootLogger, {
-  microservice: 'whastapp-bot-service',
-  scope: 'webhook',
+  service: 'whastapp-bot-service',
 });
 
 type MessageStatus = {

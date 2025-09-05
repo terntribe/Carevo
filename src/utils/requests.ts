@@ -4,8 +4,8 @@ import { getLogger, rootLogger } from '#config/logger.js';
 import { AxiosError } from 'axios';
 
 const logger = getLogger(rootLogger, {
-  microservice: 'whatsapp-bot-service',
-  scope: 'RequestsManager',
+  service: 'whatsapp-bot-service',
+  component: 'requests-manager',
 });
 
 export class RequestsManager {

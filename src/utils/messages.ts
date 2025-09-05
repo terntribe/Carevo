@@ -9,8 +9,8 @@ import path from 'path';
 const requests = new RequestsManager();
 
 const logger = getLogger(rootLogger, {
-  microservice: 'whatsapp-bot-service',
-  scope: 'WhatsAppService',
+  service: 'whatsapp-bot-service',
+  component: 'whatsapp-service',
 });
 
 /*

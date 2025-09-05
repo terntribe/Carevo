@@ -3,8 +3,8 @@ import * as z from 'zod';
 import { rootLogger, getLogger } from '#config/logger.js';
 
 const logger = getLogger(rootLogger, {
-  microservice: 'whatsapp-bot-service',
-  scope: 'session-manager',
+  service: 'whatsapp-bot-service',
+  component: 'session-manager',
 });
 
 const MessageSession = z.object({

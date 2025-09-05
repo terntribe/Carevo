@@ -18,8 +18,8 @@ const messageConfig = new MessageConfig();
 const configLoaded = await messageConfig.loadMessages();
 
 const logger = getLogger(rootLogger, {
-  microservice: 'whatsapp-bot-service',
-  scope: 'response',
+  service: 'whatsapp-bot-service',
+  component: 'proccess-message',
 });
 
 export const checkSupportedLanguages = (index: string) => {

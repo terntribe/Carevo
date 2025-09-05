@@ -24,20 +24,17 @@ import {
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
-import { rootLogger, getLogger, analyticsLogger } from '#config/logger.js';
+import {
+  rootLogger,
+  getLogger,
+  analyticsLogger as analytics,
+} from '#config/logger.js';
 
 const sessionManager = new SessionManager();
 const _ = await sessionManager.loadSessions();
 
-// loggers
 const logger = getLogger(rootLogger, {
-  microservice: 'whastapp-bot-service',
-  scope: 'webhook',
-});
-
-const analytics = getLogger(analyticsLogger, {
-  microservice: 'whastapp-bot-service',
-  scope: 'webhook',
+  service: 'whastapp-bot-service',
 });
 
 type Context = {

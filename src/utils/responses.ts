@@ -6,7 +6,7 @@ import { rootLogger as logger } from '#config/logger.js';
 /*
 'onboard:select_language',
 'onboard:greet',
-'topic',
+'topic: topics',
 'support:unknown_input',
 'support:contact'
 */

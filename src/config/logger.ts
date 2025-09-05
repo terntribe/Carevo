@@ -17,7 +17,6 @@ export type logLevel = keyof typeof logLevels;
 export const rootLogger = winston.createLogger({
   levels: logLevels,
   level: config.log_level,
-  defaultMeta: { service: 'api-service' },
   transports: [
     new winston.transports.Console({
       format: combine(
@@ -44,7 +43,7 @@ export const analyticsLogger = winston.createLogger({
   levels: logLevels,
   level: config.log_level,
   format: combine(json(), timestamp()),
-  defaultMeta: { service: 'analytics' },
+  defaultMeta: { service: 'service-analytics' },
   transports: [
     new winston.transports.Console({
       format: combine(timestamp(), json()),
@@ -59,7 +58,11 @@ export const analyticsLogger = winston.createLogger({
 
 export function getLogger(
   logger: winston.Logger,
-  metadata?: Record<string, any> & { microservice: string }
+  metadata?: Record<string, any> & {
+    service: string;
+    module?: string;
+    component?: string;
+  }
 ) {
   return logger.child(metadata ? metadata : {});
 }
