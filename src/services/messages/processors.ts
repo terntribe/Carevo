@@ -6,6 +6,7 @@ import { MessageResponse } from '#utils/types.js';
 import { getLogger, rootLogger } from '#config/logger.js';
 import { config } from '#config/index.js';
 import path from 'path';
+import storage from '#config/storage.js';
 
 export type Intent = {
   intent: string;
@@ -113,7 +114,7 @@ export const processMessage = async (
 
   if (!message) {
     logger.warn(`No message found for query or id: ${query}`);
-    message = messageConfig.getMessageByQueryOrId('support:invalid_input');
+    message = messageConfig.getMessageByQueryOrId('system:invalid_input');
   }
 
   if (message) {
@@ -148,7 +149,7 @@ export const processMessage = async (
       );
 
       const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
-        audioLocation,
+        storage.resolvePath(audioLocation),
         context
       );
 
@@ -175,7 +176,7 @@ export const processMessage = async (
         message.id
       );
       // const audioFilePath =
-      // 'C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250826103710.ogg';
+      // '\audio_files\carevo-0-20250826103710.ogg';
       if (!audioFilePath) {
         logger.error('Failed to generate audio for message', {
           response: text,
@@ -185,7 +186,7 @@ export const processMessage = async (
       }
 
       const uploadedMediaId = await processAndSendWhatsAppAudioMessage(
-        audioFilePath,
+        storage.resolvePath(audioFilePath),
         context
       );
 

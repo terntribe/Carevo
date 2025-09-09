@@ -3,13 +3,14 @@
     {
       "id": 0,
       "type": "onboard",
+      "category": "system",
       "keyword": "onboard",
       "query": "onboard:greet",
-      "response": "Hello, welcome to Carevo. I am your health guide on WhatsApp. You can listen to short audio messages about health in simple language.\n\nPlease select your preferred language:\n1. English\n\nTo proceed to the available health topics without changing language, reply with:\n2. Select a health topic\n\nReply with the number of your choice.",
+      "response": "Hello, welcome to Carevo. I am your health guide on WhatsApp. You can listen to short audio messages about health in simple language.\n\nPlease select your preferred language:\n1. English\n\nTo proceed to the available health categories without changing language, reply with:\n2. Categories\n\nReply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-0-20250830095119.ogg",
-          "whatsapp_media_id": "1311458950369952"
+          "location": "/audio_files/carevo-0-20250909102903.ogg",
+          "whatsapp_media_id": "1310763014092948"
         }
       },
       "actions": {
@@ -23,13 +24,14 @@
     {
       "id": 15,
       "type": "onboard",
+      "category": "system",
       "keyword": "onboard:language",
       "query": "onboard:english",
       "response": "You have selected English as your preferred language.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-15-20250904203937.ogg",
-          "whatsapp_media_id": "1064251035535456"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
@@ -42,13 +44,34 @@
     {
       "id": 22,
       "type": "topic",
-      "keyword": "topic",
-      "query": "topic:topics",
-      "response": "Here are the available health topics you can learn about:\n\n1. Malaria\n\nReply with the number of your choice.",
+      "category": "system",
+      "keyword": "categories",
+      "query": "topic:categories",
+      "response": "Here are the available health categories you can learn about:\n\n1. Diseases and how to prevent against them.\n\nReply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-22-20250830183846.ogg",
-          "whatsapp_media_id": "775552828756666"
+          "location": "/audio_files/carevo-22-20250909103351.ogg",
+          "whatsapp_media_id": "1821325632602261"
+        }
+      },
+      "actions": {
+        "prompt": "",
+        "options": [
+          12
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "type": "topic",
+      "category": "system",
+      "keyword": "disease_prevention",
+      "query": "topic:disease_prevention",
+      "response": "Here are the available health topics on disease prevention you can learn about:\n\n1. Malaria\n\nReply with the number of your choice.",
+      "audio": {
+        "english": {
+          "location": "/audio_files/carevo-12-20250909103428.ogg",
+          "whatsapp_media_id": "749237834410393"
         }
       },
       "actions": {
@@ -59,15 +82,38 @@
       }
     },
     {
+      "id": 33,
+      "type": "system",
+      "category": "system",
+      "keyword": "invalid_input",
+      "query": "system:invalid_input",
+      "response": "Sorry, I did not understand your reply. Please choose one of the available options below:\n\n1. Reply with 11 for more information on the current topic.\n2. Reply with 10 to change your preferred language.\n3. Reply with 22 to go back to the available health categories.",
+      "audio": {
+        "english": {
+          "location": "/audio_files/carevo-33-20250909105814.ogg",
+          "whatsapp_media_id": "2665743413768564"
+        }
+      },
+      "actions": {
+        "prompt": "You can reply with:\n1. 11 for more information on the current topic.\n2. 10 to change your preferred language.\n3. 22 to go back to the available health categories.",
+        "options": [
+          11,
+          10,
+          22
+        ]
+      }
+    },
+    {
       "id": 1,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "malaria",
       "response": "Malaria is a sickness caused by parasites that enter the body through mosquito bites. These mosquitoes are usually active at night.\n\nIt can make people very weak and, if not treated quickly, can even cause death.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-1-20250830185153.ogg",
-          "whatsapp_media_id": "3024856607675537"
+          "location": "/audio_files/carevo-1-20250909104542.ogg",
+          "whatsapp_media_id": "1314433970064718"
         }
       },
       "actions": {
@@ -84,13 +130,14 @@
     {
       "id": 2,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "What are the symptoms of malaria?",
       "response": "The main symptoms are fever, chills, sweating, headache, and feeling very tired. Some people also have body pain and feel sick in the stomach.\n\nIf you see these signs, it is important to get tested and treated quickly.",
       "audio": {
         "english": {
-          "location": "",
-          "whastapp_media_id": ""
+          "location": "/audio_files/carevo-2-20250909113011.ogg",
+          "whatsapp_media_id": "1433635927935312"
         }
       },
       "actions": {
@@ -105,6 +152,7 @@
     {
       "id": 3,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "How does malaria spread?",
       "response": "Malaria spreads when a female mosquito carrying the parasite bites a person. The parasite enters the blood and makes the person sick.\n\nIt cannot spread directly from one person to another like flu or cold.",
@@ -126,13 +174,14 @@
     {
       "id": 4,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "How can I prevent malaria?",
       "response": "You can prevent malaria by sleeping under a treated mosquito net, using insect sprays, and covering your body with clothes at night.\n\nAlso, clearing standing water near your home helps reduce mosquito breeding.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-4-20250830221234.ogg",
-          "whatsapp_media_id": "1270619690911970"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
@@ -147,13 +196,14 @@
     {
       "id": 5,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "How is malaria treated?",
       "response": "Malaria is treated with special medicines called antimalarial drugs. These medicines kill the parasite in the blood.\n\nIt is very important to visit a health worker or clinic as soon as symptoms start. Do not try to treat it alone.",
       "audio": {
         "english": {
-          "location": "C:\\Users\\ihima\\projects\\Carevo\\audio_files\\carevo-5-20250902121206.ogg",
-          "whatsapp_media_id": "1077314291263917"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
@@ -168,6 +218,7 @@
     {
       "id": 6,
       "type": "topic",
+      "category": "disease_prevention",
       "keyword": "malaria",
       "query": "Can malaria cause death?",
       "response": "Yes, malaria can cause death if it is not treated quickly. Severe malaria can damage the brain, liver, or kidneys.\n\nQuick testing and treatment can save lives, so it is important to seek care immediately.",

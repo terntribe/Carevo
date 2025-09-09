@@ -13,7 +13,8 @@ import { rootLogger as logger } from '#config/logger.js';
 
 const Message = z.object({
   id: z.coerce.string(),
-  type: z.literal(['topic', 'onboard', 'support']),
+  type: z.literal(['topic', 'onboard', 'system']),
+  category: z.literal(['disease_prevention', 'childcare', 'hygeine', 'system']),
   keyword: z.string(),
   query: z.coerce.string(),
   response: z.string().max(5000),
@@ -32,7 +33,8 @@ const Message = z.object({
 const systemMessages = {
   '11': 'more_information',
   '10': 'onboard:change_language',
-  '22': 'topic:topics',
+  '22': 'topic:categories',
+  '12': 'topic:disease_prevention',
 } as const;
 
 export type MessageType = z.infer<typeof Message>;
@@ -77,7 +79,7 @@ export class MessageConfig {
 
     if (!safeMsg.success) {
       // console.log(typeof message.id);
-      logger.error(`Validation error: ${safeMsg.error.issues}`, {
+      logger.error(`Validation error: ${safeMsg.error.issues[0].message}`, {
         message: message,
       });
     } else {

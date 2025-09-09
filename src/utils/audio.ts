@@ -18,25 +18,25 @@ export async function saveAudio(
   messageId: string
 ): Promise<string> {
   // Save audio in WAV format and convert to Opus
+
   const wavFileName = getAudioFileName(messageId, 'wav');
   const opusFileName = getAudioFileName(messageId, 'ogg');
 
-  const wavFilePath = storage.resolvePath(
-    `${config.storage.audio_files}/${wavFileName}`
-  );
-  const opusFilePath = storage.resolvePath(
-    `${config.storage.audio_files}/${opusFileName}`
-  );
+  const wavFilePath = `${config.storage.audio_files}/${wavFileName}`;
+  const opusFilePath = `${config.storage.audio_files}/${opusFileName}`;
 
   try {
-    await storage.saveWavFile(wavFilePath, data); // try catch here too...
+    await storage.saveWavFile(storage.resolvePath(wavFilePath), data); // try catch here too...
   } catch (error) {
     console.error('Failed to convert/store WAV file for audio');
     return '';
   }
 
   try {
-    await storage.saveOpusFile(wavFilePath, opusFilePath); // catch error here and log
+    await storage.saveOpusFile(
+      storage.resolvePath(wavFilePath),
+      storage.resolvePath(opusFilePath)
+    ); // catch error here and log
   } catch (error) {
     console.error('Failed to convert audio to Opus format');
     return '';
