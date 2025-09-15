@@ -3,18 +3,12 @@ import { JSONFileHandler } from './files.js';
 import * as z from 'zod';
 import { rootLogger as logger } from '#config/logger.js';
 
-/*
-'onboard:select_language',
-'onboard:greet',
-'topic: topics',
-'support:unknown_input',
-'support:contact'
-*/
-
 const Message = z.object({
   id: z.coerce.string(),
-  type: z.literal(['topic', 'onboard', 'system']),
-  category: z.literal(['disease_prevention', 'childcare', 'hygeine', 'system']),
+  type: z.literal(['topic', 'system']),
+  category: z.optional(
+    z.literal(['disease_prevention', 'childcare', 'hygeine'])
+  ),
   keyword: z.string(),
   query: z.coerce.string(),
   response: z.string().max(5000),
@@ -30,12 +24,10 @@ const Message = z.object({
     options: z.array(z.coerce.string()),
   }),
 });
-const systemMessages = {
-  '11': 'more_information',
-  '10': 'onboard:change_language',
-  '22': 'topic:categories',
-  '12': 'topic:disease_prevention',
-} as const;
+
+// const systemMessages = {
+//   '22': 'topic:categories',
+// } as const;
 
 export type MessageType = z.infer<typeof Message>;
 
@@ -44,10 +36,12 @@ messages/system prompts from the JSON config file. */
 export class MessageConfig {
   private messages: MessageType[];
   private languages: string[];
+  private systemMessages: Record<string, string>;
 
   constructor() {
     this.messages = [];
     this.languages = [];
+    this.systemMessages = {};
   }
 
   // Load messages from the JSON file
@@ -59,6 +53,11 @@ export class MessageConfig {
 
       this.messages = results.messages;
       this.languages = results.languages;
+      const sysMessages = this.messages.filter((msg) => msg.type === 'system');
+
+      sysMessages.forEach((msg) => {
+        this.systemMessages[msg.id.toString()] = msg.query;
+      });
     } catch (error) {
       logger.error(
         `Failed to load messages from ${config.storage.messages_location}:
@@ -80,7 +79,7 @@ export class MessageConfig {
     if (!safeMsg.success) {
       // console.log(typeof message.id);
       logger.error(`Validation error: ${safeMsg.error.issues[0].message}`, {
-        message: message,
+        message: { ...message },
       });
     } else {
       this.messages = this.messages.map((msg) => {
@@ -115,11 +114,11 @@ export class MessageConfig {
     return null;
   }
 
-  static checkSysPrompt(
+  checkSysPrompt(
     query: string
-  ): (typeof systemMessages)[keyof typeof systemMessages] | false {
-    if (query in systemMessages) {
-      return systemMessages[query as keyof typeof systemMessages];
+  ): (typeof this.systemMessages)[keyof typeof this.systemMessages] | false {
+    if (query in this.systemMessages) {
+      return this.systemMessages[query as keyof typeof this.systemMessages];
     }
     return false;
   }

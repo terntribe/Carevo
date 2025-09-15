@@ -2,32 +2,10 @@
   "messages": [
     {
       "id": 0,
-      "type": "onboard",
-      "category": "system",
+      "type": "system",
       "keyword": "onboard",
       "query": "onboard:greet",
-      "response": "Hello, welcome to Carevo. I am your health guide on WhatsApp. You can listen to short audio messages about health in simple language.\n\nPlease select your preferred language:\n1. English\n\nTo proceed to the available health categories without changing language, reply with:\n2. Categories\n\nReply with the number of your choice.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-0-20250909102903.ogg",
-          "whatsapp_media_id": "1310763014092948"
-        }
-      },
-      "actions": {
-        "prompt": "",
-        "options": [
-          15,
-          22
-        ]
-      }
-    },
-    {
-      "id": 15,
-      "type": "onboard",
-      "category": "system",
-      "keyword": "onboard:language",
-      "query": "onboard:english",
-      "response": "You have selected English as your preferred language.",
+      "response": "Hello and welcome to Carevo\nI'm your health companion on WhatsApp, here to share short audio messages in simple English to help you stay healthy and informed.",
       "audio": {
         "english": {
           "location": "",
@@ -35,149 +13,44 @@
         }
       },
       "actions": {
-        "prompt": "To continue, reply with 22 to see the list of available health topics.",
+        "prompt": "Pick a topic to get started:\n1. Hygiene - Easy tips to stay clean and avoid infections at home, school, or work.\n2. Disease Prevention - Learn how to protect yourself from illnesses like malaria, typhoid, and COVID-19.\n3. Childcare - Advice for parents and caregivers on feeding, bathing, and keeping children safe and strong.\nReply with the number of your choice, and I'll guide you from there.",
         "options": [
-          22
-        ]
-      }
-    },
-    {
-      "id": 22,
-      "type": "topic",
-      "category": "system",
-      "keyword": "categories",
-      "query": "topic:categories",
-      "response": "Here are the available health categories you can learn about:\n\n1. Diseases and how to prevent against them.\n\nReply with the number of your choice.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-22-20250909103351.ogg",
-          "whatsapp_media_id": "1821325632602261"
-        }
-      },
-      "actions": {
-        "prompt": "",
-        "options": [
-          12
-        ]
-      }
-    },
-    {
-      "id": 12,
-      "type": "topic",
-      "category": "system",
-      "keyword": "disease_prevention",
-      "query": "topic:disease_prevention",
-      "response": "Here are the available health topics on disease prevention you can learn about:\n\n1. Malaria\n\nReply with the number of your choice.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-12-20250909103428.ogg",
-          "whatsapp_media_id": "749237834410393"
-        }
-      },
-      "actions": {
-        "prompt": "",
-        "options": [
-          1
-        ]
-      }
-    },
-    {
-      "id": 33,
-      "type": "system",
-      "category": "system",
-      "keyword": "invalid_input",
-      "query": "system:invalid_input",
-      "response": "Sorry, I did not understand your reply. Please choose one of the available options below:\n\n1. Reply with 11 for more information on the current topic.\n2. Reply with 10 to change your preferred language.\n3. Reply with 22 to go back to the available health categories.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-33-20250909105814.ogg",
-          "whatsapp_media_id": "2665743413768564"
-        }
-      },
-      "actions": {
-        "prompt": "You can reply with:\n1. 11 for more information on the current topic.\n2. 10 to change your preferred language.\n3. 22 to go back to the available health categories.",
-        "options": [
-          11,
-          10,
-          22
+          1,
+          2,
+          3
         ]
       }
     },
     {
       "id": 1,
       "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "malaria",
-      "response": "Malaria is a sickness caused by parasites that enter the body through mosquito bites. These mosquitoes are usually active at night.\n\nIt can make people very weak and, if not treated quickly, can even cause death.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-1-20250909104542.ogg",
-          "whatsapp_media_id": "1314433970064718"
-        }
-      },
-      "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How can I prevent malaria?\n4. How is malaria treated?\n5. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [
-          2,
-          3,
-          4,
-          5,
-          6
-        ]
-      }
-    },
-    {
-      "id": 2,
-      "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "What are the symptoms of malaria?",
-      "response": "The main symptoms are fever, chills, sweating, headache, and feeling very tired. Some people also have body pain and feel sick in the stomach.\n\nIf you see these signs, it is important to get tested and treated quickly.",
-      "audio": {
-        "english": {
-          "location": "/audio_files/carevo-2-20250909113011.ogg",
-          "whatsapp_media_id": "1433635927935312"
-        }
-      },
-      "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. How does malaria spread?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
-        "options": [
-          3,
-          4,
-          5
-        ]
-      }
-    },
-    {
-      "id": 3,
-      "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "How does malaria spread?",
-      "response": "Malaria spreads when a female mosquito carrying the parasite bites a person. The parasite enters the blood and makes the person sick.\n\nIt cannot spread directly from one person to another like flu or cold.",
+      "category": "hygiene",
+      "keyword": "hygiene",
+      "query": "topic:hygiene",
+      "response": "You've chosen Hygiene.\nHere are the lessons available:\n\n1. Handwashing Basics - How and why to wash your hands properly\n2. Safe Water for Handwashing - Keeping your water clean and safe\n3. Food Hygiene - Tips for handling and preparing food safely",
       "audio": {
         "english": {
           "location": "",
-          "whastapp_media_id": ""
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "prompt": "Reply with the number of the lesson you want to hear, or reply with 9 to go back to the health categories.",
         "options": [
-          2,
           4,
-          5
+          5,
+          6,
+          9
         ]
       }
     },
     {
       "id": 4,
       "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "How can I prevent malaria?",
-      "response": "You can prevent malaria by sleeping under a treated mosquito net, using insect sprays, and covering your body with clothes at night.\n\nAlso, clearing standing water near your home helps reduce mosquito breeding.",
+      "category": "hygiene",
+      "keyword": "hygiene",
+      "query": "topic:handwashing",
+      "response": "You've chosen Handwashing Basics — a simple habit that protects your whole family.\nHere are the key steps:\nFirst, wet your hands with clean, running water.\nSecond, apply soap and lather every surface — your palms, the backs of your hands, between your fingers, under your nails, and around your thumbs.\nThird, scrub for about twenty seconds. You can hum the song Happy Birthday twice to keep time.\nFourth, rinse your hands well under running water.\nFinally, dry your hands with a clean towel or let them air-dry.\n\nThese five steps remove germs that cause diarrhoea, typhoid, and chest infections. A small habit that keeps your whole household safe.",
       "audio": {
         "english": {
           "location": "",
@@ -185,21 +58,20 @@
         }
       },
       "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. How is malaria treated?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
         "options": [
-          2,
-          3,
-          5
+          5,
+          9
         ]
       }
     },
     {
       "id": 5,
       "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "How is malaria treated?",
-      "response": "Malaria is treated with special medicines called antimalarial drugs. These medicines kill the parasite in the blood.\n\nIt is very important to visit a health worker or clinic as soon as symptoms start. Do not try to treat it alone.",
+      "category": "hygiene",
+      "keyword": "hygiene",
+      "query": "topic:handwash-safe-water",
+      "response": "You've chosen Safe Water for Handwashing — because clean water is just as important as soap.\n\nAlways use safe, running water if possible. If you fetch water, keep it in a clean container and cover it to protect it from dirt. Never dip dirty cups, hands, or utensils directly into the container.\n\nIf you are unsure that water is safe, boil it or treat it before use. Even clear-looking water can carry germs.\n\nA good idea is to set up a small handwashing point near your kitchen or toilet. This makes it easy for everyone to wash their hands at the right times.\n\nRemember: dirty water can spread as many germs as not washing at all. Keep it clean, keep it safe.",
       "audio": {
         "english": {
           "location": "",
@@ -207,32 +79,70 @@
         }
       },
       "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How does malaria spread?\n3. Can malaria cause death?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
         "options": [
-          2,
-          3,
-          6
+          6,
+          9
         ]
       }
     },
     {
       "id": 6,
       "type": "topic",
-      "category": "disease_prevention",
-      "keyword": "malaria",
-      "query": "Can malaria cause death?",
-      "response": "Yes, malaria can cause death if it is not treated quickly. Severe malaria can damage the brain, liver, or kidneys.\n\nQuick testing and treatment can save lives, so it is important to seek care immediately.",
+      "category": "hygiene",
+      "keyword": "hygiene",
+      "query": "topic:food-hygiene",
+      "response": "You've chosen Food Hygiene — keeping food safe protects your family from illness.\n\nFirst, always wash fruits and vegetables with clean water before eating.\nSecond, cook food thoroughly, especially meat, poultry, and fish. Undercooked food can carry harmful germs.\nThird, store cooked food separately from raw food so that juices or bacteria from raw food do not contaminate what is ready to eat.\nFourth, keep leftovers covered, and if you can, refrigerate them.\nAnd fifth, always wash your hands before preparing or serving food.\n\nThese simple steps prevent diarrhoea, food poisoning, and other stomach illnesses.",
       "audio": {
         "english": {
           "location": "",
-          "whastapp_media_id": ""
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
-        "prompt": "To learn more about the subject, here are some related questions you can ask:\n1. What are the symptoms of malaria?\n2. How can I prevent malaria?\n\nPlease reply with the question number or if you want more information on the subject, respond with number 11. To change your preferred language respond with 10.",
+        "prompt": "To continue, press 9 to return to the health categories.",
         "options": [
+          9
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "type": "system",
+      "keyword": "topics",
+      "query": "topic:categories",
+      "response": "Alright, let's pick a category. You can choose: one, Hygiene; two, Disease Prevention; or three, Childcare. Just reply with the number of your choice.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "",
+        "options": [
+          1,
           2,
-          4
+          3
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "type": "system",
+      "keyword": "invalid_input",
+      "query": "system:invalid_input",
+      "response": "Sorry, I did not understand your reply. But not to worry!",
+      "audio": {
+        "english": {
+          "location": "/audio_files/carevo-11-20250915145348.ogg",
+          "whatsapp_media_id": "1324822945707708"
+        }
+      },
+      "actions": {
+        "prompt": "You can reply with\n1. To replay the last message or 9. To go back to the available health categories.",
+        "options": [
+          9
         ]
       }
     }

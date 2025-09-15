@@ -45,21 +45,12 @@ export const matchIntent = (
       context
     );
 
-    const sysPrompt = MessageConfig.checkSysPrompt(query);
+    const sysPrompt = messageConfig.checkSysPrompt(query);
     if (sysPrompt) {
       logger.info(`Matched intent: ${sysPrompt}`);
     }
 
-    if (
-      sysPrompt &&
-      sysPrompt === 'more_information' &&
-      session.lastMessage.query
-    ) {
-      return {
-        intent: `${session.lastMessage.query}:more_info`,
-        service: 'message',
-      };
-    } else if (sysPrompt) {
+    if (sysPrompt) {
       return {
         intent: sysPrompt,
         service: sysPrompt.startsWith('onboard') ? 'onboard' : 'message',
@@ -71,7 +62,7 @@ export const matchIntent = (
     ) {
       // checks if a reserved system prompt is used as an option
       const option = session.lastMessage.options[index - 1];
-      const isSysPrompt = MessageConfig.checkSysPrompt(option);
+      const isSysPrompt = messageConfig.checkSysPrompt(option);
 
       logger.info(
         `Matched Intent: ${isSysPrompt ? isSysPrompt : option}`,
@@ -155,7 +146,7 @@ export const processMessage = async (
 
       if (uploadedMediaId) {
         // save the mediaId to the message config for future use
-        logger.info(`Obtained whatsapp media id: ${uploadedMediaId}`, {
+        logger.info(`Obtained whatsapp media id: ${uploadedMediaId.id}`, {
           audio: audioLocation,
           ...context,
         });
@@ -211,16 +202,36 @@ export const processMessage = async (
         });
       }
     }
+
     // update the session keyword entry
     session.lastMessage.query =
-      message.query !== session.lastMessage.query
+      message.query !== session.lastMessage.query &&
+      message.query !== 'system:invalid_input'
         ? message.query
         : session.lastMessage.query;
 
-    // update options
-    session.lastMessage.options = message.actions.options
-      ? message.actions.options
-      : session.lastMessage.options;
+    if (message.actions.options) {
+      if (message.query === 'system:invalid_input') {
+        const lastMessage = messageConfig.getMessageByQueryOrId(
+          session.lastMessage.query
+        );
+
+        if (!lastMessage) {
+          logger.error(
+            'No previous message for invalid input',
+            session,
+            message
+          );
+        } else {
+          session.lastMessage.options = [
+            lastMessage.id,
+            ...message.actions.options,
+          ];
+        }
+      } else {
+        session.lastMessage.options = message.actions.options;
+      }
+    }
   }
 
   return session;

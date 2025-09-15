@@ -104,31 +104,30 @@ export const chatController = async (req: Request, res: Response) => {
     );
     return res.send(200);
   } else {
-    // pass the text to the intent matcher and call either ->
+    // pass the text to the intent matcher
     intent = matchIntent(messageData?.text, userSession);
-  }
 
-  // obs or message service
-  if (intent && intent.service === 'onboard') {
-    // call obs
+    // Remove for now: Select Language Feature
+    // if (intent && intent.service === 'onboard') {
+    //   // call obs
 
-    const currentSession = await OnboardingService.setLanguagePreferrence(
-      intent.intent,
-      userSession
-    );
+    //   const currentSession = await OnboardingService.setLanguagePreferrence(
+    //     intent.intent,
+    //     userSession
+    //   );
 
-    if (!currentSession) {
-      logger.error(
-        `Failed to set language preference of ${intent.intent}`,
-        context
-      ); // log here
-      return res.send(200);
-    }
+    //   if (!currentSession) {
+    //     logger.error(
+    //       `Failed to set language preference of ${intent.intent}`,
+    //       context
+    //     ); // log here
+    //     return res.send(200);
+    //   }
 
-    const _ = await sessionManager.update(currentSession);
+    //   const _ = await sessionManager.update(currentSession);
 
-    return res.send('Onboard response sent');
-  } else if (intent && intent.service === 'message') {
+    //   return res.send('Onboard response sent');}
+    // else if (intent && intent.service === 'message') {
     // call tps
 
     const currentSession = await MessageService.response(
@@ -145,10 +144,9 @@ export const chatController = async (req: Request, res: Response) => {
       ); // log here
       return res.send(200);
     }
-    // console.log('Session after TPS: ', currentSession);
-    const _ = await sessionManager.update(currentSession);
-    return res.send('Response sent');
-  }
 
+    const _ = await sessionManager.update(currentSession);
+    logger.info(`Success: Message Processed for `, currentSession);
+  }
   return res.send(200);
 };

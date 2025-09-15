@@ -83,7 +83,7 @@ export class SessionManager {
 
     if (!updated.success) {
       logger.error(`Validation Error: ${updated.error.issues[0].message}`, {
-        session: sesh,
+        session: { ...sesh },
       });
       return null;
     } else {
