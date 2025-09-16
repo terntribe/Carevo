@@ -5,9 +5,9 @@ import { rootLogger as logger } from '#config/logger.js';
 
 const Message = z.object({
   id: z.coerce.string(),
-  type: z.literal(['topic', 'system']),
+  type: z.literal(['topic', 'message', 'prompt']),
   category: z.optional(
-    z.literal(['disease_prevention', 'childcare', 'hygeine'])
+    z.literal(['disease_prevention', 'childcare', 'hygiene'])
   ),
   keyword: z.string(),
   query: z.coerce.string(),
@@ -36,12 +36,12 @@ messages/system prompts from the JSON config file. */
 export class MessageConfig {
   private messages: MessageType[];
   private languages: string[];
-  private systemMessages: Record<string, string>;
+  private systemPrompts: Record<string, string>;
 
   constructor() {
     this.messages = [];
     this.languages = [];
-    this.systemMessages = {};
+    this.systemPrompts = {};
   }
 
   // Load messages from the JSON file
@@ -53,11 +53,12 @@ export class MessageConfig {
 
       this.messages = results.messages;
       this.languages = results.languages;
-      const sysMessages = this.messages.filter((msg) => msg.type === 'system');
+      const sysPrompts = this.messages.filter((msg) => msg.type === 'prompt');
 
-      sysMessages.forEach((msg) => {
-        this.systemMessages[msg.id.toString()] = msg.query;
+      sysPrompts.forEach((msg) => {
+        this.systemPrompts[msg.id.toString()] = msg.query;
       });
+      logger.info(this.systemPrompts);
     } catch (error) {
       logger.error(
         `Failed to load messages from ${config.storage.messages_location}:
@@ -116,9 +117,9 @@ export class MessageConfig {
 
   checkSysPrompt(
     query: string
-  ): (typeof this.systemMessages)[keyof typeof this.systemMessages] | false {
-    if (query in this.systemMessages) {
-      return this.systemMessages[query as keyof typeof this.systemMessages];
+  ): (typeof this.systemPrompts)[keyof typeof this.systemPrompts] | false {
+    if (query in this.systemPrompts) {
+      return this.systemPrompts[query as keyof typeof this.systemPrompts];
     }
     return false;
   }

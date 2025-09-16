@@ -2,14 +2,14 @@
   "messages": [
     {
       "id": 0,
-      "type": "system",
+      "type": "message",
       "keyword": "onboard",
       "query": "onboard:greet",
       "response": "Hello and welcome to Carevo\nI'm your health companion on WhatsApp, here to share short audio messages in simple English to help you stay healthy and informed.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-0-20250916085051.ogg",
+          "whatsapp_media_id": "25106411565617437"
         }
       },
       "actions": {
@@ -30,8 +30,8 @@
       "response": "You've chosen Hygiene.\nHere are the lessons available:\n\n1. Handwashing Basics - How and why to wash your hands properly\n2. Safe Water for Handwashing - Keeping your water clean and safe\n3. Food Hygiene - Tips for handling and preparing food safely",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-1-20250916090112.ogg",
+          "whatsapp_media_id": "654570144368060"
         }
       },
       "actions": {
@@ -53,8 +53,8 @@
       "response": "You've chosen Handwashing Basics — a simple habit that protects your whole family.\nHere are the key steps:\nFirst, wet your hands with clean, running water.\nSecond, apply soap and lather every surface — your palms, the backs of your hands, between your fingers, under your nails, and around your thumbs.\nThird, scrub for about twenty seconds. You can hum the song Happy Birthday twice to keep time.\nFourth, rinse your hands well under running water.\nFinally, dry your hands with a clean towel or let them air-dry.\n\nThese five steps remove germs that cause diarrhoea, typhoid, and chest infections. A small habit that keeps your whole household safe.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-4-20250916085337.ogg",
+          "whatsapp_media_id": "690658197385543"
         }
       },
       "actions": {
@@ -74,8 +74,8 @@
       "response": "You've chosen Safe Water for Handwashing — because clean water is just as important as soap.\n\nAlways use safe, running water if possible. If you fetch water, keep it in a clean container and cover it to protect it from dirt. Never dip dirty cups, hands, or utensils directly into the container.\n\nIf you are unsure that water is safe, boil it or treat it before use. Even clear-looking water can carry germs.\n\nA good idea is to set up a small handwashing point near your kitchen or toilet. This makes it easy for everyone to wash their hands at the right times.\n\nRemember: dirty water can spread as many germs as not washing at all. Keep it clean, keep it safe.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-5-20250916090633.ogg",
+          "whatsapp_media_id": "1901067254157547"
         }
       },
       "actions": {
@@ -108,14 +108,14 @@
     },
     {
       "id": 9,
-      "type": "system",
+      "type": "prompt",
       "keyword": "topics",
       "query": "topic:categories",
       "response": "Alright, let's pick a category. You can choose: one, Hygiene; two, Disease Prevention; or three, Childcare. Just reply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-9-20250916091724.ogg",
+          "whatsapp_media_id": "779169271390783"
         }
       },
       "actions": {
@@ -129,7 +129,7 @@
     },
     {
       "id": 11,
-      "type": "system",
+      "type": "message",
       "keyword": "invalid_input",
       "query": "system:invalid_input",
       "response": "Sorry, I did not understand your reply. But not to worry!",

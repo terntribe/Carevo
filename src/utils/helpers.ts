@@ -158,7 +158,7 @@ export function initRequestClient() {
 
 export function inProcessLine(msg: { phone: string; text: string }): boolean {
   const now = new Date();
-  const expiry = new Date(now.getTime() + 5 * 60 * 1000);
+  const expiry = new Date(now.getTime() + 1 * 60 * 1000);
   const newEntry = { ...msg, expires: expiry };
   const message = messages.find(
     (m) => m.phone == msg.phone && m.text == msg.text
