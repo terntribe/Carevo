@@ -7,15 +7,12 @@ Any error that occurs when we process the message should be logged.
 
 WhatsApp Business API retries messages that return any status code other than 200,
 We do not want unexpected behaivors or to pollute our logs and standard output with errors.
-The `inProcessLine` function tries to prevent multiple identical queries from the same sender to pass
+The `debounce` function tries to prevent multiple identical queries from the same sender to pass
 for a limited time range but the API is unstable  i.e. failed messages from yesterday are also retried.
 
 */
 
-import {
-  inProcessLine,
-  parseIncomingWhatAppMessageData,
-} from '#utils/helpers.js';
+import { debounce, parseIncomingWhatAppMessageData } from '#utils/helpers.js';
 import { Request, Response } from 'express';
 import {
   MessageSessionType,
@@ -52,9 +49,7 @@ export const chatController = async (req: Request, res: Response) => {
   if (!sendersPhoneNumber || !messageData || !messageData.text) {
     logger.error('Missing fields: phone number or message text is missing');
     return res.status(400).send(400);
-  } else if (
-    inProcessLine({ phone: sendersPhoneNumber, text: messageData.text })
-  ) {
+  } else if (debounce({ phone: sendersPhoneNumber, text: messageData.text })) {
     logger.warn(
       `Message still being processed: Sender: ${sendersPhoneNumber} -> text: ${messageData.text}`
     );

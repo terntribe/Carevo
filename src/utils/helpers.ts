@@ -156,7 +156,7 @@ export function initRequestClient() {
   return client;
 }
 
-export function inProcessLine(msg: { phone: string; text: string }): boolean {
+export function debounce(msg: { phone: string; text: string }): boolean {
   const now = new Date();
   const expiry = new Date(now.getTime() + 1 * 60 * 1000);
   const newEntry = { ...msg, expires: expiry };
