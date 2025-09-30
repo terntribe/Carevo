@@ -1,19 +1,22 @@
-import 'reflect-metadata';
+// import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from './index.js';
-import { Session } from '#models/sessions/db/sessions.model.js';
+import { Session, LastMessage } from '#models/sessions/db/sessions.model.js';
 
 const initDatabase = async () => {
   let options;
 
   if (config.env === 'development') {
     options = {
-      type: 'sqlite',
-      database: 'database.sqlite', // file path
+      type: 'postgres',
+      host: config.db.host,
+      port: config.db.port,
+      username: config.db.username,
+      password: config.db.password,
+      database: config.db.name,
+      entities: [Session, LastMessage],
       synchronize: true,
-      entities: ['src/models/**/*.ts'],
-      migrations: ['src/migration/**/*.ts'],
-      subscribers: ['src/subscriber/**/*.ts'],
+      logging: false,
     } as DataSourceOptions;
   } else if (config.env === 'production') {
     options = {
@@ -23,7 +26,7 @@ const initDatabase = async () => {
       username: config.db.username,
       password: config.db.password,
       database: config.db.name,
-      entities: [Session],
+      entities: [Session, LastMessage],
       synchronize: true,
       logging: false,
     } as DataSourceOptions;

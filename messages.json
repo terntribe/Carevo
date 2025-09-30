@@ -90,7 +90,7 @@
       }
     },
     {
-      "id": 7,
+      "id": 2,
       "type": "topic",
       "category": "disease_prevention",
       "keyword": "disease_prevention",
@@ -121,7 +121,7 @@
         }
       },
       "actions": {
-        "prompt": "To continue, Reply with 2 for the next disease prevention lesson, or 9 to go back to the topic list.",
+        "prompt": "To continue, Reply with 1 for the next disease prevention lesson, or 9 to go back to the topic list.",
         "options": [10, 9]
       }
     },
@@ -139,8 +139,152 @@
         }
       },
       "actions": {
-        "prompt": "Reply with 2 for the next disease prevention lesson, or 9 to return to the topic list.",
+        "prompt": "Reply with 1 for the next disease prevention lesson, or 9 to return to the topic list.",
         "options": [12, 9]
+      }
+    },
+    {
+      "id": 12,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "sexually_transmitted_infections",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen the topic: Sexually Transmitted Infections (STIs). Let’s talk about how to protect yourself, notice the signs, and get help if needed.\n\nLesson one — how to prevent STIs.\nLesson two — the signs and symptoms to watch for.\nLesson three — what to do if you think you have an STI.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Reply with the number of the lesson you want, or press nine to go back to the topic list",
+        "options": [13, 14, 15, 9]
+      }
+    },
+    {
+      "id": 13,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "preventing_stis",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen Preventing STIs — sexually transmitted infections like gonorrhoea, syphilis, and HIV.\n\nThese infections spread through unprotected sex, and sometimes through sharing sharp objects. Many people with STIs have no symptoms, but the germs can still cause serious damage.\n\nFirst, always use a condom — every time. Condoms reduce the risk of nearly all STIs.\n\nSecond, stick to one faithful partner who is also faithful to you. This greatly lowers your risk.\n\nThird, go for regular health checkups, even if you feel fine. Most STIs can be silent for months.\n\nFourth, never share razors, needles, or anything that can carry blood.\n\nAnd fifth, talk to your partner. Encourage them to get tested too, so you protect each other.\n\nSTIs can lead to infertility, pregnancy loss, or even long-term illness — but most can be cured with simple treatment if caught early.\n\nLet’s take care of ourselves and those we love.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To continue, press 1 to learn the signs of STIs, or 9 to go back to the topic list.",
+        "options": [14, 9]
+      }
+    },
+    {
+      "id": 14,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "stis_signs_symptoms",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen Signs and Symptoms of STIs — sexually transmitted infections.\n\nSome people show signs. Others don’t. But here are symptoms you should never ignore:\n\nPain or burning when you urinate\n\nSores, bumps, or blisters on or around your private parts\n\nDischarge from the penis or vagina that looks or smells unusual\n\nItching or rashes near your genitals\n\nPain during sex\n\nPain in your lower belly, especially for women\n\nBleeding between periods or after sex\n\nThese signs might mean you have an STI, but some STIs show no symptoms at all. That’s why regular testing is important — even when you feel fine.\n",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To learn what to do if you suspect you have an STI, press 1. To go back to topic list, press nine.",
+        "options": [15, 9]
+      }
+    },
+    {
+      "id": 15,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "stis_what_to_do",
+      "query": "topic:stis_what_to_do",
+      "response": "You’ve chosen What to Do If You Think You Have an STI.\n\nFirst — don’t panic. Most STIs can be cured with medicine. Even HIV, though not curable, can be treated so you live a long, healthy life.\n\nSecond, go to a health center or clinic and ask for a test. Be honest with the nurse or doctor — they are there to help you, not judge you.\n\nThird, stop having sex until your treatment is finished and you’re cleared.\n\nFourth, talk to your partner or anyone you’ve had sex with. Ask them to get tested too — so the infection doesn’t go back and forth.\n\nAnd fifth, if you get medicine, take all of it, even if you feel better after one or two days. Stopping early makes the infection come back stronger.\n\nSTIs are not a curse. But ignoring them can lead to serious problems.\n",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Press nine to go back and choose another topic.",
+        "options": [9]
+      }
+    },
+    {
+      "id": 3,
+      "type": "topic",
+      "category": "childcare",
+      "keyword": "childcare",
+      "query": "topic:childcare",
+      "response": "You’ve chosen Childcare, helpful tips for feeding, bathing, and keeping your child healthy and strong.\n\nHere are the lessons available:\nLesson one — feeding your baby, and what to give at different ages.\nLesson two — bathing and hygiene, to keep your child clean and safe.\nLesson three — when to seek medical help, and danger signs you should never ignore.”",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Just reply with the number of the lesson you want, or press nine to go back to topic list.",
+        "options": [16, 17, 18, 9]
+      }
+    },
+    {
+      "id": 16,
+      "type": "topic",
+      "category": "childcare",
+      "keyword": "feeding",
+      "query": "topic:childcare",
+      "response": "You’ve chosen Feeding Your Baby.\n\nFor the first six months, give your baby only breastmilk. No water, no pap, no formula — just breastmilk. It’s complete and keeps your baby strong.\n\nAt six months, start giving soft foods like mashed yam, soft beans, pap with milk, mashed banana, or soft fruits.\n\nFeed your baby three to four times a day, and continue breastfeeding.\n\nUse a clean spoon or cup to feed. Avoid using bottles, especially if you can’t sterilize them properly.\n\nAnd watch your baby — a well-fed child will be alert, active, and gain weight steadily.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To continue, press 1 for bathing and hygiene, or nine to return to the topic list.",
+        "options": [17, 9]
+      }
+    },
+    {
+      "id": 17,
+      "type": "topic",
+      "category": "childcare",
+      "keyword": "bathing",
+      "query": "topic:childcare",
+      "response": "You’ve chosen Bathing and Hygiene.\n\nBathe your baby every day using warm water and mild baby soap.\n\nPay attention to the neck, under the arms, groin, and behind the ears — these places can hide dirt or sweat.\n\nIf your baby still has the cord stump, keep it dry and clean. Don’t cover it too tightly, and don’t rub anything on it. It will fall off on its own.\n\nUse a clean towel and sponge for each bath, and dress your baby in clean clothes.\n\nAlso, keep baby’s fingernails short. Babies move a lot and may scratch their own face.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To continue, press 1 to learn danger signs to watch for, or press nine to go back.",
+        "options": [18, 9]
+      }
+    },
+    {
+      "id": 18,
+      "type": "topic",
+      "category": "childcare",
+      "keyword": "medical_help",
+      "query": "topic:childcare",
+      "response": "You’ve chosen When to Seek Medical Help.\n\nThere are times when your child may need to see a nurse or doctor quickly. Don’t wait if you notice any of these:\n\nThe child has a fever or feels hot to the touch\n\nVomiting or refusing to eat\n\nBreathing fast, with chest pulling in or noisy breathing\n\nDiarrhoea, especially if there is blood\n\nFits or convulsions — shaking or fainting\n\nSleeping too much, not waking easily, or not reacting to touch\n\nThese are danger signs. Take your child to the nearest clinic or health worker without delay.\n\nEarly care can save your child’s life.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Press nine to return to the topic list.",
+        "options": [9]
       }
     },
     {

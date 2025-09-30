@@ -7,14 +7,17 @@ import {
   BaseEntity,
 } from 'typeorm';
 
-export type Identifier = { id: string } | { phoneNumber: string };
+export type Identifier = {
+  id?: string;
+  phoneNumber?: string;
+};
 
 @Entity()
 export class Session extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', unique: true })
   phoneNumber!: string;
 
   @Column({ type: 'enum', enum: ['EN'], default: 'EN' })
@@ -32,8 +35,12 @@ export class Session extends BaseEntity {
 
   static findByIdOrPhoneNumber(query: Identifier) {
     return this.createQueryBuilder('session')
-      .where('session.id = :id', { query })
-      .orWhere('session.phoneNumber = :phoneNumber', { query })
+      .where(
+        'id' in query
+          ? 'session.id = :id'
+          : 'session.phoneNumber = :phoneNumber',
+        { query }
+      )
       .getOne();
   }
 }
@@ -43,7 +50,7 @@ export class LastMessage extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   query!: string;
 
   @Column('simple-array')

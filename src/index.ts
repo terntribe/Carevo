@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express from 'express';
 import initDatabase from '#config/db.js';
 import { rootLogger as logger } from '#config/logger.js';
@@ -14,14 +15,15 @@ app.get('/', async (req, res) => {
   console.log('Received a request at /');
 });
 
-app.listen(config.port, () => {
-  logger.info(`Server is running at http://localhost:${config.port}`);
-});
-
 try {
   initDatabase();
-  logger.info('Data source configured successfully');
+  logger.info('Database configured successfully');
+
+  // start server
+  app.listen(config.port, () => {
+    logger.info(`Server is running at http://localhost:${config.port}`);
+  });
 } catch (error) {
-  logger.error('Error during Data Source configuration', error);
+  logger.error('Error during Database configuration', error);
   process.exit(1);
 }

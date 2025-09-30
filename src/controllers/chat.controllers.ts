@@ -48,6 +48,7 @@ export const chatController = async (req: Request, res: Response) => {
 
   if (!sendersPhoneNumber || !messageData || !messageData.text) {
     logger.error('Missing fields: phone number or message text is missing');
+
     return res.status(400).send(400);
   } else if (debounce({ phone: sendersPhoneNumber, text: messageData.text })) {
     logger.warn(
