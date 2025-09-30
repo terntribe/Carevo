@@ -14,11 +14,7 @@
       },
       "actions": {
         "prompt": "Pick a topic to get started:\n1. Hygiene - Easy tips to stay clean and avoid infections at home, school, or work.\n2. Disease Prevention - Learn how to protect yourself from illnesses like malaria, typhoid, and COVID-19.\n3. Childcare - Advice for parents and caregivers on feeding, bathing, and keeping children safe and strong.\nReply with the number of your choice, and I'll guide you from there.",
-        "options": [
-          1,
-          2,
-          3
-        ]
+        "options": [1, 2, 3]
       }
     },
     {
@@ -36,12 +32,7 @@
       },
       "actions": {
         "prompt": "Reply with the number of the lesson you want to hear, or reply with 9 to go back to the health categories.",
-        "options": [
-          4,
-          5,
-          6,
-          9
-        ]
+        "options": [4, 5, 6, 9]
       }
     },
     {
@@ -59,10 +50,7 @@
       },
       "actions": {
         "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
-        "options": [
-          5,
-          9
-        ]
+        "options": [5, 9]
       }
     },
     {
@@ -80,10 +68,7 @@
       },
       "actions": {
         "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
-        "options": [
-          6,
-          9
-        ]
+        "options": [6, 9]
       }
     },
     {
@@ -101,9 +86,61 @@
       },
       "actions": {
         "prompt": "To continue, press 9 to return to the health categories.",
-        "options": [
-          9
-        ]
+        "options": [9]
+      }
+    },
+    {
+      "id": 7,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "disease_prevention",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen Disease Prevention. Here are the lessons available:\nOne — Preventing Malaria.\nTwo — Avoiding Typhoid.\nThree — Protecting Against Sexually Transmitted Infections.\n",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Reply with the number of the lesson you want, or press nine to go back.",
+        "options": [8, 10, 12, 9]
+      }
+    },
+    {
+      "id": 8,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "preventing_malaria",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen Preventing Malaria — a disease that spreads through mosquito bites, but can be stopped.\n\nFirst, always sleep under a long-lasting insecticide-treated mosquito net. This is the most effective protection.\n\nSecond, wear long sleeves and trousers, especially in the evening when mosquitoes are most active.\n\nThird, use mosquito repellents on your skin or clothing if available. Even natural options like lemon eucalyptus oil can help.\n\nFourth, remove stagnant water from your surroundings. Mosquitoes breed in still water—like old tires, buckets, pots, or puddles.\n\nFifth, keep your water storage containers tightly covered, so mosquitoes cannot lay eggs inside.\n\nSixth, clear bushes and tall grasses around your home. Mosquitoes hide there during the day.\n\nSeventh, make sure windows and doors have screens or nets to prevent mosquitoes from entering. Repair any holes.\n\nEighth, burn mosquito coils or use indoor sprays (if safe and available) to kill mosquitoes inside the house.\n\nNinth, encourage your community to do weekly clean-ups — malaria is easier to prevent when the whole area works together.\n\nAnd tenth, if you feel feverish, tired, or have body pains, go to a health center and get tested immediately. Early treatment saves lives.\n\nMalaria is dangerous, but with these small actions, we can stop it.\n",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "To continue, Reply with 2 for the next disease prevention lesson, or 9 to go back to the topic list.",
+        "options": [10, 9]
+      }
+    },
+    {
+      "id": 10,
+      "type": "topic",
+      "category": "disease_prevention",
+      "keyword": "avoiding_typhoid",
+      "query": "topic:disease_prevention",
+      "response": "You’ve chosen Avoiding Typhoid — a serious illness that spreads through dirty food and water.\n\nFirst, always drink safe water. Boil it, treat it, or use clean bottled water.\nSecond, avoid eating raw food from roadside sellers if you’re unsure about hygiene.\nThird, wash fruits and vegetables with clean water before eating them.\nFourth, wash your hands thoroughly before eating or preparing meals.\nAnd fifth, always use a toilet or latrine. Open defecation spreads typhoid quickly.\n\nTyphoid can cause long-term illness or even death if untreated. Prevention is easier than cure.\n",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Reply with 2 for the next disease prevention lesson, or 9 to return to the topic list.",
+        "options": [12, 9]
       }
     },
     {
@@ -120,11 +157,7 @@
       },
       "actions": {
         "prompt": "",
-        "options": [
-          1,
-          2,
-          3
-        ]
+        "options": [1, 2, 3]
       }
     },
     {
@@ -141,9 +174,7 @@
       },
       "actions": {
         "prompt": "You can reply with\n1. To replay the last message or 9. To go back to the available health categories.",
-        "options": [
-          9
-        ]
+        "options": [9]
       }
     }
   ]

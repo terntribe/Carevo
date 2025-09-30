@@ -17,7 +17,7 @@ import { Request, Response } from 'express';
 import {
   MessageSessionType,
   SessionManager,
-} from '#models/sessions/sessions.model.js';
+} from '#models/sessions/file/sessions.model.js';
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';

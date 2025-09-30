@@ -4,6 +4,15 @@ export const config = {
   port: process.env.PORT || '3000',
   log_level: process.env.LOG_LEVEL || 'info',
 
+  // database configuration
+  db: {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    username: process.env.DB_USER || '',
+    password: process.env.DB_PASS || '',
+    name: process.env.DB_NAME || '',
+  },
+
   // Storage configuration
   storage: {
     messages_location: process.env.MESSAGES_FILE_LOCATION || './messages.json',
