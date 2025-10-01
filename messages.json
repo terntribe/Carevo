@@ -8,13 +8,13 @@
       "response": "Hello and welcome to Carevo\nI'm your health companion on WhatsApp, here to share short audio messages in simple English to help you stay healthy and informed.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-0-20250916085051.ogg",
-          "whatsapp_media_id": "25106411565617437"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
-        "prompt": "Pick a topic to get started:\n1. Hygiene - Easy tips to stay clean and avoid infections at home, school, or work.\n2. Disease Prevention - Learn how to protect yourself from illnesses like malaria, typhoid, and COVID-19.\n3. Childcare - Advice for parents and caregivers on feeding, bathing, and keeping children safe and strong.\nReply with the number of your choice, and I'll guide you from there.",
-        "options": [1, 2, 3]
+        "prompt": "Pick a topic to get started:\n1. Hygiene - Easy tips to stay clean and avoid infections at home, school, or work.\n2. Disease Prevention - Learn how to protect yourself from illnesses like malaria, typhoid, and Sexuallly transmitted infections.\n3. Pregnancy Care – Stay healthy during pregnancy and know what to expect.\n4. Childcare - Advice for parents and caregivers on feeding, bathing, and keeping children safe and strong.\nReply with the number of your choice, and I'll guide you from there.",
+        "options": [1, 2, 3, 4]
       }
     },
     {
@@ -32,11 +32,11 @@
       },
       "actions": {
         "prompt": "Reply with the number of the lesson you want to hear, or reply with 9 to go back to the health categories.",
-        "options": [4, 5, 6, 9]
+        "options": [5, 6, 7, 9]
       }
     },
     {
-      "id": 4,
+      "id": 5,
       "type": "topic",
       "category": "hygiene",
       "keyword": "hygiene",
@@ -50,11 +50,11 @@
       },
       "actions": {
         "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
-        "options": [5, 9]
+        "options": [6, 9]
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "topic",
       "category": "hygiene",
       "keyword": "hygiene",
@@ -68,11 +68,11 @@
       },
       "actions": {
         "prompt": "To continue, reply:\n1. Next hygiene lesson\n9. Back to the health categories.",
-        "options": [6, 9]
+        "options": [7, 9]
       }
     },
     {
-      "id": 6,
+      "id": 7,
       "type": "topic",
       "category": "hygiene",
       "keyword": "hygiene",
@@ -218,6 +218,60 @@
     {
       "id": 3,
       "type": "topic",
+      "category": "pregnancy",
+      "keyword": "antenatal_care",
+      "query": "topic:pregnancy",
+      "response": "You’ve chosen Antenatal Care — this means going to the clinic regularly when you’re pregnant.\n\nFirst, go for your first antenatal visit as soon as you know you’re pregnant — don’t wait.\n\nSecond, go for checkups at least once every month, or as advised by your nurse or doctor.\n\nAt the clinic, you’ll get:\n\nHealth checks for you and the baby\n\nIron and folic acid tablets\n\nMalaria prevention medicine\n\nVaccines like tetanus\n\nYou can also ask about changes in your body, pain, food, birth preparation — the nurses are there to help.\n\nIf you feel weak, dizzy, or unwell, don’t wait for your next appointment — go back immediately.\n\nGoing to the clinic early and often keeps both you and your baby safe.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Reply with 1 to learn about what to eat or press 9 to return to topic list",
+        "options": [19, 9]
+      }
+    },
+    {
+      "id": 19,
+      "type": "topic",
+      "category": "pregnancy",
+      "keyword": "nutrition_pregnancy",
+      "query": "topic:pregnancy",
+      "response": "You’ve chosen Nutrition During Pregnancy — what you eat affects both your health and your baby’s growth.\n\nFirst, you don’t need to eat for two. Just eat a little more than usual, and make sure it’s balanced.\n\nEat more:\n\nGreen vegetables\n\nFruits like oranges, bananas, pawpaw\n\nBeans and groundnuts\n\nEggs, fish, and small meat\n\nDrink plenty of clean water each day.\n\nAvoid things that can harm your baby:\n\nNo alcohol\n\nNo smoking\n\nNo strong herbal mixtures, especially the ones not prescribed by a nurse or doctor\n\nTake your iron tablets with food, and don’t skip meals — your baby depends on you.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Press three to learn warning signs to watch for, or press nine to go back to topic list.",
+        "options": [20, 9]
+      }
+    },
+    {
+      "id": 20,
+      "type": "topic",
+      "category": "pregnancy",
+      "keyword": "warning_signs_pregnancy",
+      "query": "topic:pregnancy",
+      "response": "You’ve chosen Warning Signs in Pregnancy. Some signs mean you need urgent help — don’t wait.\n\nGo to the clinic immediately if you notice:\n\nBleeding from your vagina\n\nA severe headache or you see blurry\n\nYour hands, face, or feet swell suddenly\n\nSharp pain in your belly\n\nHigh fever or you feel very hot\n\nAfter six months, you feel no movement from the baby\n\nThese signs may point to a serious problem. Going early could save your life and your baby’s.\n\nDon’t delay. If you're unsure, go anyway — it’s better to be safe.",
+      "audio": {
+        "english": {
+          "location": "",
+          "whatsapp_media_id": ""
+        }
+      },
+      "actions": {
+        "prompt": "Press nine to return to the topic list.",
+        "options": [9]
+      }
+    },
+    {
+      "id": 4,
+      "type": "topic",
       "category": "childcare",
       "keyword": "childcare",
       "query": "topic:childcare",
@@ -292,16 +346,16 @@
       "type": "prompt",
       "keyword": "topics",
       "query": "topic:categories",
-      "response": "Alright, let's pick a category. You can choose: one, Hygiene; two, Disease Prevention; or three, Childcare. Just reply with the number of your choice.",
+      "response": "Alright, let's pick a category. You can choose: one, Hygiene; two, Disease Prevention; three, Pregnancy or four, Childcare. Just reply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-9-20250916091724.ogg",
-          "whatsapp_media_id": "779169271390783"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
         "prompt": "",
-        "options": [1, 2, 3]
+        "options": [1, 2, 3, 4]
       }
     },
     {

@@ -6,6 +6,13 @@ const logger = getLogger(rootLogger, {
   component: 'session-manager',
 });
 
+interface SessionRepository<T> {
+  create(phoneNumber: string): Promise<T>;
+  retrieve(identifier: string): Promise<T | null>;
+  update(session: T): Promise<T | null>;
+  delete(session: T): Promise<void>;
+}
+
 export default class SessionService {
   private get UserSession() {
     return new Session();
@@ -30,7 +37,7 @@ export default class SessionService {
 
   async retrieve(
     // retrieve
-    query: Identifier
+    identifier: string
   ): Promise<Session | null> {
     try {
       return await Session.findByIdOrPhoneNumber(query);
