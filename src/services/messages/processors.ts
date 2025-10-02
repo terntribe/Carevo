@@ -1,4 +1,4 @@
-import { MessageSessionType } from '#models/sessions/sessions.model.js';
+import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
 import { generateAudio } from '#utils/audio.js';
 import WhatsAppService from '#utils/messages.js';
 import { MessageConfig, MessageType } from '#utils/responses.ts';

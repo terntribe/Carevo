@@ -1,71 +1,33 @@
-import { Session, Identifier } from '#models/sessions/db/sessions.model.js';
 import { rootLogger, getLogger } from '#config/logger.js';
+import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
 
 const logger = getLogger(rootLogger, {
   service: 'whatsapp-bot-service',
-  component: 'session-manager',
+  component: 'session-service',
 });
 
-interface SessionRepository<T> {
+interface SessionRepo<T> {
   create(phoneNumber: string): Promise<T>;
   retrieve(identifier: string): Promise<T | null>;
   update(session: T): Promise<T | null>;
-  delete(session: T): Promise<void>;
+  delete(identifier: string): Promise<void>;
 }
 
-export default class SessionService {
-  private get UserSession() {
-    return new Session();
+export default class SessionService<T> {
+  constructor(private sessionRepo: SessionRepo<T>) {}
+
+  private deserialize<T>(data: T): MessageSessionType {
+    return;
   }
 
-  async create(phoneNumber: string): Promise<Session> {
-    const session = this.UserSession;
-
-    try {
-      session.phoneNumber = phoneNumber;
-      session.language = 'EN';
-      session.lastMessage = null as any; // Set to null or appropriate default
-      await session.save();
-      return session;
-    } catch (error) {
-      logger.error(`Failed to create session for ${phoneNumber}:`, error);
-      //   throw error;
-    }
-
-    return session;
+  private serialize<T>(mesage: MessageSessionType): T {
+    return;
   }
 
-  async retrieve(
-    // retrieve
-    identifier: string
-  ): Promise<Session | null> {
-    try {
-      return await Session.findByIdOrPhoneNumber(query);
-    } catch (error) {
-      logger.error(`Failed to fetch user session for ${query}`, error);
-    }
-    return null;
+  async create(phoneNumber: string) {
+    return await this.sessionRepo.create(phoneNumber);
   }
-
-  async update(session: Session): Promise<Session> {
-    try {
-      return await session.save();
-    } catch (error) {
-      logger.error(`Failed to update session with id ${session.id}`, error);
-    }
-    return session;
-  }
-
-  async delete(query: Identifier) {
-    const session = await this.retrieve(query);
-    if (session) {
-      try {
-        return await session.remove();
-      } catch (error) {
-        logger.error(`Failed to delete session for ${session.id}`, error);
-      }
-    }
-    logger.error(`Failed to fetch session for ${query}`);
-    return session;
+  async retrieve(identifier: string) {
+    return await this.sessionRepo.retrieve(identifier);
   }
 }

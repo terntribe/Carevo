@@ -76,14 +76,14 @@ export class SessionManager {
     return session;
   }
 
-  async update(sesh: MessageSessionType) {
+  async update(session: MessageSessionType) {
     // updates a session
-    sesh.updatedAt = new Date().toISOString();
-    const updated = MessageSession.safeParse(sesh); // might move to validators...??
+    session.updatedAt = new Date().toISOString();
+    const updated = MessageSession.safeParse(session); // might move to validators...??
 
     if (!updated.success) {
       logger.error(`Validation Error: ${updated.error.issues[0].message}`, {
-        session: { ...sesh },
+        session: { ...session },
       });
       return null;
     } else {
@@ -96,12 +96,12 @@ export class SessionManager {
       //save
       const saved = await this.saveSessions();
       if (!saved) {
-        logger.error('Failed to save updated session', { session: sesh });
+        logger.error('Failed to save updated session', { session: session });
         return null;
       }
     }
 
-    return sesh;
+    return session;
   }
 
   retrieve(identifier: string): MessageSessionType | undefined {
@@ -119,8 +119,6 @@ export class SessionManager {
     const deleted = await this.saveSessions();
     if (!deleted) {
       logger.error('Failed to delete session', { identifier: identifier });
-      return null;
     }
-    return;
   }
 }

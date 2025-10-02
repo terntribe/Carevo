@@ -7,10 +7,10 @@ import {
   BaseEntity,
 } from 'typeorm';
 
-export type Identifier = {
+export interface Identifier {
   id?: string;
   phoneNumber?: string;
-};
+}
 
 @Entity()
 export class Session extends BaseEntity {
@@ -33,15 +33,25 @@ export class Session extends BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
-  static findByIdOrPhoneNumber(query: Identifier) {
-    return this.createQueryBuilder('session')
-      .where(
-        'id' in query
-          ? 'session.id = :id'
-          : 'session.phoneNumber = :phoneNumber',
-        { query }
-      )
-      .getOne();
+  static findByIdOrPhoneNumber(id?: string, phoneNumber?: string) {
+    let query;
+
+    if (!id && !phoneNumber) {
+      return null;
+    }
+
+    if (id && phoneNumber) {
+      query = this.createQueryBuilder('session')
+        .where('session.id = :id', { id })
+        .orWhere('session.phoneNumber = :phoneNumber', { phoneNumber });
+    } else {
+      query = this.createQueryBuilder('session').where(
+        id ? 'session.id = :id' : 'session.phoneNumber = :phoneNumber',
+        { id, phoneNumber }
+      );
+    }
+
+    return query.getOne();
   }
 }
 

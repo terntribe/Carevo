@@ -142,7 +142,7 @@ export const chatController = async (req: Request, res: Response) => {
     }
 
     const _ = await sessionManager.update(currentSession);
-    logger.info(`Success: Message Processed for `, currentSession);
+    logger.info(`Success: Message Processed for `, currentSession.phoneNumber);
   }
   return res.send(200);
 };
