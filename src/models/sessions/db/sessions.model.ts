@@ -23,7 +23,7 @@ export class Session extends BaseEntity {
   @Column({ type: 'enum', enum: ['english'], default: 'english' })
   language!: string;
 
-  @OneToOne(() => LastMessage, { cascade: true })
+  @OneToOne(() => LastMessage, { cascade: true, eager: true })
   @JoinColumn()
   lastMessage!: LastMessage;
 
@@ -52,7 +52,9 @@ export class Session extends BaseEntity {
       );
     }
 
-    return query.getOne();
+    return query
+      .leftJoinAndSelect('session.lastMessage', 'lastMessage')
+      .getOne();
   }
 }
 
@@ -66,4 +68,7 @@ export class LastMessage extends BaseEntity {
 
   @Column('simple-array')
   options!: string[];
+
+  @OneToOne(() => Session, (session) => session.lastMessage)
+  session!: Session;
 }

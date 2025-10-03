@@ -51,12 +51,9 @@ export default class SessionRepository {
     try {
       const session = await this.retrieve(data.phoneNumber);
       if (session) {
-        const lastMessage = new LastMessage();
-        lastMessage.query = data.lastMessage.query;
-        lastMessage.options = data.lastMessage.options;
-
         session.language = data.language;
-        session.lastMessage = lastMessage;
+        Object.assign(session.lastMessage, data.lastMessage);
+        console.log(session);
         return await session.save();
       }
     } catch (error) {
