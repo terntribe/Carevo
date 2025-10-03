@@ -8,7 +8,7 @@ const logger = getLogger(rootLogger, {
 
 type MessageStatus = {
   id: string;
-  status: 'sent' | 'delivered';
+  status: 'sent' | 'delivered' | 'failed';
   timestamp: number;
   recipient_id: string;
 };
@@ -36,6 +36,11 @@ export const validateWebhookRequest = (
     logger.info(`Status recieved: ${statusData.status}`, {
       status: statusData,
     });
+
+    if (statusData.status == 'failed') {
+      const error = changes[0].value.statuses[0].errors[0];
+      logger.error(`Failed to send message: ${error.error_data.details}`);
+    }
 
     return res.status(200).send({ status: status });
   }

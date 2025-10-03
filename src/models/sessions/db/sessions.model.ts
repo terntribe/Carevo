@@ -20,7 +20,7 @@ export class Session extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   phoneNumber!: string;
 
-  @Column({ type: 'enum', enum: ['EN'], default: 'EN' })
+  @Column({ type: 'enum', enum: ['english'], default: 'english' })
   language!: string;
 
   @OneToOne(() => LastMessage, { cascade: true })
@@ -33,7 +33,8 @@ export class Session extends BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
-  static findByIdOrPhoneNumber(id?: string, phoneNumber?: string) {
+  static findByIdOrPhoneNumber(options: { id?: string; phoneNumber?: string }) {
+    const { id, phoneNumber } = options;
     let query;
 
     if (!id && !phoneNumber) {

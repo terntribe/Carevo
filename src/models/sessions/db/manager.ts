@@ -1,5 +1,10 @@
-import { Session, Identifier } from '#models/sessions/db/sessions.model.js';
+import {
+  Session,
+  Identifier,
+  LastMessage,
+} from '#models/sessions/db/sessions.model.js';
 import { rootLogger, getLogger } from '#config/logger.js';
+import { MessageSessionType } from '../file/sessions.model.js';
 
 const logger = getLogger(rootLogger, {
   service: 'whatsapp-bot-service',
@@ -15,11 +20,16 @@ export default class SessionRepository {
     const session = this.UserSession;
 
     try {
+      // last message entry
+      let lastMessage = new LastMessage();
+      lastMessage.query = '';
+      lastMessage.options = [];
+      lastMessage = await lastMessage.save();
+
       session.phoneNumber = phoneNumber;
-      session.language = 'EN';
-      session.lastMessage = null as any; // Set to null or appropriate default
-      await session.save();
-      return session;
+      session.language = 'english';
+      session.lastMessage = lastMessage;
+      return await session.save();
     } catch (error) {
       logger.error(`Failed to create session for ${phoneNumber}:`, error);
       //   throw error;
@@ -30,20 +40,29 @@ export default class SessionRepository {
 
   async retrieve(identifier: string): Promise<Session | null> {
     try {
-      return await Session.findByIdOrPhoneNumber(identifier);
+      return await Session.findByIdOrPhoneNumber({ phoneNumber: identifier });
     } catch (error) {
       logger.error(`Failed to fetch user session for ${identifier}`, error);
     }
     return null;
   }
 
-  async update(session: Session): Promise<Session | null> {
+  async update(data: MessageSessionType): Promise<Session | null> {
     try {
-      return await session.save();
+      const session = await this.retrieve(data.phoneNumber);
+      if (session) {
+        const lastMessage = new LastMessage();
+        lastMessage.query = data.lastMessage.query;
+        lastMessage.options = data.lastMessage.options;
+
+        session.language = data.language;
+        session.lastMessage = lastMessage;
+        return await session.save();
+      }
     } catch (error) {
-      logger.error(`Failed to update session with id ${session.id}`, error);
-      return null;
+      logger.error(`Failed to update session with id ${data.id}`, error);
     }
+    return null;
   }
 
   async delete(identifier: string) {
@@ -56,5 +75,9 @@ export default class SessionRepository {
       }
     }
     logger.error(`Failed to fetch session for ${identifier}`);
+  }
+
+  serialize(message: MessageSessionType) {
+    return this.UserSession;
   }
 }

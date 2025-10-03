@@ -7,7 +7,7 @@ const logger = getLogger(rootLogger, {
   component: 'session-manager',
 });
 
-const MessageSession = z.object({
+export const MessageSession = z.object({
   id: z.uuid(),
   phoneNumber: z.coerce.string().min(10),
   language: z.union([z.literal('english'), z.string()]),
@@ -15,8 +15,12 @@ const MessageSession = z.object({
     query: z.string(),
     options: z.array(z.coerce.string()),
   }),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
+  createdAt: z.date({
+    error: (issue) => (issue.input === undefined ? 'Required' : 'Invalid date'),
+  }),
+  updatedAt: z.date({
+    error: (issue) => (issue.input === undefined ? 'Required' : 'Invalid date'),
+  }),
 });
 
 export type MessageSessionType = z.infer<typeof MessageSession>;
@@ -62,8 +66,8 @@ export class SessionManager {
       phoneNumber: phoneNumber,
       language: 'english',
       lastMessage: { query: '', options: [] },
-      createdAt: timestamp.toISOString(),
-      updatedAt: timestamp.toISOString(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
     this.sessions.push(session);
     // save
@@ -78,7 +82,7 @@ export class SessionManager {
 
   async update(session: MessageSessionType) {
     // updates a session
-    session.updatedAt = new Date().toISOString();
+    session.updatedAt = new Date();
     const updated = MessageSession.safeParse(session); // might move to validators...??
 
     if (!updated.success) {
@@ -120,5 +124,9 @@ export class SessionManager {
     if (!deleted) {
       logger.error('Failed to delete session', { identifier: identifier });
     }
+  }
+
+  serialize(message: MessageSessionType) {
+    return message;
   }
 }

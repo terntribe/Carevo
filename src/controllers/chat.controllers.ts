@@ -26,9 +26,14 @@ import {
   getLogger,
   analyticsLogger as analytics,
 } from '#config/logger.js';
+import SessionService from '#services/messages/sessions.service.js';
+import SessionRepository from '#models/sessions/db/manager.js';
+import { Session } from '#models/sessions/db/sessions.model.js';
 
-const sessionManager = new SessionManager();
-const _ = await sessionManager.loadSessions();
+// const sessionService = new SessionService<MessageSessionType>(new SessionManager());
+// const _ = await sessionManager.loadSessions();
+
+const sessionService = new SessionService<Session>(new SessionRepository());
 
 const logger = getLogger(rootLogger, {
   service: 'whastapp-bot-service',
@@ -59,9 +64,7 @@ export const chatController = async (req: Request, res: Response) => {
 
   // try and get the session first (if num does not exist),
   //if not create a new sesh and call obs with 'greet' keyword...
-  let userSession = sessionManager.retrieve(
-    sendersPhoneNumber
-  ) as MessageSessionType;
+  let userSession = await sessionService.retrieve(sendersPhoneNumber);
 
   let context: Context = {
     phoneNumber: sendersPhoneNumber,
@@ -70,7 +73,7 @@ export const chatController = async (req: Request, res: Response) => {
 
   if (!userSession) {
     // !userSession
-    var newSession = await sessionManager.create(sendersPhoneNumber);
+    var newSession = await sessionService.create(sendersPhoneNumber);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
@@ -90,7 +93,7 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
 
-    newSession = await sessionManager.update(currentSession);
+    newSession = await sessionService.update(currentSession);
 
     logger.info(
       `New session created for whatsapp user -> ${sendersPhoneNumber}`,
@@ -141,7 +144,7 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
 
-    const _ = await sessionManager.update(currentSession);
+    const _ = await sessionService.update(currentSession);
     logger.info(`Success: Message Processed for `, currentSession.phoneNumber);
   }
   return res.send(200);
