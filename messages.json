@@ -8,8 +8,8 @@
       "response": "Hello and welcome to Carevo\nI'm your health companion on WhatsApp, here to share short audio messages in simple English to help you stay healthy and informed.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-0-20251001112452.ogg",
-          "whatsapp_media_id": "1683172072317240"
+          "location": "/audio_files/carevo-0-20251005183341.ogg",
+          "whatsapp_media_id": "1943504769554424"
         }
       },
       "actions": {
@@ -31,8 +31,8 @@
       "response": "You've chosen Hygiene.\nHere are the lessons available:\n\n1. Handwashing Basics - How and why to wash your hands properly\n2. Safe Water for Handwashing - Keeping your water clean and safe\n3. Food Hygiene - Tips for handling and preparing food safely",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-1-20250916090112.ogg",
-          "whatsapp_media_id": "654570144368060"
+          "location": "/audio_files/carevo-1-20251005183605.ogg",
+          "whatsapp_media_id": "780011068160495"
         }
       },
       "actions": {
@@ -54,8 +54,8 @@
       "response": "You've chosen Handwashing Basics — a simple habit that protects your whole family.\nHere are the key steps:\nFirst, wet your hands with clean, running water.\nSecond, apply soap and lather every surface — your palms, the backs of your hands, between your fingers, under your nails, and around your thumbs.\nThird, scrub for about twenty seconds. You can hum the song Happy Birthday twice to keep time.\nFourth, rinse your hands well under running water.\nFinally, dry your hands with a clean towel or let them air-dry.\n\nThese five steps remove germs that cause diarrhoea, typhoid, and chest infections. A small habit that keeps your whole household safe.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-4-20250916085337.ogg",
-          "whatsapp_media_id": "690658197385543"
+          "location": "/audio_files/carevo-5-20251005184057.ogg",
+          "whatsapp_media_id": "807626964967414"
         }
       },
       "actions": {
@@ -75,8 +75,8 @@
       "response": "You've chosen Safe Water for Handwashing — because clean water is just as important as soap.\n\nAlways use safe, running water if possible. If you fetch water, keep it in a clean container and cover it to protect it from dirt. Never dip dirty cups, hands, or utensils directly into the container.\n\nIf you are unsure that water is safe, boil it or treat it before use. Even clear-looking water can carry germs.\n\nA good idea is to set up a small handwashing point near your kitchen or toilet. This makes it easy for everyone to wash their hands at the right times.\n\nRemember: dirty water can spread as many germs as not washing at all. Keep it clean, keep it safe.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-5-20250916090633.ogg",
-          "whatsapp_media_id": "1901067254157547"
+          "location": "/audio_files/carevo-6-20251007083807.ogg",
+          "whatsapp_media_id": "1994184914680548"
         }
       },
       "actions": {
@@ -96,8 +96,8 @@
       "response": "You've chosen Food Hygiene — keeping food safe protects your family from illness.\n\nFirst, always wash fruits and vegetables with clean water before eating.\nSecond, cook food thoroughly, especially meat, poultry, and fish. Undercooked food can carry harmful germs.\nThird, store cooked food separately from raw food so that juices or bacteria from raw food do not contaminate what is ready to eat.\nFourth, keep leftovers covered, and if you can, refrigerate them.\nAnd fifth, always wash your hands before preparing or serving food.\n\nThese simple steps prevent diarrhoea, food poisoning, and other stomach illnesses.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-7-20251002091645.ogg",
-          "whatsapp_media_id": "1495784645000997"
+          "location": "/audio_files/carevo-7-20251007083222.ogg",
+          "whatsapp_media_id": "1899946507252121"
         }
       },
       "actions": {
@@ -116,8 +116,8 @@
       "response": "You’ve chosen Disease Prevention. Here are the lessons available:\nOne — Preventing Malaria.\nTwo — Avoiding Typhoid.\nThree — Protecting Against Sexually Transmitted Infections.\n",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-2-20251001113132.ogg",
-          "whatsapp_media_id": "827444443050379"
+          "location": "/audio_files/carevo-2-20251007084255.ogg",
+          "whatsapp_media_id": "794907306581599"
         }
       },
       "actions": {
@@ -139,8 +139,8 @@
       "response": "You’ve chosen Preventing Malaria — a disease that spreads through mosquito bites, but can be stopped.\n\nFirst, always sleep under a long-lasting insecticide-treated mosquito net. This is the most effective protection.\n\nSecond, wear long sleeves and trousers, especially in the evening when mosquitoes are most active.\n\nThird, use mosquito repellents on your skin or clothing if available. Even natural options like lemon eucalyptus oil can help.\n\nFourth, remove stagnant water from your surroundings. Mosquitoes breed in still water—like old tires, buckets, pots, or puddles.\n\nFifth, keep your water storage containers tightly covered, so mosquitoes cannot lay eggs inside.\n\nSixth, clear bushes and tall grasses around your home. Mosquitoes hide there during the day.\n\nSeventh, make sure windows and doors have screens or nets to prevent mosquitoes from entering. Repair any holes.\n\nEighth, burn mosquito coils or use indoor sprays (if safe and available) to kill mosquitoes inside the house.\n\nNinth, encourage your community to do weekly clean-ups — malaria is easier to prevent when the whole area works together.\n\nAnd tenth, if you feel feverish, tired, or have body pains, go to a health center and get tested immediately. Early treatment saves lives.\n\nMalaria is dangerous, but with these small actions, we can stop it.\n",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-8-20251001115352.ogg",
-          "whatsapp_media_id": "1911724066061656"
+          "location": "/audio_files/carevo-8-20251007084655.ogg",
+          "whatsapp_media_id": "1459762648471700"
         }
       },
       "actions": {
@@ -160,8 +160,8 @@
       "response": "You’ve chosen Avoiding Typhoid — a serious illness that spreads through dirty food and water.\n\nFirst, always drink safe water. Boil it, treat it, or use clean bottled water.\nSecond, avoid eating raw food from roadside sellers if you’re unsure about hygiene.\nThird, wash fruits and vegetables with clean water before eating them.\nFourth, wash your hands thoroughly before eating or preparing meals.\nAnd fifth, always use a toilet or latrine. Open defecation spreads typhoid quickly.\n\nTyphoid can cause long-term illness or even death if untreated. Prevention is easier than cure.\n",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-10-20251003193951.ogg",
-          "whatsapp_media_id": "725040723919498"
+          "location": "/audio_files/carevo-10-20251007084954.ogg",
+          "whatsapp_media_id": "2738683926466233"
         }
       },
       "actions": {
@@ -181,8 +181,8 @@
       "response": "You’ve chosen the topic: Sexually Transmitted Infections (STIs). Let’s talk about how to protect yourself, notice the signs, and get help if needed.\n\nLesson one — how to prevent STIs.\nLesson two — the signs and symptoms to watch for.\nLesson three — what to do if you think you have an STI.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-12-20251007085243.ogg",
+          "whatsapp_media_id": "1451888659249592"
         }
       },
       "actions": {
@@ -204,8 +204,8 @@
       "response": "You’ve chosen Preventing STIs — sexually transmitted infections like gonorrhoea, syphilis, and HIV.\n\nThese infections spread through unprotected sex, and sometimes through sharing sharp objects. Many people with STIs have no symptoms, but the germs can still cause serious damage.\n\nFirst, always use a condom — every time. Condoms reduce the risk of nearly all STIs.\n\nSecond, stick to one faithful partner who is also faithful to you. This greatly lowers your risk.\n\nThird, go for regular health checkups, even if you feel fine. Most STIs can be silent for months.\n\nFourth, never share razors, needles, or anything that can carry blood.\n\nAnd fifth, talk to your partner. Encourage them to get tested too, so you protect each other.\n\nSTIs can lead to infertility, pregnancy loss, or even long-term illness — but most can be cured with simple treatment if caught early.\n\nLet’s take care of ourselves and those we love.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-13-20251007085414.ogg",
+          "whatsapp_media_id": "799983339302416"
         }
       },
       "actions": {
@@ -225,8 +225,8 @@
       "response": "You’ve chosen Signs and Symptoms of STIs — sexually transmitted infections.\n\nSome people show signs. Others don’t. But here are symptoms you should never ignore:\n\nPain or burning when you urinate\n\nSores, bumps, or blisters on or around your private parts\n\nDischarge from the penis or vagina that looks or smells unusual\n\nItching or rashes near your genitals\n\nPain during sex\n\nPain in your lower belly, especially for women\n\nBleeding between periods or after sex\n\nThese signs might mean you have an STI, but some STIs show no symptoms at all. That’s why regular testing is important — even when you feel fine.\n",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-14-20251007085650.ogg",
+          "whatsapp_media_id": "837652838825201"
         }
       },
       "actions": {
@@ -246,8 +246,8 @@
       "response": "You’ve chosen What to Do If You Think You Have an STI.\n\nFirst — don’t panic. Most STIs can be cured with medicine. Even HIV, though not curable, can be treated so you live a long, healthy life.\n\nSecond, go to a health center or clinic and ask for a test. Be honest with the nurse or doctor — they are there to help you, not judge you.\n\nThird, stop having sex until your treatment is finished and you’re cleared.\n\nFourth, talk to your partner or anyone you’ve had sex with. Ask them to get tested too — so the infection doesn’t go back and forth.\n\nAnd fifth, if you get medicine, take all of it, even if you feel better after one or two days. Stopping early makes the infection come back stronger.\n\nSTIs are not a curse. But ignoring them can lead to serious problems.\n",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-15-20251007085914.ogg",
+          "whatsapp_media_id": "1913164735907115"
         }
       },
       "actions": {
@@ -266,8 +266,8 @@
       "response": "You’ve chosen Antenatal Care — this means going to the clinic regularly when you’re pregnant.\n\nFirst, go for your first antenatal visit as soon as you know you’re pregnant — don’t wait.\n\nSecond, go for checkups at least once every month, or as advised by your nurse or doctor.\n\nAt the clinic, you’ll get:\n\nHealth checks for you and the baby\n\nIron and folic acid tablets\n\nMalaria prevention medicine\n\nVaccines like tetanus\n\nYou can also ask about changes in your body, pain, food, birth preparation — the nurses are there to help.\n\nIf you feel weak, dizzy, or unwell, don’t wait for your next appointment — go back immediately.\n\nGoing to the clinic early and often keeps both you and your baby safe.",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-3-20251007090232.ogg",
+          "whatsapp_media_id": "4170671889836915"
         }
       },
       "actions": {
@@ -292,7 +292,7 @@
         }
       },
       "actions": {
-        "prompt": "Press three to learn warning signs to watch for, or press nine to go back to topic list.",
+        "prompt": "Press 1 to learn warning signs to watch for, or press nine to go back to topic list.",
         "options": [
           20,
           9
@@ -308,8 +308,8 @@
       "response": "You’ve chosen Warning Signs in Pregnancy. Some signs mean you need urgent help — don’t wait.\n\nGo to the clinic immediately if you notice:\n\nBleeding from your vagina\n\nA severe headache or you see blurry\n\nYour hands, face, or feet swell suddenly\n\nSharp pain in your belly\n\nHigh fever or you feel very hot\n\nAfter six months, you feel no movement from the baby\n\nThese signs may point to a serious problem. Going early could save your life and your baby’s.\n\nDon’t delay. If you're unsure, go anyway — it’s better to be safe.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-20-20251002095248.ogg",
-          "whatsapp_media_id": "1129818205757788"
+          "location": "/audio_files/carevo-20-20251007090748.ogg",
+          "whatsapp_media_id": "1572216747475635"
         }
       },
       "actions": {
@@ -328,8 +328,8 @@
       "response": "You’ve chosen Childcare, helpful tips for feeding, bathing, and keeping your child healthy and strong.\n\nHere are the lessons available:\nLesson one — feeding your baby, and what to give at different ages.\nLesson two — bathing and hygiene, to keep your child clean and safe.\nLesson three — when to seek medical help, and danger signs you should never ignore.”",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-4-20251002100517.ogg",
-          "whatsapp_media_id": "1237376431411769"
+          "location": "/audio_files/carevo-4-20251007113153.ogg",
+          "whatsapp_media_id": "660967450068874"
         }
       },
       "actions": {
@@ -412,8 +412,8 @@
       "response": "Alright, let's pick a category. You can choose: one, Hygiene; two, Disease Prevention; three, Pregnancy or four, Childcare. Just reply with the number of your choice.",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-9-20251001112953.ogg",
-          "whatsapp_media_id": "4174276072900613"
+          "location": "/audio_files/carevo-9-20251007084120.ogg",
+          "whatsapp_media_id": "811908111251616"
         }
       },
       "actions": {
@@ -434,8 +434,8 @@
       "response": "Sorry, I did not understand your reply. But not to worry!",
       "audio": {
         "english": {
-          "location": "/audio_files/carevo-11-20250915145348.ogg",
-          "whatsapp_media_id": "1324822945707708"
+          "location": "",
+          "whatsapp_media_id": ""
         }
       },
       "actions": {
