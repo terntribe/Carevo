@@ -12,7 +12,11 @@ for a limited time range but the API is unstable  i.e. failed messages from yest
 
 */
 
-import { debounce, parseIncomingWhatAppMessageData } from '#utils/helpers.js';
+import {
+  debounce,
+  generateNumHash,
+  parseIncomingWhatAppMessageData,
+} from '#utils/helpers.js';
 import { Request, Response } from 'express';
 import {
   MessageSessionType,
@@ -40,45 +44,50 @@ const logger = getLogger(rootLogger, {
 });
 
 type Context = {
-  phoneNumber: string;
   message: string;
-  intent?: Intent;
+  sessionId?: string;
+  intent?: string;
+  service?: string;
 };
 
 export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
 
-  const sendersPhoneNumber = messageData?.from;
+  const from = await generateNumHash(messageData?.from);
   let intent: Intent | null = null;
 
-  if (!sendersPhoneNumber || !messageData || !messageData.text) {
+  if (!messageData || !messageData.text || messageData.from) {
     logger.error('Missing fields: phone number or message text is missing');
 
+    if (messageData?.type != 'text') {
+      logger.error('Invalid message');
+      // maybe implement blocking strategy
+    }
+
     return res.status(400).send(400);
-  } else if (debounce({ phone: sendersPhoneNumber, text: messageData.text })) {
+  } else if (debounce({ phone: from, text: messageData.text })) {
     logger.warn(
-      `Message still being processed: Sender: ${sendersPhoneNumber} -> text: ${messageData.text}`
+      `Message still being processed: Sender: ${from} -> text: ${messageData.text}` // trucate hash and log
     );
     return res.send(200);
   }
 
   // try and get the session first (if num does not exist),
   //if not create a new sesh and call obs with 'greet' keyword...
-  let userSession = await sessionService.retrieve(sendersPhoneNumber);
+  let userSession = await sessionService.retrieve(from);
 
   let context: Context = {
-    phoneNumber: sendersPhoneNumber,
     message: messageData.text,
   }; // for logging
 
   if (!userSession) {
     // !userSession
-    var newSession = await sessionService.create(sendersPhoneNumber);
+    var newSession = await sessionService.create(from);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
       logger.error(
-        `Failed to create a new session for whatsapp user -> ${sendersPhoneNumber}`,
+        `Failed to create a new session for whatsapp user -> ${from}`,
         context
       ); // log here
       return res.send(200);
@@ -86,23 +95,17 @@ export const chatController = async (req: Request, res: Response) => {
 
     const currentSession = await OnboardingService.greetUser(userSession);
     if (!currentSession) {
-      logger.error(
-        `Failed to onboard whatsapp user -> ${sendersPhoneNumber}`,
-        context
-      ); // log here
+      logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
       return res.send(200);
     }
 
     newSession = await sessionService.update(currentSession);
 
-    logger.info(
-      `New session created for whatsapp user -> ${sendersPhoneNumber}`,
-      {
-        session: newSession,
-      }
-    );
+    logger.info(`New session created for whatsapp user -> ${from}`, newSession);
     return res.send(200);
   } else {
+    context.sessionId = userSession.id;
+
     // pass the text to the intent matcher
     intent = matchIntent(messageData?.text, userSession);
 
@@ -134,7 +137,8 @@ export const chatController = async (req: Request, res: Response) => {
       userSession
     );
 
-    context.intent = intent;
+    context.intent = intent.intent;
+    context.service = intent.service;
 
     if (!currentSession) {
       logger.error(
@@ -145,7 +149,7 @@ export const chatController = async (req: Request, res: Response) => {
     }
 
     const _ = await sessionService.update(currentSession);
-    logger.info(`Success: Message Processed for `, currentSession.phoneNumber);
+    logger.info(`Success: Message Processed for `, currentSession.id);
   }
   return res.send(200);
 };

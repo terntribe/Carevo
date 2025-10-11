@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { rootLogger as logger } from '#config/logger.js';
+import * as bcrypt from 'bcrypt';
 
 type messageData = {
   id: any;
@@ -177,4 +178,13 @@ export function debounce(msg: { phone: string; text: string }): boolean {
   }
   messages.push(newEntry);
   return false;
+}
+
+export async function generateNumHash(phoneNumber?: string) {
+  if (!phoneNumber) return null;
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPhoneNumber = await bcrypt.hash(phoneNumber, salt);
+
+  return { id: crypto.randomUUID(), phone: hashedPhoneNumber };
 }

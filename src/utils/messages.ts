@@ -64,10 +64,10 @@ export default class WhatsAppService {
     return response?.data as FileUploadResponse;
   }
 
-  static getOutgoingMessageData(message: MessageResponse) {
+  static getOutgoingMessageData(message: MessageResponse, to: string) {
     const baseResponseData = {
       messaging_product: 'whatsapp',
-      to: config.whatsapp.reciepient_id,
+      to: config.env == 'local' ? config.whatsapp.reciepient_id : to,
       recepient_type: 'individual',
     };
     return { ...baseResponseData, ...message };
