@@ -20,10 +20,10 @@ export class Session extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   phoneNumber!: string;
 
-  @Column({ type: 'enum', enum: ['EN'], default: 'EN' })
+  @Column({ type: 'enum', enum: ['english'], default: 'english' })
   language!: string;
 
-  @OneToOne(() => LastMessage, { cascade: true })
+  @OneToOne(() => LastMessage, { cascade: true, eager: true })
   @JoinColumn()
   lastMessage!: LastMessage;
 
@@ -33,7 +33,8 @@ export class Session extends BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 
-  static findByIdOrPhoneNumber(id?: string, phoneNumber?: string) {
+  static findByIdOrPhoneNumber(options: { id?: string; phoneNumber?: string }) {
+    const { id, phoneNumber } = options;
     let query;
 
     if (!id && !phoneNumber) {
@@ -51,7 +52,9 @@ export class Session extends BaseEntity {
       );
     }
 
-    return query.getOne();
+    return query
+      .leftJoinAndSelect('session.lastMessage', 'lastMessage')
+      .getOne();
   }
 }
 
@@ -65,4 +68,7 @@ export class LastMessage extends BaseEntity {
 
   @Column('simple-array')
   options!: string[];
+
+  @OneToOne(() => Session, (session) => session.lastMessage)
+  session!: Session;
 }

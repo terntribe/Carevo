@@ -21,7 +21,7 @@ export default class GeminiTTSConfig {
           {
             parts: [
               {
-                text: `Say this in ${langauge} '${text}'`,
+                text: `Say this in ${langauge} at 0.9x speed '${text}'`,
               },
             ],
           },
@@ -31,7 +31,7 @@ export default class GeminiTTSConfig {
           speechConfig: {
             voiceConfig: {
               prebuiltVoiceConfig: {
-                voiceName: 'Kore',
+                voiceName: 'Achird',
               },
             },
           },

@@ -7,7 +7,7 @@ const Message = z.object({
   id: z.coerce.string(),
   type: z.literal(['topic', 'message', 'prompt']),
   category: z.optional(
-    z.literal(['disease_prevention', 'childcare', 'hygiene'])
+    z.literal(['disease_prevention', 'childcare', 'hygiene', 'pregnancy'])
   ),
   keyword: z.string(),
   query: z.coerce.string(),
