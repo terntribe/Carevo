@@ -8,7 +8,8 @@ export class OnboardingService {
 
   static async setLanguagePreferrence(
     choice: string,
-    session: MessageSessionType
+    session: MessageSessionType,
+    to: string
   ) {
     let keyword = 'support:invalid-input';
     const language = checkSupportedLanguages(choice);
@@ -16,6 +17,6 @@ export class OnboardingService {
       keyword = `onboard:${language}`;
       session.language = language;
     }
-    return await processMessage(keyword, session);
+    return await processMessage(keyword, session, to);
   }
 }

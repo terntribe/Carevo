@@ -52,22 +52,29 @@ type Context = {
 
 export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
-
-  const from = await generateNumHash(messageData?.from);
   let intent: Intent | null = null;
+  let from: string | null;
 
-  if (!messageData || !messageData.text || messageData.from) {
+  if (!messageData || !messageData.text || !messageData.from) {
     logger.error('Missing fields: phone number or message text is missing');
 
     if (messageData?.type != 'text') {
       logger.error('Invalid message');
-      // maybe implement blocking strategy
+      // maybe implement blocking strategy here...
     }
-
     return res.status(400).send(400);
-  } else if (debounce({ phone: from, text: messageData.text })) {
+  } else {
+    from = await generateNumHash(messageData.from);
+  }
+
+  if (!from) {
+    logger.error('Failed to hash phone number');
+    return res.status(500).send(500);
+  }
+
+  if (debounce({ phone: messageData.from, text: messageData.text })) {
     logger.warn(
-      `Message still being processed: Sender: ${from} -> text: ${messageData.text}` // trucate hash and log
+      `Message still being processed: Sender: ${from.substring(0, 10)} -> text: ${messageData.text}`
     );
     return res.send(200);
   }
@@ -93,7 +100,10 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
 
-    const currentSession = await OnboardingService.greetUser(userSession);
+    const currentSession = await OnboardingService.greetUser(
+      userSession,
+      messageData.from
+    );
     if (!currentSession) {
       logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
       return res.send(200);
@@ -134,7 +144,8 @@ export const chatController = async (req: Request, res: Response) => {
 
     const currentSession = await MessageService.response(
       intent.intent,
-      userSession
+      userSession,
+      messageData.from
     );
 
     context.intent = intent.intent;

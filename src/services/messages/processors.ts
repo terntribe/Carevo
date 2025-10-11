@@ -81,7 +81,7 @@ export const matchIntent = (
   return { intent: 'support:invalid_input', service: 'message' };
 };
 
-export const ProccessMessage = async (
+export const processMessage = async (
   query: string,
   session: MessageSessionType,
   to: string
@@ -104,7 +104,11 @@ export const ProccessMessage = async (
     await sendWhatsAppVoiceMsg(responseMsg.mediaId, to);
   }
 
-  // finalize() implement
+  if (responseMsg && responseMsg.message) {
+    return await finalize(responseMsg.message, session);
+  }
+
+  return session;
 };
 
 export const GetWhatsAppMediaIdForMsg = async (
@@ -230,32 +234,6 @@ export const GetWhatsAppMediaIdForMsg = async (
     }
   }
 
-  // update the session keyword entry
-  // session.lastMessage.query =
-  //   message.query !== session.lastMessage.query &&
-  //   message.query !== 'system:invalid_input'
-  //     ? message.query
-  //     : session.lastMessage.query;
-
-  // if (message.actions.options) {
-  //   if (message.query === 'system:invalid_input') {
-  //     const lastMessage = messageConfig.getMessageByQueryOrId(
-  //       session.lastMessage.query
-  //     );
-
-  //     if (!lastMessage) {
-  //       logger.error('No previous message for invalid input', session, message);
-  //     } else {
-  //       session.lastMessage.options = [
-  //         lastMessage.id,
-  //         ...message.actions.options,
-  //       ];
-  //     }
-  //   } else {
-  //     session.lastMessage.options = message.actions.options;
-  //   }
-  // }
-
   return { mediaId, message };
 };
 
@@ -286,4 +264,40 @@ async function uploadAudioFileToWhatsApp(
   }
 
   return fileId?.id;
+}
+
+async function finalize(message: MessageType, session: MessageSessionType) {
+  /**
+   * final operations to carry out after processing response:
+   * 1. Mark message as read
+   * 2. Update session info
+   */
+
+  //  update the session keyword entry
+  session.lastMessage.query =
+    message.query !== session.lastMessage.query &&
+    message.query !== 'system:invalid_input'
+      ? message.query
+      : session.lastMessage.query;
+
+  if (message.actions.options) {
+    if (message.query === 'system:invalid_input') {
+      const lastMessage = messageConfig.getMessageByQueryOrId(
+        session.lastMessage.query
+      );
+
+      if (!lastMessage) {
+        logger.error('No previous message for invalid input', session, message);
+      } else {
+        session.lastMessage.options = [
+          lastMessage.id,
+          ...message.actions.options,
+        ];
+      }
+    } else {
+      session.lastMessage.options = message.actions.options;
+    }
+  }
+
+  return session;
 }

@@ -161,9 +161,9 @@ export function debounce(msg: { phone: string; text: string }): boolean {
   const now = new Date();
   const expiry = new Date(now.getTime() + 1 * 60 * 1000);
   const newEntry = { ...msg, expires: expiry };
-  const message = messages.find(
-    (m) => m.phone == msg.phone && m.text == msg.text
-  );
+  const message = messages.find((m) => {
+    m.phone == msg.phone && m.text == msg.text;
+  });
 
   if (message) {
     if (now > message.expires) {
@@ -186,5 +186,5 @@ export async function generateNumHash(phoneNumber?: string) {
   const salt = await bcrypt.genSalt(10);
   const hashedPhoneNumber = await bcrypt.hash(phoneNumber, salt);
 
-  return { id: crypto.randomUUID(), phone: hashedPhoneNumber };
+  return hashedPhoneNumber;
 }

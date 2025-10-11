@@ -21,7 +21,6 @@ export default class SessionService<T> {
   private deserialize<T>(data: T): MessageSessionType | null {
     const serialized = MessageSession.safeParse(data);
     if (!serialized.success) {
-      console.log('This was the data -> ', data);
       logger.error(`Validation error: ${serialized.error.issues[0].message}`);
       return null;
     }
@@ -30,7 +29,7 @@ export default class SessionService<T> {
 
   async create(phoneNumber: string) {
     const response = await this.sessionRepo.create(phoneNumber);
-    console.log('This the response from create', response);
+    // console.log('This the response from create', response);
     return this.deserialize(response);
   }
 
