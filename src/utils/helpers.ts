@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { rootLogger as logger } from '#config/logger.js';
-import * as bcrypt from 'bcrypt';
+import { config } from '#config/index.js';
+import crypto from 'crypto';
 
 type messageData = {
   id: any;
@@ -164,15 +165,17 @@ export function debounce(msg: { phone: string; text: string }): boolean {
   const message = messages.find((m) => {
     m.phone == msg.phone && m.text == msg.text;
   });
-
+  console.log(messages);
   if (message) {
     if (now > message.expires) {
       messages = messages.map((m) => {
         if (m.phone == msg.phone && m.text == msg.text) return newEntry;
         return m;
       });
+      console.log('YUP');
       return false;
     } else {
+      console.log('NOPE');
       return true;
     }
   }
@@ -180,11 +183,11 @@ export function debounce(msg: { phone: string; text: string }): boolean {
   return false;
 }
 
-export async function generateNumHash(phoneNumber?: string) {
+export async function generatePhoneNumHash(phoneNumber?: string) {
   if (!phoneNumber) return null;
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPhoneNumber = await bcrypt.hash(phoneNumber, salt);
-
-  return hashedPhoneNumber;
+  return crypto
+    .createHmac('sha256', config.phone_hash_secret)
+    .update(phoneNumber)
+    .digest('hex');
 }

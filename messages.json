@@ -434,8 +434,8 @@
       "response": "Sorry, I did not understand your reply. But not to worry!",
       "audio": {
         "english": {
-          "location": "",
-          "whatsapp_media_id": ""
+          "location": "/audio_files/carevo-11-20251012072207.ogg",
+          "whatsapp_media_id": "1279624670512150"
         }
       },
       "actions": {
