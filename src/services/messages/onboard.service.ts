@@ -2,8 +2,17 @@ import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
 import { checkSupportedLanguages, processMessage } from './processors.js';
 
 export class OnboardingService {
-  static async greetUser(session: MessageSessionType, to: string) {
-    return await processMessage('onboard:greet', session, to);
+  static async greetUser(
+    wa_mid: string,
+    session: MessageSessionType,
+    to: string
+  ) {
+    return await processMessage({
+      query: 'onboard:greet',
+      session: session,
+      to: to,
+      wa_mid: wa_mid,
+    });
   }
 
   static async setLanguagePreferrence(
@@ -17,6 +26,11 @@ export class OnboardingService {
       keyword = `onboard:${language}`;
       session.language = language;
     }
-    return await processMessage(keyword, session, to);
+    return await processMessage({
+      query: keyword,
+      session: session,
+      to: to,
+      wa_mid: '',
+    });
   }
 }

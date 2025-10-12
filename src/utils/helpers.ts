@@ -158,24 +158,23 @@ export function initRequestClient() {
   return client;
 }
 
-export function debounce(msg: { phone: string; text: string }): boolean {
+export function throttle(msg: { phone: string; text: string }): boolean {
   const now = new Date();
   const expiry = new Date(now.getTime() + 1 * 60 * 1000);
   const newEntry = { ...msg, expires: expiry };
-  const message = messages.find((m) => {
-    m.phone == msg.phone && m.text == msg.text;
-  });
-  console.log(messages);
+  const message = messages.find(
+    (m) => m.phone == msg.phone && m.text == msg.text
+  );
+
   if (message) {
     if (now > message.expires) {
       messages = messages.map((m) => {
         if (m.phone == msg.phone && m.text == msg.text) return newEntry;
         return m;
       });
-      console.log('YUP');
+
       return false;
     } else {
-      console.log('NOPE');
       return true;
     }
   }

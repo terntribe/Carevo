@@ -13,6 +13,13 @@ export type Intent = {
   service: 'onboard' | 'message';
 };
 
+export type QueryData = {
+  wa_mid: string;
+  query: string;
+  session: MessageSessionType;
+  to: string;
+};
+
 type processContext = { query: string; session: string };
 
 const messageConfig = new MessageConfig();
@@ -81,11 +88,9 @@ export const matchIntent = (
   return { intent: 'support:invalid_input', service: 'message' };
 };
 
-export const processMessage = async (
-  query: string,
-  session: MessageSessionType,
-  to: string
-) => {
+export const processMessage = async (queryData: QueryData) => {
+  const { wa_mid, query, session, to } = queryData;
+
   let message = messageConfig.getMessageByQueryOrId(query);
 
   if (!message) {

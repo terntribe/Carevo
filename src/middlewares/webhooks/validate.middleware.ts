@@ -10,7 +10,6 @@ type MessageStatus = {
   id: string;
   status: 'sent' | 'delivered' | 'failed';
   timestamp: number;
-  recipient_id: string;
 };
 
 export const validateWebhookRequest = (
@@ -30,8 +29,8 @@ export const validateWebhookRequest = (
     const messageStatusData =
       messageStatus.length > 0 ? messageStatus[0] : null;
 
-    const { id, status, timestamp, recipient_id } = messageStatusData;
-    const statusData: MessageStatus = { id, status, timestamp, recipient_id };
+    const { id, status, timestamp } = messageStatusData;
+    const statusData: MessageStatus = { id, status, timestamp };
 
     logger.info(`Status recieved: ${statusData.status}`, {
       status: statusData,
@@ -52,17 +51,9 @@ export const validateWebhookRequest = (
       .send('Bad Request: No changes found in the webhook data');
   }
 
-  logger.info(
-    'New whatsapp message event recieved',
-    changes.length > 0
-      ? {
-          field: changes[0].field,
-          metadata: changes[0].value.metadata,
-          contacts: changes[0].value.contacts,
-          messages: changes[0].value.messages,
-        }
-      : {}
-  );
+  logger.info('New whatsapp message event recieved', {
+    eventData: parseEventLogData(changes),
+  });
 
   if (isValidIncomingWhatsAppMessageData(body)) {
     // Handle messages in the chat handlers
@@ -72,3 +63,28 @@ export const validateWebhookRequest = (
     return res.status(400).send('Bad Request: Invalid webhook data');
   }
 };
+
+type EventLogData = {
+  id: string;
+  text: Record<string, string>;
+  timestamp: string;
+  type: string;
+};
+
+function parseEventLogData(data: any[]): EventLogData | null {
+  /**
+   * Parses webhook data for logging (filters out the phone number)
+   */
+
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  const value = data[0].value;
+
+  if (value?.messages?.length > 0) {
+    const { from, ...messageWithoutPhone } = value.messages[0];
+    return messageWithoutPhone;
+  }
+  return null;
+}

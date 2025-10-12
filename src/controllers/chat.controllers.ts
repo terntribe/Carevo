@@ -7,15 +7,15 @@ Any error that occurs when we process the message should be logged.
 
 WhatsApp Business API retries messages that return any status code other than 200,
 We do not want unexpected behaivors or to pollute our logs and standard output with errors.
-The `debounce` function tries to prevent multiple identical queries from the same sender to pass
+The `throttle` function tries to prevent multiple identical queries from the same sender to pass
 for a limited time range but the API is unstable  i.e. failed messages from yesterday are also retried.
 
 */
 
 import {
-  debounce,
   generatePhoneNumHash,
   parseIncomingWhatAppMessageData,
+  throttle,
 } from '#utils/helpers.js';
 import { Request, Response } from 'express';
 import {
@@ -72,13 +72,11 @@ export const chatController = async (req: Request, res: Response) => {
     return res.status(500).send(500);
   }
 
-  if (debounce({ phone: messageData.from, text: messageData.text })) {
+  if (throttle({ phone: messageData.from, text: messageData.text })) {
     logger.warn(
       `Message still being processed: Sender: ${from.substring(0, 10)} -> text: ${messageData.text}`
     );
     return res.send(200);
-  } else {
-    console.log(messageData.from, messageData.text, 'debounce returned false');
   }
 
   // try and get the session first (if num does not exist),
@@ -90,7 +88,6 @@ export const chatController = async (req: Request, res: Response) => {
   }; // for logging
 
   if (!userSession) {
-    // !userSession
     var newSession = await sessionService.create(from);
     userSession = newSession ? newSession : userSession;
 
@@ -98,22 +95,23 @@ export const chatController = async (req: Request, res: Response) => {
       logger.error(
         `Failed to create a new session for whatsapp user -> ${from}`,
         context
-      ); // log here
+      );
       return res.send(200);
     }
 
-    // const currentSession = await OnboardingService.greetUser(
-    //   userSession,
-    //   messageData.from
-    // );
-    // if (!currentSession) {
-    //   logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
-    //   return res.send(200);
-    // }
+    const currentSession = await OnboardingService.greetUser(
+      'ABS',
+      userSession,
+      messageData.from
+    );
+    if (!currentSession) {
+      logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
+      return res.send(200);
+    }
 
-    // newSession = await sessionService.update(currentSession);
+    newSession = await sessionService.update(currentSession);
 
-    // logger.info(`New session created for whatsapp user -> ${from}`, newSession);
+    logger.info(`New session created for whatsapp user -> ${from}`, newSession);
     return res.send(200);
   } else {
     context.sessionId = userSession.id;
@@ -144,25 +142,26 @@ export const chatController = async (req: Request, res: Response) => {
     // else if (intent && intent.service === 'message') {
     // call tps
     //----------------------------------------
-    // const currentSession = await MessageService.response(
-    //   intent.intent,
-    //   userSession,
-    //   messageData.from
-    // );
+    const currentSession = await MessageService.response(
+      'ABS',
+      intent.intent,
+      userSession,
+      messageData.from
+    );
 
-    // context.intent = intent.intent;
-    // context.service = intent.service;
+    context.intent = intent.intent;
+    context.service = intent.service;
 
-    // if (!currentSession) {
-    //   logger.error(
-    //     `Failed to proccess response for: ${messageData.text}`,
-    //     context
-    //   ); // log here
-    //   return res.send(200);
-    // }
+    if (!currentSession) {
+      logger.error(
+        `Failed to proccess response for: ${messageData.text}`,
+        context
+      ); // log here
+      return res.send(200);
+    }
 
-    // const _ = await sessionService.update(currentSession);
-    // logger.info(`Success: Message Processed for `, currentSession.id);
+    const _ = await sessionService.update(currentSession);
+    logger.info(`Success: Message Processed for `, currentSession.id);
   }
   return res.send(200);
 };
