@@ -1,4 +1,4 @@
-import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
+import { MessageSessionType } from '#models/file/sessions.model.js';
 import { checkSupportedLanguages, processMessage } from './processors.js';
 
 export class OnboardingService {

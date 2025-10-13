@@ -1,8 +1,4 @@
-import {
-  Session,
-  Identifier,
-  LastMessage,
-} from '#models/sessions/db/sessions.model.js';
+import { Session, Identifier, LastMessage } from '#models/db/sessions.model.js';
 import { rootLogger, getLogger } from '#config/logger.js';
 import { MessageSessionType } from '../file/sessions.model.js';
 

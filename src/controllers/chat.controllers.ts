@@ -21,7 +21,7 @@ import { Request, Response } from 'express';
 import {
   MessageSessionType,
   SessionManager,
-} from '#models/sessions/file/sessions.model.js';
+} from '#models/file/sessions.model.js';
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
@@ -31,8 +31,8 @@ import {
   analyticsLogger as analytics,
 } from '#config/logger.js';
 import SessionService from '#services/messages/sessions.service.js';
-import SessionRepository from '#models/sessions/db/manager.js';
-import { Session } from '#models/sessions/db/sessions.model.js';
+import SessionRepository from '#models/db/manager.js';
+import { Session } from '#models/db/sessions.model.js';
 
 // const sessionService = new SessionService<MessageSessionType>(new SessionManager());
 // const _ = await sessionManager.loadSessions();

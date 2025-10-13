@@ -1,6 +1,6 @@
 import { rootLogger, getLogger } from '#config/logger.js';
-import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
-import { MessageSession } from '#models/sessions/file/sessions.model.js';
+import { MessageSessionType } from '#models/file/sessions.model.js';
+import { MessageSession } from '#models/file/sessions.model.js';
 
 const logger = getLogger(rootLogger, {
   service: 'whatsapp-bot-service',

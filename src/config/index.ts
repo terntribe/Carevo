@@ -33,4 +33,12 @@ export const config = {
   api_keys: {
     gemini: process.env.GEMINI_API_KEY || '',
   },
+
+  analytics_db: {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    username: process.env.DB_USER || '',
+    password: process.env.DB_PASS || '',
+    name: process.env.DB_NAME || '',
+  },
 };

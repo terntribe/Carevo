@@ -45,6 +45,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
     "@types/wav": "^1.0.4",
     "eslint": "^9.34.0",
     "eslint-plugin-perfectionist": "^4.15.0",
