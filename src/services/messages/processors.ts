@@ -7,17 +7,20 @@ import { getLogger, rootLogger } from '#config/logger.js';
 import { config } from '#config/index.js';
 import path from 'path';
 import storage from '#config/storage.js';
+import { AnalyticsEvent } from '#analytics/types.js';
+import { AnalyticsService } from '#services/analytics/analytics.service.js';
 
 export type Intent = {
   intent: string;
   service: 'onboard' | 'message';
 };
 
-export type QueryData = {
+export type QueryParams = {
   wa_mid: string;
   query: string;
   session: MessageSessionType;
   to: string;
+  events: AnalyticsEvent[];
 };
 
 type processContext = { query: string; session: string };
@@ -29,6 +32,8 @@ const logger = getLogger(rootLogger, {
   service: 'whatsapp-bot-service',
   component: 'proccess-message',
 });
+
+const analyticsService = new AnalyticsService();
 
 export const checkSupportedLanguages = (index: string) => {
   const i = Number(index);
@@ -88,8 +93,8 @@ export const matchIntent = (
   return { intent: 'support:invalid_input', service: 'message' };
 };
 
-export const processMessage = async (queryData: QueryData) => {
-  const { wa_mid, query, session, to } = queryData;
+export const processMessage = async (queryData: QueryParams) => {
+  const { wa_mid, query, session, to, events } = queryData;
 
   let message = messageConfig.getMessageByQueryOrId(query);
 
@@ -103,17 +108,16 @@ export const processMessage = async (queryData: QueryData) => {
     return session;
   }
 
-  const responseMsg = await GetWhatsAppMediaIdForMsg(message, session);
+  const response = await GetWhatsAppMediaIdForMsg(message, session);
 
-  if (responseMsg && responseMsg.mediaId) {
-    await sendWhatsAppVoiceMsg(responseMsg.mediaId, to);
+  if (response) {
+    if (response.mediaId) await sendWhatsAppVoiceMsg(response.mediaId, to);
+
+    message = response.message;
+    // events = response.events
   }
 
-  if (responseMsg && responseMsg.message) {
-    return await finalize(responseMsg.message, session);
-  }
-
-  return session;
+  return await finalize(wa_mid, message, session, events);
 };
 
 export const GetWhatsAppMediaIdForMsg = async (
@@ -271,12 +275,21 @@ async function uploadAudioFileToWhatsApp(
   return fileId?.id;
 }
 
-async function finalize(message: MessageType, session: MessageSessionType) {
+async function finalize(
+  whastappMessageId: string,
+  message: MessageType,
+  session: MessageSessionType,
+  analyticEvents: AnalyticsEvent[]
+) {
   /**
    * final operations to carry out after processing response:
    * 1. Mark message as read
    * 2. Update session info
+   * 3. Register analytics
    */
+
+  // Mark as read
+  WhatsAppService.markAsRead(whastappMessageId);
 
   //  update the session keyword entry
   session.lastMessage.query =
@@ -303,6 +316,9 @@ async function finalize(message: MessageType, session: MessageSessionType) {
       session.lastMessage.options = message.actions.options;
     }
   }
+
+  // register analytics
+  analyticsService.processEvents(analyticEvents); // not async!
 
   return session;
 }

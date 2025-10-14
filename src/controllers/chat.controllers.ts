@@ -33,6 +33,8 @@ import {
 import SessionService from '#services/messages/sessions.service.js';
 import SessionRepository from '#models/db/manager.js';
 import { Session } from '#models/db/sessions.model.js';
+import { AnalyticsService } from '#services/analytics/analytics.service.js';
+import { AnalyticsEvent } from '#analytics/types.js';
 
 // const sessionService = new SessionService<MessageSessionType>(new SessionManager());
 // const _ = await sessionManager.loadSessions();
@@ -54,6 +56,7 @@ export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
   let intent: Intent | null = null;
   let from: string | null;
+  let events: AnalyticsEvent[] = [];
 
   if (!messageData || !messageData.text || !messageData.from) {
     logger.error('Missing fields: phone number or message text is missing');
@@ -100,9 +103,10 @@ export const chatController = async (req: Request, res: Response) => {
     }
 
     const currentSession = await OnboardingService.greetUser(
-      'ABS',
+      messageData.id,
       userSession,
-      messageData.from
+      messageData.from,
+      events
     );
     if (!currentSession) {
       logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
@@ -143,10 +147,11 @@ export const chatController = async (req: Request, res: Response) => {
     // call tps
     //----------------------------------------
     const currentSession = await MessageService.response(
-      'ABS',
+      messageData.id,
       intent.intent,
       userSession,
-      messageData.from
+      messageData.from,
+      events
     );
 
     context.intent = intent.intent;
