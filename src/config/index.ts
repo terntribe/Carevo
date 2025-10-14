@@ -36,7 +36,7 @@ export const config = {
 
   analytics_db: {
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
+    port: Number(process.env.DB_PORT) || 5432,
     username: process.env.DB_USER || '',
     password: process.env.DB_PASS || '',
     name: process.env.DB_NAME || '',
