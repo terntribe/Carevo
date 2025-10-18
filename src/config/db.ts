@@ -1,7 +1,7 @@
 // import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from './index.js';
-import { Session, LastMessage } from '#models/sessions/db/sessions.model.js';
+import { Session, LastMessage } from '#models/db/sessions.model.js';
 
 const initDatabase = async () => {
   let options;

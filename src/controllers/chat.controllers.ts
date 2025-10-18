@@ -7,17 +7,21 @@ Any error that occurs when we process the message should be logged.
 
 WhatsApp Business API retries messages that return any status code other than 200,
 We do not want unexpected behaivors or to pollute our logs and standard output with errors.
-The `debounce` function tries to prevent multiple identical queries from the same sender to pass
+The `throttle` function tries to prevent multiple identical queries from the same sender to pass
 for a limited time range but the API is unstable  i.e. failed messages from yesterday are also retried.
 
 */
 
-import { debounce, parseIncomingWhatAppMessageData } from '#utils/helpers.js';
+import {
+  generatePhoneNumHash,
+  parseIncomingWhatAppMessageData,
+  throttle,
+} from '#utils/helpers.js';
 import { Request, Response } from 'express';
 import {
   MessageSessionType,
   SessionManager,
-} from '#models/sessions/file/sessions.model.js';
+} from '#models/file/sessions.model.js';
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
@@ -27,8 +31,10 @@ import {
   analyticsLogger as analytics,
 } from '#config/logger.js';
 import SessionService from '#services/messages/sessions.service.js';
-import SessionRepository from '#models/sessions/db/manager.js';
-import { Session } from '#models/sessions/db/sessions.model.js';
+import SessionRepository from '#models/db/manager.js';
+import { Session } from '#models/db/sessions.model.js';
+import { AnalyticsService } from '#services/analytics/analytics.service.js';
+import { AnalyticsEvent } from '#analytics/types.js';
 
 // const sessionService = new SessionService<MessageSessionType>(new SessionManager());
 // const _ = await sessionManager.loadSessions();
@@ -40,69 +46,80 @@ const logger = getLogger(rootLogger, {
 });
 
 type Context = {
-  phoneNumber: string;
   message: string;
-  intent?: Intent;
+  sessionId?: string;
+  intent?: string;
+  service?: string;
 };
 
 export const chatController = async (req: Request, res: Response) => {
   const messageData = parseIncomingWhatAppMessageData(req.body);
-
-  const sendersPhoneNumber = messageData?.from;
   let intent: Intent | null = null;
+  let from: string | null;
+  let events: AnalyticsEvent[] = [];
 
-  if (!sendersPhoneNumber || !messageData || !messageData.text) {
+  if (!messageData || !messageData.text || !messageData.from) {
     logger.error('Missing fields: phone number or message text is missing');
 
+    if (messageData?.type != 'text') {
+      logger.error('Invalid message');
+      // maybe implement blocking strategy here...
+    }
     return res.status(400).send(400);
-  } else if (debounce({ phone: sendersPhoneNumber, text: messageData.text })) {
+  } else {
+    from = await generatePhoneNumHash(messageData.from);
+  }
+
+  if (!from) {
+    logger.error('Failed to hash phone number');
+    return res.status(500).send(500);
+  }
+
+  if (throttle({ phone: messageData.from, text: messageData.text })) {
     logger.warn(
-      `Message still being processed: Sender: ${sendersPhoneNumber} -> text: ${messageData.text}`
+      `Message still being processed: Sender: ${from.substring(0, 10)} -> text: ${messageData.text}`
     );
     return res.send(200);
   }
 
   // try and get the session first (if num does not exist),
   //if not create a new sesh and call obs with 'greet' keyword...
-  let userSession = await sessionService.retrieve(sendersPhoneNumber);
+  let userSession = await sessionService.retrieve(from);
 
   let context: Context = {
-    phoneNumber: sendersPhoneNumber,
     message: messageData.text,
   }; // for logging
 
   if (!userSession) {
-    // !userSession
-    var newSession = await sessionService.create(sendersPhoneNumber);
+    var newSession = await sessionService.create(from);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
       logger.error(
-        `Failed to create a new session for whatsapp user -> ${sendersPhoneNumber}`,
+        `Failed to create a new session for whatsapp user -> ${from}`,
         context
-      ); // log here
+      );
       return res.send(200);
     }
 
-    const currentSession = await OnboardingService.greetUser(userSession);
+    const currentSession = await OnboardingService.greetUser(
+      messageData.id,
+      userSession,
+      messageData.from,
+      events
+    );
     if (!currentSession) {
-      logger.error(
-        `Failed to onboard whatsapp user -> ${sendersPhoneNumber}`,
-        context
-      ); // log here
+      logger.error(`Failed to onboard whatsapp user -> ${from}`, context); // log here
       return res.send(200);
     }
 
     newSession = await sessionService.update(currentSession);
 
-    logger.info(
-      `New session created for whatsapp user -> ${sendersPhoneNumber}`,
-      {
-        session: newSession,
-      }
-    );
+    logger.info(`New session created for whatsapp user -> ${from}`, newSession);
     return res.send(200);
   } else {
+    context.sessionId = userSession.id;
+
     // pass the text to the intent matcher
     intent = matchIntent(messageData?.text, userSession);
 
@@ -128,13 +145,17 @@ export const chatController = async (req: Request, res: Response) => {
     //   return res.send('Onboard response sent');}
     // else if (intent && intent.service === 'message') {
     // call tps
-
+    //----------------------------------------
     const currentSession = await MessageService.response(
+      messageData.id,
       intent.intent,
-      userSession
+      userSession,
+      messageData.from,
+      events
     );
 
-    context.intent = intent;
+    context.intent = intent.intent;
+    context.service = intent.service;
 
     if (!currentSession) {
       logger.error(
@@ -145,7 +166,7 @@ export const chatController = async (req: Request, res: Response) => {
     }
 
     const _ = await sessionService.update(currentSession);
-    logger.info(`Success: Message Processed for `, currentSession.phoneNumber);
+    logger.info(`Success: Message Processed for `, currentSession.id);
   }
   return res.send(200);
 };

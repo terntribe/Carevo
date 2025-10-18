@@ -12,6 +12,11 @@ const logLevels = {
   trace: 5,
 };
 
+const analyticsLogLevels = {
+  warn: 0,
+  info: 1,
+};
+
 export type logLevel = keyof typeof logLevels;
 
 export const rootLogger = winston.createLogger({
@@ -40,8 +45,8 @@ export const rootLogger = winston.createLogger({
 });
 
 export const analyticsLogger = winston.createLogger({
-  levels: logLevels,
-  level: config.log_level,
+  levels: analyticsLogLevels,
+  level: 'info',
   format: combine(json(), timestamp()),
   defaultMeta: { service: 'service-analytics' },
   transports: [
@@ -50,7 +55,7 @@ export const analyticsLogger = winston.createLogger({
     }),
     new winston.transports.File({
       filename: 'logs/analytics.log',
-      level: 'error',
+      level: 'info',
       format: combine(timestamp(), json()),
     }),
   ],

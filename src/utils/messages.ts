@@ -13,17 +13,6 @@ const logger = getLogger(rootLogger, {
   component: 'whatsapp-service',
 });
 
-/*
-{
-      messaging_product: 'whatsapp',
-      to: RECIPIENT_WAID,
-      recepient_type: 'individual',
-      type: 'text',
-      text: { preview_url: false, body: message },
-    }
-
-*/
-
 export default class WhatsAppService {
   static async sendMessage(data: MessageResponse) {
     const url = `https://graph.facebook.com/${config.whatsapp.api_version}/${config.whatsapp.phone_number_id}/messages`;
@@ -64,10 +53,28 @@ export default class WhatsAppService {
     return response?.data as FileUploadResponse;
   }
 
-  static getOutgoingMessageData(message: MessageResponse) {
+  static async markAsRead(id: string) {
+    const url = `https://graph.facebook.com/${config.whatsapp.api_version}/${config.whatsapp.phone_number_id}/messages`;
+    const data = {
+      messaging_product: 'whatsapp',
+      status: 'read',
+      message_id: id,
+    };
+    const reponse = await requests.post({
+      url: url,
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${config.whatsapp.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return reponse;
+  }
+
+  static getOutgoingMessageData(message: MessageResponse, to: string) {
     const baseResponseData = {
       messaging_product: 'whatsapp',
-      to: config.whatsapp.reciepient_id,
+      to: config.env == 'local' ? config.whatsapp.reciepient_id : to,
       recepient_type: 'individual',
     };
     return { ...baseResponseData, ...message };

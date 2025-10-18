@@ -1,14 +1,28 @@
-import { MessageSessionType } from '#models/sessions/file/sessions.model.js';
+import { AnalyticsEvent } from '#analytics/types.js';
+import { MessageSessionType } from '#models/file/sessions.model.js';
 import { checkSupportedLanguages, processMessage } from './processors.js';
 
 export class OnboardingService {
-  static async greetUser(session: MessageSessionType) {
-    return await processMessage('onboard:greet', session);
+  static async greetUser(
+    wa_mid: string,
+    session: MessageSessionType,
+    to: string,
+    events: AnalyticsEvent[]
+  ) {
+    return await processMessage({
+      query: 'onboard:greet',
+      session: session,
+      to: to,
+      wa_mid: wa_mid,
+      events,
+    });
   }
 
   static async setLanguagePreferrence(
     choice: string,
-    session: MessageSessionType
+    session: MessageSessionType,
+    to: string,
+    events: AnalyticsEvent[]
   ) {
     let keyword = 'support:invalid-input';
     const language = checkSupportedLanguages(choice);
@@ -16,6 +30,12 @@ export class OnboardingService {
       keyword = `onboard:${language}`;
       session.language = language;
     }
-    return await processMessage(keyword, session);
+    return await processMessage({
+      query: keyword,
+      session: session,
+      to: to,
+      wa_mid: '',
+      events,
+    });
   }
 }

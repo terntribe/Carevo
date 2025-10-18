@@ -3,6 +3,7 @@ export const config = {
   env: process.env.ENV || 'local',
   port: process.env.PORT || '3000',
   log_level: process.env.LOG_LEVEL || 'info',
+  phone_hash_secret: process.env.PHONE_HASH_SECRET || '',
 
   // database configuration
   db: {
@@ -31,5 +32,13 @@ export const config = {
   // third-party APIs
   api_keys: {
     gemini: process.env.GEMINI_API_KEY || '',
+  },
+
+  analytics_db: {
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 5432,
+    username: process.env.DB_USER || '',
+    password: process.env.DB_PASS || '',
+    name: process.env.DB_NAME || '',
   },
 };

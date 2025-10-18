@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { rootLogger as logger } from '#config/logger.js';
+import { config } from '#config/index.js';
+import crypto from 'crypto';
 
 type messageData = {
   id: any;
@@ -156,7 +158,7 @@ export function initRequestClient() {
   return client;
 }
 
-export function debounce(msg: { phone: string; text: string }): boolean {
+export function throttle(msg: { phone: string; text: string }): boolean {
   const now = new Date();
   const expiry = new Date(now.getTime() + 1 * 60 * 1000);
   const newEntry = { ...msg, expires: expiry };
@@ -170,6 +172,7 @@ export function debounce(msg: { phone: string; text: string }): boolean {
         if (m.phone == msg.phone && m.text == msg.text) return newEntry;
         return m;
       });
+
       return false;
     } else {
       return true;
@@ -177,4 +180,13 @@ export function debounce(msg: { phone: string; text: string }): boolean {
   }
   messages.push(newEntry);
   return false;
+}
+
+export async function generatePhoneNumHash(phoneNumber?: string) {
+  if (!phoneNumber) return null;
+
+  return crypto
+    .createHmac('sha256', config.phone_hash_secret)
+    .update(phoneNumber)
+    .digest('hex');
 }
