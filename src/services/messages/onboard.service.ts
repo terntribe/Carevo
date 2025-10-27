@@ -1,11 +1,11 @@
 import { AnalyticsEvent } from '#analytics/types.js';
-import { MessageSessionType } from '#models/file/sessions.model.js';
+import { WAUserSessionType } from '#models/whatsapp-user-manager.js';
 import { checkSupportedLanguages, processMessage } from './processors.js';
 
 export class OnboardingService {
   static async greetUser(
     wa_mid: string,
-    session: MessageSessionType,
+    session: WAUserSessionType,
     to: string,
     events: AnalyticsEvent[]
   ) {
@@ -20,7 +20,7 @@ export class OnboardingService {
 
   static async setLanguagePreferrence(
     choice: string,
-    session: MessageSessionType,
+    session: WAUserSessionType,
     to: string,
     events: AnalyticsEvent[]
   ) {
@@ -28,7 +28,7 @@ export class OnboardingService {
     const language = checkSupportedLanguages(choice);
     if (language) {
       keyword = `onboard:${language}`;
-      session.language = language;
+      session.lastSession.language = language;
     }
     return await processMessage({
       query: keyword,

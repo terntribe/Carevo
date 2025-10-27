@@ -1,5 +1,5 @@
 import { AnalyticsEvent } from '#analytics/types.js';
-import { MessageSessionType } from '#models/file/sessions.model.js';
+import { WAUserSessionType } from '#models/whatsapp-user-manager.js';
 import { processMessage } from './processors.js';
 import { QueryParams } from './processors.js';
 
@@ -7,7 +7,7 @@ export class MessageService {
   static async response(
     wa_mid: string,
     keyword: string,
-    session: MessageSessionType,
+    session: WAUserSessionType,
     to: string,
     events: AnalyticsEvent[]
   ) {

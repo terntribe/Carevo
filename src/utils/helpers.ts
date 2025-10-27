@@ -190,3 +190,10 @@ export async function generatePhoneNumHash(phoneNumber?: string) {
     .update(phoneNumber)
     .digest('hex');
 }
+
+export function getLastEntryOrNull<T>(data: T[]): T | null {
+  if (data.length <= 0) {
+    return null;
+  }
+  return data[data.length - 1];
+}
