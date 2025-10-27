@@ -23,7 +23,10 @@ export class WhatsAppUser extends BaseEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
-  static findByIdOrPhoneNumber(options: { id?: string; phoneNumber?: string }) {
+  static async findByIdOrPhoneNumber(options: {
+    id?: string;
+    phoneNumber?: string;
+  }) {
     const { id, phoneNumber } = options;
     let query;
 
@@ -44,8 +47,19 @@ export class WhatsAppUser extends BaseEntity {
       );
     }
 
-    return query
+    const user = await query
       .leftJoinAndSelect('whatsappuser.lastSession', 'lastSession')
       .getOne();
+
+    if (user) {
+      user.lastSession.messages = await Session.createQueryBuilder('session')
+        .relation(Session, 'messages')
+        .of(user.lastSession)
+        .loadMany();
+
+      return user;
+    }
+
+    return null;
   }
 }

@@ -1,8 +1,8 @@
 import { Session, Identifier, Message } from '#models/db/sessions.model.js';
 import { rootLogger, getLogger } from '#config/logger.js';
-// import { MessageSessionType } from './file/sessions.model.js';
 import * as z from 'zod';
 import { WhatsAppUser } from './db/whatsapp-user.models.js';
+import { getLastEntryOrNull } from '#utils/helpers.js';
 
 const logger = getLogger(rootLogger, {
   service: 'whatsapp-bot-service',
@@ -45,14 +45,21 @@ export default class WAUSerRepository {
 
   async create(phoneNumber: string): Promise<WhatsAppUser> {
     const user = this.WhatsAppUser;
+    const session = new Session();
+
     try {
       // session entry
-      user.lastSession.language = 'english';
-      user.lastSession.isFirstSession = true;
+
+      session.language = 'english';
+      session.isFirstSession = true;
+      session.messages = [];
+
+      user.lastSession = session;
+      user.phoneNumber = phoneNumber;
+
       return await user.save();
     } catch (error) {
       logger.error(`Failed to create session for ${phoneNumber}:`, error);
-      //   throw error;
     }
 
     return user;
@@ -79,6 +86,10 @@ export default class WAUSerRepository {
           new Date().getTime() - user.lastSession.updatedAt.getTime() >
           30 * 60 * 1000
         ) {
+          // remove and delete the old session
+          const oldSession = user.lastSession;
+          oldSession.remove();
+
           session.isFirstSession = false;
           session.language = data.lastSession.language;
           session.messages = data.lastSession.messages.map((msg) => {
@@ -89,20 +100,17 @@ export default class WAUSerRepository {
           });
         } else {
           user.lastSession.language = data.lastSession.language;
-          user.lastSession.messages.concat(
-            data.lastSession.messages.map((msg) => {
-              const message = new Message();
-              message.query = msg.query;
-              message.options = msg.options;
-              return message;
-            })
-          );
+          const msg = getLastEntryOrNull(data.lastSession.messages);
+
+          if (msg) {
+            const message = new Message();
+            message.query = msg.query;
+            message.options = msg.options;
+            user.lastSession.messages =
+              user.lastSession.messages.concat(message);
+          }
         }
 
-        // user.lastSession.language = data.language;
-        // Object.assign(session.lastMessage, data.lastMessage);
-
-        console.log(session);
         return await user.save();
       }
     } catch (error) {

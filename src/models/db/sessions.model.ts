@@ -5,6 +5,7 @@ import {
   BaseEntity,
   OneToMany,
   ManyToOne,
+  AfterLoad,
 } from 'typeorm';
 
 export interface Identifier {
@@ -23,7 +24,10 @@ export class Session extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   isFirstSession!: boolean;
 
-  @OneToMany(() => Message, (message) => message.session, { eager: true })
+  @OneToMany(() => Message, (message) => message.session, {
+    cascade: true,
+    eager: true,
+  })
   messages!: Message[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -31,6 +35,13 @@ export class Session extends BaseEntity {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
+
+  @AfterLoad()
+  emptyMessageCheck() {
+    if (!this.messages) {
+      this.messages = [];
+    }
+  }
 }
 
 @Entity()

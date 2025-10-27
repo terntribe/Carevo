@@ -1,4 +1,4 @@
-import { MessageSessionType } from '#models/file/sessions.model.js';
+// import { MessageSessionType } from '#models/file/sessions.model.js';
 import { generateAudio } from '#utils/audio.js';
 import WhatsAppService from '#utils/messages.js';
 import { MessageConfig, MessageType } from '#utils/responses.ts';
@@ -9,6 +9,8 @@ import path from 'path';
 import storage from '#config/storage.js';
 import { AnalyticsEvent } from '#analytics/types.js';
 import { AnalyticsService } from '#services/analytics/analytics.service.js';
+import { WAUserSessionType } from '#models/whatsapp-user-manager.js';
+import { getLastEntryOrNull } from '#utils/helpers.js';
 
 export type Intent = {
   intent: string;
@@ -18,7 +20,7 @@ export type Intent = {
 export type QueryParams = {
   wa_mid: string;
   query: string;
-  session: MessageSessionType;
+  session: WAUserSessionType;
   to: string;
   events: AnalyticsEvent[];
 };
@@ -45,9 +47,10 @@ export const checkSupportedLanguages = (index: string) => {
 
 export const matchIntent = (
   query: string,
-  session: MessageSessionType
+  session: WAUserSessionType
 ): Intent => {
   const context = { session: session };
+  const lastMessage = getLastEntryOrNull(session.lastSession.messages);
 
   if (/^\d+$/.test(query)) {
     const index = Number(query);
@@ -68,12 +71,12 @@ export const matchIntent = (
         service: sysPrompt.startsWith('onboard') ? 'onboard' : 'message',
       };
     } else if (
-      session.lastMessage.options.length > 0 &&
+      lastMessage &&
       index >= 0 &&
-      index <= session.lastMessage.options.length
+      index <= lastMessage.options.length
     ) {
       // checks if a reserved system prompt is used as an option
-      const option = session.lastMessage.options[index - 1];
+      const option = lastMessage.options[index - 1];
       const isSysPrompt = messageConfig.checkSysPrompt(option);
 
       logger.info(
@@ -122,7 +125,7 @@ export const processMessage = async (queryData: QueryParams) => {
 
 export const GetWhatsAppMediaIdForMsg = async (
   message: MessageType,
-  session: MessageSessionType
+  session: WAUserSessionType
 ) => {
   /**
    Uses the query to either  get the WhatsApp provided media id for the audio response
@@ -139,7 +142,7 @@ export const GetWhatsAppMediaIdForMsg = async (
 
   let context: processContext = {
     query: message.query,
-    session: session.id,
+    session: session.lastSession.id,
   };
 
   // ensures the messageConfig has been loaded
@@ -154,7 +157,7 @@ export const GetWhatsAppMediaIdForMsg = async (
   context.query = message.query;
   logger.info(`Processing message: ${message.query}`);
 
-  const languagePreference = session.language;
+  const languagePreference = session.lastSession.language;
   mediaId =
     languagePreference in message.audio
       ? message.audio[languagePreference].whatsapp_media_id
@@ -278,7 +281,7 @@ async function uploadAudioFileToWhatsApp(
 async function finalize(
   whastappMessageId: string,
   message: MessageType,
-  session: MessageSessionType,
+  user: WAUserSessionType,
   analyticEvents: AnalyticsEvent[]
 ) {
   /**
@@ -292,33 +295,43 @@ async function finalize(
   WhatsAppService.markAsRead(whastappMessageId);
 
   //  update the session keyword entry
-  session.lastMessage.query =
-    message.query !== session.lastMessage.query &&
-    message.query !== 'system:invalid_input'
-      ? message.query
-      : session.lastMessage.query;
+  // session.lastMessage.query =
+  //   message.query !== session.lastMessage.query &&
+  //   message.query !== 'system:invalid_input'
+  //     ? message.query
+  //     : session.lastMessage.query;
+
+  // const lastSession = user.lastSession;
+  const lastMessage = getLastEntryOrNull(user.lastSession.messages);
+
+  const newMessage: { query: string; options: string[] } = {
+    query: message.query,
+    options: [],
+  };
 
   if (message.actions.options) {
-    if (message.query === 'system:invalid_input') {
-      const lastMessage = messageConfig.getMessageByQueryOrId(
-        session.lastMessage.query
+    if (message.query === 'system:invalid_input' && lastMessage) {
+      const previousMessage = messageConfig.getMessageByQueryOrId(
+        lastMessage.query
       );
 
-      if (!lastMessage) {
-        logger.error('No previous message for invalid input', session, message);
+      if (!previousMessage) {
+        logger.error(
+          'No previous message for invalid input',
+          user.lastSession.id,
+          message
+        );
       } else {
-        session.lastMessage.options = [
-          lastMessage.id,
-          ...message.actions.options,
-        ];
+        newMessage.options = [previousMessage.id, ...message.actions.options];
       }
     } else {
-      session.lastMessage.options = message.actions.options;
+      newMessage.options = message.actions.options;
     }
+
+    user.lastSession.messages.push(newMessage);
   }
 
   // register analytics
   analyticsService.processEvents(analyticEvents); // not async!
-
-  return session;
+  return user;
 }

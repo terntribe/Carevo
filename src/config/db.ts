@@ -1,7 +1,8 @@
 // import 'reflect-metadata';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from './index.js';
-import { Session, LastMessage } from '#models/db/sessions.model.js';
+import { Session, Message } from '#models/db/sessions.model.js';
+import { WhatsAppUser } from '#models/db/whatsapp-user.models.js';
 
 const initDatabase = async () => {
   let options;
@@ -14,7 +15,7 @@ const initDatabase = async () => {
       username: config.db.username,
       password: config.db.password,
       database: config.db.name,
-      entities: [Session, LastMessage],
+      entities: [WhatsAppUser, Session, Message],
       synchronize: true,
       logging: false,
     } as DataSourceOptions;
@@ -26,7 +27,7 @@ const initDatabase = async () => {
       username: config.db.username,
       password: config.db.password,
       database: config.db.name,
-      entities: [Session, LastMessage],
+      entities: [WhatsAppUser, Session, Message],
       synchronize: true,
       logging: false,
     } as DataSourceOptions;

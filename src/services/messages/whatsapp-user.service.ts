@@ -43,7 +43,6 @@ export default class WhatsAppUserService<T> {
   }
 
   async update(user: WAUserSessionType) {
-    // const data = this.sessionRepo.serialize(session);
     const response = await this.whatsAppUserRepo.update(user);
     return this.deserialize(response);
   }
