@@ -18,10 +18,10 @@ import {
   throttle,
 } from '#utils/helpers.js';
 import { Request, Response } from 'express';
-import {
-  MessageSessionType,
-  SessionManager,
-} from '#models/file/sessions.model.js';
+// import {
+//   MessageSessionType,
+//   SessionManager,
+// } from '#models/file/sessions.model.js';
 import { matchIntent, Intent } from '#services/messages/processors.js';
 import { OnboardingService } from '#services/messages/onboard.service.js';
 import { MessageService } from '#services/messages/message.service.js';
@@ -30,16 +30,17 @@ import {
   getLogger,
   analyticsLogger as analytics,
 } from '#config/logger.js';
-import SessionService from '#services/messages/sessions.service.js';
-import SessionRepository from '#models/db/manager.js';
 import { Session } from '#models/db/sessions.model.js';
 import { AnalyticsService } from '#services/analytics/analytics.service.js';
 import { AnalyticsEvent } from '#analytics/types.js';
+import WAUSerRepository from '#models/whatsapp-user-manager.js';
+import { WhatsAppUser } from '#models/db/whatsapp-user.models.js';
+import WhatsAppUserService from '#services/messages/whatsapp-user.service.js';
 
-// const sessionService = new SessionService<MessageSessionType>(new SessionManager());
-// const _ = await sessionManager.loadSessions();
-
-const sessionService = new SessionService<Session>(new SessionRepository());
+// const sessionService = new SessionService<Session>(new SessionRepository());
+const whatsAppUserService = new WhatsAppUserService<WhatsAppUser>(
+  new WAUSerRepository()
+);
 
 const logger = getLogger(rootLogger, {
   service: 'whastapp-bot-service',
@@ -84,14 +85,14 @@ export const chatController = async (req: Request, res: Response) => {
 
   // try and get the session first (if num does not exist),
   //if not create a new sesh and call obs with 'greet' keyword...
-  let userSession = await sessionService.retrieve(from);
+  let userSession = await whatsAppUserService.retrieve(from);
 
   let context: Context = {
     message: messageData.text,
   }; // for logging
 
   if (!userSession) {
-    var newSession = await sessionService.create(from);
+    var newSession = await whatsAppUserService.create(from);
     userSession = newSession ? newSession : userSession;
 
     if (!userSession) {
@@ -113,12 +114,15 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
 
-    newSession = await sessionService.update(currentSession);
+    newSession = await whatsAppUserService.update(currentSession);
 
-    logger.info(`New session created for whatsapp user -> ${from}`, newSession);
+    logger.info(
+      `New session created for whatsapp user -> ${from}`,
+      newSession?.id
+    );
     return res.send(200);
   } else {
-    context.sessionId = userSession.id;
+    context.sessionId = userSession.lastSession.id;
 
     // pass the text to the intent matcher
     intent = matchIntent(messageData?.text, userSession);
@@ -165,7 +169,7 @@ export const chatController = async (req: Request, res: Response) => {
       return res.send(200);
     }
 
-    const _ = await sessionService.update(currentSession);
+    const _ = await whatsAppUserService.update(currentSession);
     logger.info(`Success: Message Processed for `, currentSession.id);
   }
   return res.send(200);

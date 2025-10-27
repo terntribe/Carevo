@@ -1,3 +1,5 @@
+// deprecated
+
 import { JSONFileHandler } from '#utils/files.js';
 import * as z from 'zod';
 import { rootLogger, getLogger } from '#config/logger.js';
